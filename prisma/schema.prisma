@@ -26,7 +26,7 @@ model User {
   activities Activity[]
   comments Comment[]
   subscription Subscription?
-  onborading Boolean @default(false)
+  onboardingCompleted Boolean @default(false)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   
