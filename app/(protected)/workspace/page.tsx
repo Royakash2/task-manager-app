@@ -1,18 +1,16 @@
 import { getUserWorkspaces } from '@/app/workspace/getUserWorkspace'
-import React from 'react'
+import { redirect } from 'next/navigation';
+
 
 const WorkspacePage = async () => {
-    const {data} = await getUserWorkspaces()
-    if(!data) return null;
-    if(data.onboardingCompleted){
-    
+    const { data } = await getUserWorkspaces()
+    if(data?.onboardingCompleted && data?.workspaces.length === 0){
+        redirect('/create-workspace')
+    } else if(!data?.onboardingCompleted ){
+        redirect('/onboarding')
+    }else{
+        redirect(`/workspace/${data?.workspaces[0].workspaceId}`)
     }
-        return (
-            <div>
-                <h1 className='text-4xl font-bold'>Workspace page</h1>
-            </div>
-      
-    )
 }
 
 export default WorkspacePage;
