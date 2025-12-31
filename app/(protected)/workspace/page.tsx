@@ -2,7 +2,7 @@ import { getUserWorkspaces } from '@/app/workspace/getUserWorkspace'
 import { redirect } from 'next/navigation';
 
 
-const WorkspacePage = async () => {
+export default async function WorkspacePage() {
     const { data } = await getUserWorkspaces()
     if(data?.onboardingCompleted && data?.workspaces.length === 0){
         redirect('/create-workspace')
@@ -13,4 +13,4 @@ const WorkspacePage = async () => {
     }
 }
 
-export default WorkspacePage;
+
