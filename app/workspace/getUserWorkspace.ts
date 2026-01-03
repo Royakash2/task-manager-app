@@ -4,7 +4,6 @@ import { userRequired } from "../data/user/get-user";
 export const getUserWorkspaces = async () => {
   try {
     const { user } = await userRequired();
-    // Add this check
     if (!user) return { data: null };
 
     const workspace = await db.user.findUnique({
