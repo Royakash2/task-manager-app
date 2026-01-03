@@ -26,7 +26,7 @@ export default async function Home() {
               <>
               <Button asChild>
                 <Link href="/workspace">
-                  Get Started
+                  Goto Workspace
                 </Link>
               </Button>
               </>
