@@ -8,6 +8,7 @@ import z from 'zod';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from './ui/form';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from './ui/card';
 import { Input } from './ui/input';
+import { Button } from './ui/button';
 interface Props {
     name: string;
     email: string;
@@ -60,7 +61,10 @@ export const OnboardingForm = ({ name, email, image }: Props) => {
                                     </FormItem>
                                 )}
                             />
-                                
+                            
+                            <Button type='submit' >
+                                Submit
+                            </Button>
                         </form>
                     </Form>
                 </CardContent>
