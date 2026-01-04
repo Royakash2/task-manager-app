@@ -12,6 +12,8 @@ import { Button } from './ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
 import { countryList, } from '@/utils/countryLists';
 import Image from 'next/image';
+import { industryTypesList, roleList } from '@/utils';
+import { Textarea } from './ui/textarea';
 interface Props {
     name: string;
     email: string;
@@ -19,10 +21,11 @@ interface Props {
 
 }
 
-type userDatatype = z.infer<typeof userSchema>
+export type userDatatype = z.infer<typeof userSchema>
 
 export const OnboardingForm = ({ name, email, image }: Props) => {
     const [pending, setPending] = useState(false);
+    console.log(pending, setPending);
     const form = useForm<userDatatype>({
         resolver: zodResolver(userSchema), defaultValues: {
             about: '',
@@ -36,6 +39,7 @@ export const OnboardingForm = ({ name, email, image }: Props) => {
 
     })
     const onSubmit = async (data: userDatatype) => {
+        console.log(data);
 
     }
     return (
@@ -43,7 +47,7 @@ export const OnboardingForm = ({ name, email, image }: Props) => {
 
             <Card className='w-full max-w-md'>
                 <CardHeader>
-                    <CardTitle>Welcome to Aura</CardTitle>
+                    <CardTitle className='text-2xl font-bold'>Welcome to Aura</CardTitle>
                     <CardDescription>
                         Aura is a premium task management platform designed to bring clarity and speed to your workflow.
                     </CardDescription>
@@ -93,7 +97,74 @@ export const OnboardingForm = ({ name, email, image }: Props) => {
                                     </FormItem>
                                 )}
                             />
-                            <Button type='submit' >
+                            <div className='grid grid-cols-1 md:grid-cols-2 gap-2'>
+                                {/* industry type */}
+                                <FormField
+                                    control={form.control}
+                                    name='industryType'
+                                    render={({ field }) => (
+                                        <FormItem>
+                                            <FormLabel>Industry Type</FormLabel>
+                                            <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                                <FormControl>
+                                                    <SelectTrigger className='w-full'>
+                                                        <SelectValue placeholder="Select a industry type" />
+
+                                                    </SelectTrigger>
+                                                </FormControl>
+                                                <SelectContent >
+                                                    {industryTypesList.map((industry) => (
+                                                        <SelectItem key={industry} value={industry}>
+                                                            {industry}
+                                                        </SelectItem>
+                                                    ))}
+                                                </SelectContent>
+                                            </Select>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
+                                {/* role */}
+                                <FormField
+                                    control={form.control}
+                                    name='role'
+                                    render={({ field }) => (
+                                        <FormItem>
+                                            <FormLabel>Role</FormLabel>
+                                            <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                                <FormControl>
+                                                    <SelectTrigger className='w-full'>
+                                                        <SelectValue placeholder="Select a role" />
+
+                                                    </SelectTrigger>
+                                                </FormControl>
+                                                <SelectContent >
+                                                    {roleList.map((role) => (
+                                                        <SelectItem key={role} value={role}>
+                                                            {role}
+                                                        </SelectItem>
+                                                    ))}
+                                                </SelectContent>
+                                            </Select>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
+                            </div>
+                            <FormField
+                                control={form.control}
+                                name='about'
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>Bio</FormLabel>
+                                        <FormControl>
+                                            <Textarea placeholder='Tell us about yourself' className='resize-none' {...field} />
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+                            <Button type='submit' disabled={pending} className='w-full'>
                                 Submit
                             </Button>
                         </form>
