@@ -71,24 +71,24 @@ export const OnboardingForm = ({ name, email, image }: Props) => {
                                 render={({ field }) => (
                                     <FormItem>
                                         <FormLabel>Country</FormLabel>
-                                       <Select onValueChange={field.onChange} defaultValue={field.value}>
-                                        <FormControl>
-                                             <SelectTrigger className='w-full'>
-                                                 <SelectValue placeholder="Select a country" />
+                                        <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                            <FormControl>
+                                                <SelectTrigger className='w-full'>
+                                                    <SelectValue placeholder="Select a country" />
 
-                                             </SelectTrigger>
-                                        </FormControl>
-                                        <SelectContent >
-                                            {countryList.map((country) => (
-                                                <SelectItem key={country.code} value={country.code}>
-                                                 <div className='flex items-center gap-2'>
-                                                   <Image src={country.flag} alt={country.name} width={20} height={20}/>
-                                                   <span>{country.name}</span>
-                                                 </div>
-                                                </SelectItem>
-                                            ))}
-                                        </SelectContent>
-                                       </Select>
+                                                </SelectTrigger>
+                                            </FormControl>
+                                            <SelectContent >
+                                                {countryList.map((country) => (
+                                                    <SelectItem key={country.code} value={country.code}>
+                                                        <div className='flex items-center gap-2'>
+                                                            <Image src={country.flag} alt={country.name} width={20} height={20} />
+                                                            <span>{country.name}</span>
+                                                        </div>
+                                                    </SelectItem>
+                                                ))}
+                                            </SelectContent>
+                                        </Select>
                                         <FormMessage />
                                     </FormItem>
                                 )}
@@ -100,7 +100,6 @@ export const OnboardingForm = ({ name, email, image }: Props) => {
                     </Form>
                 </CardContent>
             </Card>
-
         </div>
     )
 }
