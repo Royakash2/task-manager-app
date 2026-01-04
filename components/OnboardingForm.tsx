@@ -9,6 +9,9 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from './ui/card';
 import { Input } from './ui/input';
 import { Button } from './ui/button';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
+import { countryList, } from '@/utils/countryLists';
+import Image from 'next/image';
 interface Props {
     name: string;
     email: string;
@@ -47,7 +50,7 @@ export const OnboardingForm = ({ name, email, image }: Props) => {
                 </CardHeader>
                 <CardContent>
                     <Form {...form}>
-                        <form onSubmit={form.handleSubmit(onSubmit)} className='w-full max-w-md space-y-6'>
+                        <form onSubmit={form.handleSubmit(onSubmit)} className='w-full max-w-md space-y-5'>
                             <FormField
                                 control={form.control}
                                 name='name'
@@ -57,11 +60,39 @@ export const OnboardingForm = ({ name, email, image }: Props) => {
                                         <FormControl>
                                             <Input placeholder='Enter your name' {...field} />
                                         </FormControl>
-                                        <FormMessage/>  
+                                        <FormMessage />
                                     </FormItem>
                                 )}
                             />
-                            
+
+                            <FormField
+                                control={form.control}
+                                name='country'
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>Country</FormLabel>
+                                       <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                        <FormControl>
+                                            <SelectTrigger>
+                                                <SelectValue placeholder="Select a country" />
+
+                                            </SelectTrigger>
+                                        </FormControl>
+                                        <SelectContent>
+                                            {countryList.map((country) => (
+                                                <SelectItem key={country.code} value={country.code}>
+                                                 <div className='flex items-center gap-2'>
+                                                   <Image src={country.flag} alt={country.name} width={20} height={20}/>
+                                                   <span>{country.name}</span>
+                                                 </div>
+                                                </SelectItem>
+                                            ))}
+                                        </SelectContent>
+                                       </Select>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
                             <Button type='submit' >
                                 Submit
                             </Button>
