@@ -73,12 +73,12 @@ export const OnboardingForm = ({ name, email, image }: Props) => {
                                         <FormLabel>Country</FormLabel>
                                        <Select onValueChange={field.onChange} defaultValue={field.value}>
                                         <FormControl>
-                                            <SelectTrigger>
-                                                <SelectValue placeholder="Select a country" />
+                                             <SelectTrigger className='w-full'>
+                                                 <SelectValue placeholder="Select a country" />
 
-                                            </SelectTrigger>
+                                             </SelectTrigger>
                                         </FormControl>
-                                        <SelectContent>
+                                        <SelectContent >
                                             {countryList.map((country) => (
                                                 <SelectItem key={country.code} value={country.code}>
                                                  <div className='flex items-center gap-2'>
