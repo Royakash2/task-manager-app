@@ -40,14 +40,14 @@ export const createWorkspace = async (data: WorkspaceData) => {
       },
     });
 
-    return res;
+    return { data: res};
   } catch (error) {
     console.log(error);
 
-    // return {
-    //   status: 500,
-    //   message: "Failed to create workspace",
-    // };
-    throw new Error("Failed to create workspace");
+    return {
+      status: 500,
+      message: "Failed to create workspace",
+    };
+    
   }
 };

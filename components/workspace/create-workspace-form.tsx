@@ -31,9 +31,9 @@ export const CreateWorkspaceForm = () => {
     const onSubmit = async (data: createWorkspaceDatatype) => {
         try {
             setPending(true);
-           const res = await createWorkspace(data);
+           const {data: res} = await createWorkspace(data);
             toast.success("Workspace created successfully!");
-            router.push(`/workspace/${res.id}`);
+            router.push(`/workspace/${res?.id as string}`);
         } catch (error) {
             console.log(error);
             toast.error("Something went wrong. Please try again later")
