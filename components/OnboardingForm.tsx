@@ -14,6 +14,8 @@ import { countryList, } from '@/utils/countryLists';
 import Image from 'next/image';
 import { industryTypesList, roleList } from '@/utils';
 import { Textarea } from './ui/textarea';
+import { toast } from 'sonner';
+import { createUser } from '@/app/actions/user';
 interface Props {
     name: string;
     email: string;
@@ -39,7 +41,13 @@ export const OnboardingForm = ({ name, email, image }: Props) => {
 
     })
     const onSubmit = async (data: userDatatype) => {
-        console.log(data);
+        try {
+            setPending(true);
+           await createUser(data)
+        } catch (error) {
+            console.log(error);
+            toast.error("Something went wrong. try again later")
+        }
 
     }
     return (
