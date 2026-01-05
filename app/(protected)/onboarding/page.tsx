@@ -1,12 +1,25 @@
-import { Button } from '@/components/ui/button'
-import { LogoutLink } from '@kinde-oss/kinde-auth-nextjs/components'
+import { userRequired } from '@/app/data/user/get-user';
+import { getUserWorkspaces } from '@/app/workspace/getUserWorkspace'
+import { OnboardingForm } from '@/components/OnboardingForm';
+import { redirect } from 'next/navigation';
 import React from 'react'
 
-export default function OnboardingPage() {
+export default async function OnboardingPage() {
+    const { data } = await getUserWorkspaces();
+    const {user} = await userRequired();
+    if(data?.onboardingCompleted && data?.workspaces.length > 0){
+        redirect('/workspace')
+    }else if(data?.onboardingCompleted ){
+        redirect('/create-workspace')
+    }
+    const name = `${user?.given_name || ''} ${user?.family_name || ''}`;
     return (
         <div>
-            <h1 className='text-4xl font-bold'>onboarding page</h1>
-             <Button> <LogoutLink>Log out</LogoutLink></Button>
+        <OnboardingForm
+         name={name}
+         email={user?.email || ''}
+         image={user?.picture|| ''}
+        />
         </div>
       
     )
