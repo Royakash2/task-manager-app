@@ -5,6 +5,7 @@ import { userRequired } from "../data/user/get-user";
 import db from "@/lib/db";
 import { redirect } from "next/navigation";
 import { z } from "zod";
+import { generateInviteCode } from "@/utils/get-invite-code";
 
 type WorkspaceData = z.infer<typeof workspaceSchema>;
 
@@ -22,7 +23,7 @@ export const createWorkspace = async (data: WorkspaceData) => {
   const { name, description } = validateData.data;
 
   // Generate a random invite code
-  const inviteCode = Math.random().toString(36).substring(2, 8).toUpperCase();
+  const inviteCode = generateInviteCode();
 
   const workspace = await db.workspace.create({
     data: {
