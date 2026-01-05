@@ -12,11 +12,13 @@ import { Button } from '../ui/button';
 import { Textarea } from '../ui/textarea';
 import { toast } from 'sonner';
 import { createWorkspace } from '@/app/actions/workspace';
+import { useRouter } from 'next/navigation';
 
 export type createWorkspaceDatatype = z.infer<typeof workspaceSchema>
 
 export const CreateWorkspaceForm = () => {
     const [pending, setPending] = useState(false);
+    const router = useRouter();
 
     const form = useForm<createWorkspaceDatatype>({
         resolver: zodResolver(workspaceSchema),
@@ -29,8 +31,9 @@ export const CreateWorkspaceForm = () => {
     const onSubmit = async (data: createWorkspaceDatatype) => {
         try {
             setPending(true);
-            await createWorkspace(data);
+           const res = await createWorkspace(data);
             toast.success("Workspace created successfully!");
+            router.push(`/workspace/${res.id}`);
         } catch (error) {
             console.log(error);
             toast.error("Something went wrong. Please try again later")
