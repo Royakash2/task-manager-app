@@ -25,6 +25,15 @@ const workspaceLayout = async ({ children, params }: Props) => {
      <main className='w-full overflow-y-auto min-h-screen'>
       <div className='flex items-start'>
         <SidebarTrigger className='pt-3'/>
+        {/* <Navbar 
+        id={data?.id}
+        name={data?.name as string}
+        email={data?.email as string}
+        image={data?.image as string}
+        /> */}
+      </div>
+      <div className='p-0 md:p-4 pt-2 lg:p-6'>
+        {children}
       </div>
      </main>
     </SidebarProvider>
