@@ -1,4 +1,5 @@
 import { getUserWorkspaces } from '@/app/workspace/getUserWorkspace';
+import AppSidebarContainer from '@/components/sidebar/appSidebarContainer';
 import { SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar';
 import { redirect } from 'next/navigation';
 import React from 'react'
