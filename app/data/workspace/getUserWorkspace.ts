@@ -1,5 +1,5 @@
 import db from "@/lib/db";
-import { userRequired } from "../data/user/get-user";
+import { userRequired } from "../user/get-user";
 
 export const getUserWorkspaces = async () => {
   try {
