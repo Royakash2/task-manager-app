@@ -38,12 +38,28 @@ export const getWorkspaceProjectByWorkspceId = async (workspaceId: string) => {
           workspaceId: true,
         },
       }),
+      db.workspaceMembers.findMany({
+        where: {
+          workspaceId,
+        },
+        include: {
+            user:{
+                select:{
+                    id:true,
+                    name:true,
+                    image:true,
+                    
+                }
+            }
+        }
+      }),
     ]);
+    return {projects, projectAccess}
   } catch (error) {
     console.log(error);
     return {
       success: false,
-      error: true,
+      error: true,  
       message: "Failed to get workspace project",
     };
   }
