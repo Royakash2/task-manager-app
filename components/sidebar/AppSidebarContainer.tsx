@@ -21,7 +21,7 @@ const AppSidebarContainer = async ({ data, workspaceId }: { data: AppSidebarData
         user={user as User}
          key={user?.id}
          data={data}
-        workspacesMembers={projectAccess}
+        projectAccess={projectAccess}
          projects={projects}
           />
 }
