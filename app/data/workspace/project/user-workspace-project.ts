@@ -17,7 +17,7 @@ export const getWorkspaceProjectByWorkspceId = async (workspaceId: string) => {
     if (!isUserMember) {
       throw new Error("you are not a member of this workspace");
     }
-    const query: Prisma.ProjectWhereUniqueInput =
+    const query: Prisma.ProjectWhereInput =
       isUserMember.accessLevel === $Enums.AccessLevel.OWNER
         ? { workspaceId }
         : {
