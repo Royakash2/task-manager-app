@@ -28,7 +28,7 @@ export const getWorkspaceProjectByWorkspceId = async (workspaceId: string) => {
               },
             },
           };
-    const [projects, projectAccess] = await Promise.all([
+    const [projects, workspaceMembers] = await Promise.all([
       db.project.findMany({
         where: query,
         select: {
@@ -54,7 +54,7 @@ export const getWorkspaceProjectByWorkspceId = async (workspaceId: string) => {
         }
       }),
     ]);
-    return {projects, projectAccess}
+    return {projects, workspaceMembers}
   } catch (error) {
     console.log(error);
     return {

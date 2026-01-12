@@ -1,12 +1,24 @@
 
 import React from 'react'
 import { AppSidebarDataProps } from './AppSidebarContainer'
-import { ProjectAccess, User } from '@prisma/client'
+import {  User } from '@prisma/client'
 
-function AppSidebar({user, data, projectAccess}: {user: User, data: AppSidebarDataProps, projectAccess: ProjectAccess[]}) {
-  return (
-    <div>AppSidebar</div>
-  )
+function AppSidebar(
+    { user,
+        data,
+        workspaceMembers,
+        project
+    }
+        :
+        {
+            user: User,
+            data: AppSidebarDataProps,
+            workspaceMembers: workspaceMembersProps[],
+            project: projectProps
+        }) {
+    return (
+        <div>AppSidebar</div>
+    )
 }
 
 export default AppSidebar
