@@ -22,7 +22,7 @@ const workspaceLayout = async ({ children, params }: Props) => {
   return (
     <SidebarProvider>
      <div className='flex w-full bg-background h-screen'>
-      <AppSidebarContainer data={data} workspaceId={workspaceId}/>
+      <AppSidebarContainer data={data as any} workspaceId={workspaceId}/>
      </div>
      <main className='w-full overflow-y-auto min-h-screen'>
       <div className='flex items-start'>
