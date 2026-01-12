@@ -23,10 +23,9 @@ const workspaceLayout = async ({ children, params }: Props) => {
     <SidebarProvider>
      <div className='flex w-full bg-background h-screen'>
       <AppSidebarContainer data={data as any} workspaceId={workspaceId}/>
-     </div>
-     <main className='w-full overflow-y-auto min-h-screen'>
+      <main className='w-full overflow-y-auto min-h-screen'>
       <div className='flex items-start'>
-        <SidebarTrigger className='pt-3'/>
+        <SidebarTrigger className='p-6 cursor-pointer'/>
         {/* <Navbar 
         id={data?.id}
         name={data?.name as string}
@@ -38,6 +37,8 @@ const workspaceLayout = async ({ children, params }: Props) => {
         {children}
       </div>
      </main>
+     </div>
+     
     </SidebarProvider>
   )
 }
