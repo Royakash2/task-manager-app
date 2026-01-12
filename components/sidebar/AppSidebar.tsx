@@ -1,7 +1,8 @@
 
 import React from 'react'
 import { AppSidebarDataProps } from './AppSidebarContainer'
-import {  User } from '@prisma/client'
+import { User } from '@prisma/client'
+import { projectProps, workspaceMembersProps } from '@/utils/types'
 
 function AppSidebar(
     { user,
