@@ -35,6 +35,7 @@ const workspaceLayout = async ({ children, params }: Props) => {
       </div>
       <div className='p-0 md:p-4 pt-2 lg:p-6'>
         {children}
+        
       </div>
      </main>
      </div>

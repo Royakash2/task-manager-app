@@ -21,7 +21,7 @@ function AppSidebar(
         }) {
     return (
        <>
-       <Sidebar collapsible='icon'>
+       <Sidebar collapsible='icon' >
         <SidebarHeader className='bg-background'>
             <div className='flex items-center gap-2'>
                 <Avatar>
@@ -30,6 +30,11 @@ function AppSidebar(
                 </Avatar>
                 <SidebarGroupLabel>
                     <span className='text-xl font-bold'>Aura</span>
+                </SidebarGroupLabel>
+            </div>
+            <div className='flex items-center gap-0'>
+                <SidebarGroupLabel>
+                    <span className='text-xl font-bold'>Workspace</span>
                 </SidebarGroupLabel>
             </div>
         </SidebarHeader>
