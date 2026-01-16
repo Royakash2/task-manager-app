@@ -25,7 +25,7 @@ const workspaceLayout = async ({ children, params }: Props) => {
       <AppSidebarContainer data={data as any} workspaceId={workspaceId}/>
       <main className='w-full overflow-y-auto min-h-screen'>
       <div className='flex items-start'>
-        <SidebarTrigger className='p-6 cursor-pointer'/>
+        <SidebarTrigger className='p-6 cursor-pointer z-50'/>
         {/* <Navbar 
         id={data?.id}
         name={data?.name as string}
