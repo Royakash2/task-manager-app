@@ -1,9 +1,11 @@
 
+'use client'
+
 import React from 'react'
 import { AppSidebarDataProps } from './AppSidebarContainer'
 import { User } from '@prisma/client'
 import { projectProps, workspaceMembersProps } from '@/utils/types'
-import { Sidebar, SidebarGroupLabel, SidebarHeader } from '../ui/sidebar'
+import { Sidebar, SidebarGroupLabel, SidebarHeader, useSidebar } from '../ui/sidebar'
 import { Avatar, AvatarImage } from '../ui/avatar'
 import { Button } from '../ui/button'
 import Link from 'next/link'
@@ -22,6 +24,8 @@ function AppSidebar(
             workspaceMembers: workspaceMembersProps[],
             project: projectProps[]
         }) {
+    const { state } = useSidebar()
+    
     return (
        <>
        <Sidebar collapsible='icon' >
@@ -39,11 +43,13 @@ function AppSidebar(
                 <SidebarGroupLabel className='mb-2 uppercase text-sm text-muted-foreground font-semibold'>
                     Workspace
                 </SidebarGroupLabel>
-                <Button variant='outline' size='icon' asChild  className='size-5'>
-                    <Link href='/create-workspace'>
-                       <Plus/>
-                    </Link>
-                </Button>
+                {state === 'expanded' && (
+                    <Button variant='outline' size='icon' asChild  className='size-5'>
+                        <Link href='/create-workspace'>
+                           <Plus/>
+                        </Link>
+                    </Button>
+                )}
             </div>
         </SidebarHeader>
        </Sidebar>
