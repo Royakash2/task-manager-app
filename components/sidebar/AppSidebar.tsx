@@ -35,11 +35,11 @@ function AppSidebar(
                     <span className='text-xl font-bold'>Aura</span>
                 </SidebarGroupLabel>
             </div>
-            <div className='flex justify-between gap-0'>
+            <div className='flex justify-between items-center gap-0'>
                 <SidebarGroupLabel className='mb-2 uppercase text-sm text-muted-foreground font-semibold'>
                     Workspace
                 </SidebarGroupLabel>
-                <Button variant='outline' size='icon' asChild>
+                <Button variant='outline' size='icon' asChild  className='size-5'>
                     <Link href='/create-workspace'>
                        <Plus/>
                     </Link>
