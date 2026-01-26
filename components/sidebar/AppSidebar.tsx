@@ -25,36 +25,36 @@ function AppSidebar(
             project: projectProps[]
         }) {
     const { state } = useSidebar()
-    
-    return (
-       <>
-       <Sidebar collapsible='icon' >
-        <SidebarHeader className='bg-background'>
-            <div className='flex items-center gap-2'>
-                <Avatar>
-                    <AvatarImage src={'/global.svg'} />
 
-                </Avatar>
-                <SidebarGroupLabel>
-                    <span className='text-xl font-bold'>Aura</span>
-                </SidebarGroupLabel>
-            </div>
-            <div className='flex justify-between items-center gap-0'>
-                <SidebarGroupLabel className='mb-2 uppercase text-sm text-muted-foreground font-semibold'>
-                    Workspace
-                </SidebarGroupLabel>
-                {state === 'expanded' && (
-                    <Button variant='outline' size='icon' asChild  className='size-5'>
-                        <Link href='/create-workspace'>
-                           <Plus/>
-                        </Link>
-                    </Button>
-                )}
-            </div>
-        </SidebarHeader>
-       </Sidebar>
-       </> 
+    return (
+        <>
+            <Sidebar collapsible='icon' >
+                <SidebarHeader className='bg-background'>
+                    <div className='flex items-center gap-2'>
+                        <Avatar>
+                            <AvatarImage src={'/global.svg'} />
+
+                        </Avatar>
+                        <SidebarGroupLabel>
+                            <span className='text-xl font-bold'>Aura</span>
+                        </SidebarGroupLabel>
+                    </div>
+                    <div className='flex justify-between items-center gap-0'>
+                        <SidebarGroupLabel className='mb-2 uppercase text-sm text-muted-foreground font-semibold'>
+                            Workspace
+                        </SidebarGroupLabel>
+                        {state === 'expanded' && (
+                            <Button variant='outline' size='icon' asChild className='size-5'>
+                                <Link href='/create-workspace'>
+                                    <Plus />
+                                </Link>
+                            </Button>
+                        )}
+                    </div>
+                </SidebarHeader>
+            </Sidebar>
+        </>
     )
 }
 
-export default AppSidebar
+export default AppSidebar;
