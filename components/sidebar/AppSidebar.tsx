@@ -10,6 +10,7 @@ import { Avatar, AvatarImage } from '../ui/avatar'
 import { Button } from '../ui/button'
 import Link from 'next/link'
 import { Plus } from 'lucide-react'
+import WorkspaceSelector from './WorkspaceSelector'
 
 function AppSidebar(
     { user,
@@ -51,6 +52,7 @@ function AppSidebar(
                             </Button>
                         )}
                     </div>
+                    <WorkspaceSelector workspaces={data?.workspaces} />
                 </SidebarHeader>
             </Sidebar>
         </>
