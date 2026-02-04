@@ -52,7 +52,7 @@ function AppSidebar(
                             </Button>
                         )}
                     </div>
-                    <WorkspaceSelector workspaces={data?.workspaces} />
+                    <WorkspaceSelector workspaces={data.workspaces} />
                 </SidebarHeader>
             </Sidebar>
         </>

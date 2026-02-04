@@ -1,11 +1,13 @@
 "use client"
 import { useWorkSpaceId } from '@/hooks/UseWorkspaceId';
 import { workspaceProps } from '@/utils/types'
-import { useRouter } from 'next/router';
+
 import React, { useEffect, useState } from 'react'
 import { SidebarMenu, SidebarMenuButton, SidebarMenuSubItem } from '../ui/sidebar';
-import { DropdownMenu, DropdownMenuSubTrigger } from '../ui/dropdown-menu';
-import { WorkspaceAvatar } from '../workspace/workspaceAvatar';
+import { DropdownMenu, DropdownMenuSubTrigger, DropdownMenuTrigger } from '../ui/dropdown-menu';
+import { ChevronsUpDown } from 'lucide-react';
+import { useRouter } from 'next/navigation';
+import { WorkspaceAvatar } from '../workspace/workspace-avatar';
 
 
 function WorkspaceSelector({ workspaces }: { workspaces: workspaceProps[] }) {
@@ -34,11 +36,15 @@ function WorkspaceSelector({ workspaces }: { workspaces: workspaceProps[] }) {
             <SidebarMenu>
                 <SidebarMenuSubItem>
                     <DropdownMenu>
-                        <DropdownMenuSubTrigger asChild>
+                        <DropdownMenuTrigger asChild>
                             <SidebarMenuButton size={'lg'} className='data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground'>
-                                <WorkspaceAvatar name={selectWorkspce?.workspace.name as string} />
+                                <WorkspaceAvatar name={selectWorkspce?.workspace.name as string || 'W'} />
+                                <div className='font-semibold'>
+                                    {selectWorkspce?.workspace.name}
+                                </div>
+                                <ChevronsUpDown className='size-4 ml-auto' />
                             </SidebarMenuButton>
-                        </DropdownMenuSubTrigger>
+                        </DropdownMenuTrigger>
                     </DropdownMenu>
                 </SidebarMenuSubItem>
             </SidebarMenu>
