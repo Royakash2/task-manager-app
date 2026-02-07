@@ -2,7 +2,7 @@
 import { useWorkSpaceId } from '@/hooks/UseWorkspaceId';
 import { workspaceProps } from '@/utils/types'
 
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import { SidebarMenu, SidebarMenuButton, SidebarMenuSubItem } from '../ui/sidebar';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '../ui/dropdown-menu';
 import { Check, ChevronsUpDown } from 'lucide-react';
@@ -13,23 +13,14 @@ import { WorkspaceAvatar } from '../workspace/workspace-avatar';
 function WorkspaceSelector({ workspaces }: { workspaces: workspaceProps[] }) {
 
     const router = useRouter();
-    const workSpaceId = useWorkSpaceId();
-    const [selectWorkspce, setSelectWorkspce] = useState<workspaceProps | undefined>(undefined);
+    const workSpaceId = useWorkSpaceId() as string;
+
+    const selectWorkspce = workspaces.find((workspace) => workspace.workspaceId === workSpaceId);
 
 
     const onWorkspaceSelect = (id: string) => {
-        setSelectWorkspce(
-            workspaces.find((workspace) => workspace.id === id)
-        )
         router.push(`/workspace/${id}`);
     }
-    useEffect(() => {
-        if (workSpaceId && workspaces) {
-            setSelectWorkspce(
-                workspaces.find((workspace) => workspace.id === workSpaceId)
-            )
-        }
-    }, [workSpaceId, workspaces])
     console.log(workspaces)
 
     return (
