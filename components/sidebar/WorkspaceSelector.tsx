@@ -46,16 +46,16 @@ function WorkspaceSelector({ workspaces }: { workspaces: workspaceProps[] }) {
                                 <ChevronsUpDown className='size-4 ml-auto' />
                             </SidebarMenuButton>
                         </DropdownMenuTrigger>
-                        <DropdownMenuContent align='start' className='w-[--radix-dropdown-menu-trigger-width]'>
+                        <DropdownMenuContent align='start' className=''>
                             {
                                 workspaces.map(workspace => (
                                     <DropdownMenuItem key={workspace.id} onClick={() => onWorkspaceSelect(workspace?.workspaceId)}>
-                                        <div>
+                                        <div className='flex flex-row items-center gap-2'>
                                             <WorkspaceAvatar name={workspace.workspace.name as string || 'W'} />
                                             <p>{workspace.workspace.name}</p>
                                             {
                                                 workspace.workspaceId === workSpaceId && (
-                                                    <Check className=' ml-auto' />
+                                                    <Check className='ml-auto' />
                                                 )
                                             }
 
