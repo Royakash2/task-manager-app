@@ -4,7 +4,7 @@ import { workspaceProps } from '@/utils/types'
 
 import React, { useEffect, useState } from 'react'
 import { SidebarMenu, SidebarMenuButton, SidebarMenuSubItem } from '../ui/sidebar';
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem,  DropdownMenuTrigger } from '../ui/dropdown-menu';
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '../ui/dropdown-menu';
 import { Check, ChevronsUpDown } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { WorkspaceAvatar } from '../workspace/workspace-avatar';
@@ -15,9 +15,9 @@ function WorkspaceSelector({ workspaces }: { workspaces: workspaceProps[] }) {
     const router = useRouter();
     const workSpaceId = useWorkSpaceId();
     const [selectWorkspce, setSelectWorkspce] = useState<workspaceProps | undefined>(undefined);
-   
 
-    const onSlect = (id: string) => {
+
+    const onWorkspaceSelect = (id: string) => {
         setSelectWorkspce(
             workspaces.find((workspace) => workspace.id === id)
         )
@@ -30,6 +30,7 @@ function WorkspaceSelector({ workspaces }: { workspaces: workspaceProps[] }) {
             )
         }
     }, [workSpaceId, workspaces])
+    console.log(workspaces)
 
     return (
         <>
@@ -46,23 +47,23 @@ function WorkspaceSelector({ workspaces }: { workspaces: workspaceProps[] }) {
                             </SidebarMenuButton>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align='start' className='w-[--radix-dropdown-menu-trigger-width]'>
-                          {
-                            workspaces.map(workspace => ( 
-                                <DropdownMenuItem key={workspace.id} >
-                                    <div>
-                                        <WorkspaceAvatar name={workspace.name as string || 'W'} />
-                                        <p>{workspace.name}</p>
-                                        {
-                                            workspace.workspaceId === workSpaceId && (
-                                                <Check className=' ml-auto' />
-                                            )
-                                        }
+                            {
+                                workspaces.map(workspace => (
+                                    <DropdownMenuItem key={workspace.id} onClick={() => onWorkspaceSelect(workspace?.workspaceId)}>
+                                        <div>
+                                            <WorkspaceAvatar name={workspace.workspace.name as string || 'W'} />
+                                            <p>{workspace.workspace.name}</p>
+                                            {
+                                                workspace.workspaceId === workSpaceId && (
+                                                    <Check className=' ml-auto' />
+                                                )
+                                            }
 
-                                    </div>
-                                </DropdownMenuItem>
-                                
-                            ))
-                          }
+                                        </div>
+                                    </DropdownMenuItem>
+
+                                ))
+                            }
                         </DropdownMenuContent>
                     </DropdownMenu>
                 </SidebarMenuSubItem>
