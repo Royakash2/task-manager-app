@@ -4,8 +4,8 @@ import { workspaceProps } from '@/utils/types'
 
 import React, { useEffect, useState } from 'react'
 import { SidebarMenu, SidebarMenuButton, SidebarMenuSubItem } from '../ui/sidebar';
-import { DropdownMenu, DropdownMenuSubTrigger, DropdownMenuTrigger } from '../ui/dropdown-menu';
-import { ChevronsUpDown } from 'lucide-react';
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem,  DropdownMenuTrigger } from '../ui/dropdown-menu';
+import { Check, ChevronsUpDown } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { WorkspaceAvatar } from '../workspace/workspace-avatar';
 
@@ -45,6 +45,25 @@ function WorkspaceSelector({ workspaces }: { workspaces: workspaceProps[] }) {
                                 <ChevronsUpDown className='size-4 ml-auto' />
                             </SidebarMenuButton>
                         </DropdownMenuTrigger>
+                        <DropdownMenuContent align='start' className='w-[--radix-dropdown-menu-trigger-width]'>
+                          {
+                            workspaces.map(workspace => ( 
+                                <DropdownMenuItem key={workspace.id} >
+                                    <div>
+                                        <WorkspaceAvatar name={workspace.name as string || 'W'} />
+                                        <p>{workspace.name}</p>
+                                        {
+                                            workspace.workspaceId === workSpaceId && (
+                                                <Check className=' ml-auto' />
+                                            )
+                                        }
+
+                                    </div>
+                                </DropdownMenuItem>
+                                
+                            ))
+                          }
+                        </DropdownMenuContent>
                     </DropdownMenu>
                 </SidebarMenuSubItem>
             </SidebarMenu>
