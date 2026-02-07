@@ -37,7 +37,7 @@ function WorkspaceSelector({ workspaces }: { workspaces: workspaceProps[] }) {
                                 <ChevronsUpDown className='size-4 ml-auto' />
                             </SidebarMenuButton>
                         </DropdownMenuTrigger>
-                        <DropdownMenuContent align='start' className=''>
+                        <DropdownMenuContent align='start' className='w-(--radix-dropdown-menu-trigger-width)'>
                             {
                                 workspaces.map(workspace => (
                                     <DropdownMenuItem key={workspace.id} onClick={() => onWorkspaceSelect(workspace?.workspaceId)}>
