@@ -21,7 +21,6 @@ function WorkspaceSelector({ workspaces }: { workspaces: workspaceProps[] }) {
     const onWorkspaceSelect = (id: string) => {
         router.push(`/workspace/${id}`);
     }
-    console.log(selectedWorkspace)
 
     return (
         <>
