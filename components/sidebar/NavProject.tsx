@@ -4,6 +4,7 @@ import { projectProps, workspaceMembersProps } from "@/utils/types"
 import { SidebarGroup, SidebarGroupLabel, SidebarMenu, SidebarMenuButton, SidebarMenuItem, useSidebar } from "../ui/sidebar"
 import { usePathname } from "next/navigation"
 import Link from "next/link"
+import { CreateProjectForm } from "../project/create-project-form"
 
 
 export const NavProject = ({
@@ -23,7 +24,7 @@ export const NavProject = ({
                     <span className="text-sm font-semibold text-muted-foreground uppercase">
                         Projects
                     </span>
-                    {/* <CreateProject/> */}
+                    <CreateProjectForm workspaceMembers={workspaceMembers} />
                     <SidebarGroupLabel>
                         <SidebarMenu>
                             {
