@@ -12,6 +12,7 @@ import Link from 'next/link'
 import { Plus } from 'lucide-react'
 import WorkspaceSelector from './WorkspaceSelector'
 import { NavMain } from './NavMain'
+import { NavProject } from './NavProject'
 
 function AppSidebar(
     { user,
@@ -57,7 +58,7 @@ function AppSidebar(
                 </SidebarHeader>
                 <SidebarContent>    
                     <NavMain/>
-                    
+                    <NavProject projects={project} workspaceMembers={workspaceMembers} />
                 </SidebarContent>
             </Sidebar>
         </>
