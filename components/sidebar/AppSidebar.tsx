@@ -34,10 +34,10 @@ function AppSidebar(
             <Sidebar collapsible='icon' >
                 <SidebarHeader className='bg-background'>
                     <div className='flex items-center gap-2'>
-                        <Avatar>
+                        {/* <Avatar>
                             <AvatarImage src={'/global.svg'} />
 
-                        </Avatar>
+                        </Avatar> */}
                         <SidebarGroupLabel>
                             <span className='text-xl font-bold'>Aura</span>
                         </SidebarGroupLabel>
