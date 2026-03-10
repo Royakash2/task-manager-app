@@ -24,8 +24,9 @@ export const NavProject = ({
                     <span className="text-sm font-semibold text-muted-foreground uppercase">
                         Projects
                     </span>
-                    <CreateProjectForm workspaceMembers={workspaceMembers} />
+                 
                     <SidebarGroupLabel>
+                           <CreateProjectForm workspaceMembers={workspaceMembers} />
                         <SidebarMenu>
                             {
                                 projects.map((project) => {
