@@ -12,7 +12,7 @@ import { Form,FormControl, FormField, FormItem, FormLabel, FormMessage } from ".
 import { Input } from "../ui/input"
 import { Textarea } from "../ui/textarea"
 import { Button } from "../ui/button"
-import { Dialog, DialogContent, DialogTitle, DialogTrigger } from "../ui/dialog"
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "../ui/dialog"
 import { Plus } from "lucide-react"
 
 interface Props {
@@ -45,13 +45,13 @@ export const CreateProjectForm = ({
                 </Button>
             </DialogTrigger>
             <DialogContent>
-                <Card className='w-full max-w-md'>
-                <CardHeader>
-                    <DialogTitle className='text-2xl font-bold'>Create new Workspace</DialogTitle>
-                    <CardDescription>
-                        Setup a workspace for you and your team
-                    </CardDescription>
-                </CardHeader>
+                <Card className='w-full border-none shadow-none max-w-md'>
+                <DialogHeader>
+                    <DialogTitle className='text-2xl font-bold'>Create new Project</DialogTitle>
+                    <DialogDescription>
+                        Setup a project for you and your team
+                    </DialogDescription>
+                </DialogHeader>
                 <CardContent>
                     <Form {...form}>
                         <form onSubmit={form.handleSubmit(handleSubmit)} className='w-full max-w-md space-y-5'>
@@ -60,9 +60,9 @@ export const CreateProjectForm = ({
                                 name='name'
                                 render={({ field }) => (
                                     <FormItem>
-                                        <FormLabel>Workspace Name</FormLabel>
+                                        <FormLabel>Project Name</FormLabel>
                                         <FormControl>
-                                            <Input placeholder='Enter workspace name' {...field} />
+                                            <Input placeholder='Enter project name' {...field} />
                                         </FormControl>
                                         <FormMessage />
                                     </FormItem>
@@ -74,10 +74,10 @@ export const CreateProjectForm = ({
                                 name='description'
                                 render={({ field }) => (
                                     <FormItem>
-                                        <FormLabel>Bio</FormLabel>
+                                        <FormLabel>Description</FormLabel>
                                         <FormControl>
                                             <Textarea
-                                                placeholder='What is this workspace for?'
+                                                placeholder='What is this project for?'
                                                 className='resize-none'
                                                 {...field}
                                             />
@@ -92,7 +92,7 @@ export const CreateProjectForm = ({
                                     cancel
                                 </Button>
                                 <Button type='submit' disabled={pending} className='flex-1'>
-                                    {pending ? "Creating..." : "Create Workspace"}
+                                    {pending ? "Creating..." : "Create Project"}
                                 </Button>
                             </div>
                         </form>
