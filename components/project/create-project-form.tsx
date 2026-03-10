@@ -5,15 +5,14 @@ import { projectSchema } from "@/lib/schema"
 import { workspaceMembersProps } from "@/utils/types"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useState } from "react"
-import { Form, useForm } from "react-hook-form"
+import {  useForm } from "react-hook-form"
 import z from "zod"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../ui/card"
-import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "../ui/form"
+import { Form,FormControl, FormField, FormItem, FormLabel, FormMessage } from "../ui/form"
 import { Input } from "../ui/input"
 import { Textarea } from "../ui/textarea"
 import { Button } from "../ui/button"
-import { Dialog, DialogContent } from "../ui/dialog"
-import { DialogTrigger } from "@radix-ui/react-dialog"
+import { Dialog, DialogContent, DialogTitle, DialogTrigger } from "../ui/dialog"
 import { Plus } from "lucide-react"
 
 interface Props {
@@ -48,7 +47,7 @@ export const CreateProjectForm = ({
             <DialogContent>
                 <Card className='w-full max-w-md'>
                 <CardHeader>
-                    <CardTitle className='text-2xl font-bold'>Create new Workspace</CardTitle>
+                    <DialogTitle className='text-2xl font-bold'>Create new Workspace</DialogTitle>
                     <CardDescription>
                         Setup a workspace for you and your team
                     </CardDescription>
