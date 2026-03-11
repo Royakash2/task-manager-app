@@ -5,15 +5,16 @@ import { projectSchema } from "@/lib/schema"
 import { workspaceMembersProps } from "@/utils/types"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useState } from "react"
-import {  useForm } from "react-hook-form"
+import { useForm } from "react-hook-form"
 import z from "zod"
 import { Card } from "../ui/card"
-import { Form,FormControl, FormField, FormItem, FormLabel, FormMessage } from "../ui/form"
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "../ui/form"
 import { Input } from "../ui/input"
 import { Textarea } from "../ui/textarea"
 import { Button } from "../ui/button"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "../ui/dialog"
 import { Plus } from "lucide-react"
+import { Select, SelectItem } from "../ui/select"
 
 interface Props {
     workspaceMembers: workspaceMembersProps[]
@@ -38,67 +39,88 @@ export const CreateProjectForm = ({
     }
     return (
         <>
-         <Dialog>
-            <DialogTrigger asChild>
-                <Button className="size-5" size="icon">
-                    <Plus/>
-                </Button>
-            </DialogTrigger>
-            <DialogContent>
-                <Card className='w-full border-none shadow-none max-w-md'>
-                <DialogHeader>
-                    <DialogTitle className='text-2xl font-bold'>Create new Project</DialogTitle>
-                </DialogHeader>
-               
-                    <Form {...form}>
-                        <form onSubmit={form.handleSubmit(handleSubmit)} className='w-full max-w-md space-y-5'>
-                            <FormField
-                                control={form.control}
-                                name='name'
-                                render={({ field }) => (
-                                    <FormItem>
-                                        <FormLabel>Project Name</FormLabel>
-                                        <FormControl>
-                                            <Input placeholder='Enter project name' {...field} />
-                                        </FormControl>
-                                        <FormMessage />
-                                    </FormItem>
-                                )}
-                            />
+            <Dialog>
+                <DialogTrigger asChild>
+                    <Button className="size-5" size="icon">
+                        <Plus />
+                    </Button>
+                </DialogTrigger>
+                <DialogContent>
+                    <Card className='w-full border-none shadow-none max-w-md'>
+                        <DialogHeader>
+                            <DialogTitle className='text-2xl font-bold'>Create new Project</DialogTitle>
+                        </DialogHeader>
 
-                            <FormField
-                                control={form.control}
-                                name='description'
-                                render={({ field }) => (
-                                    <FormItem>
-                                        <FormLabel>Description</FormLabel>
-                                        <FormControl>
-                                            <Textarea
-                                                placeholder='What is this project for?'
-                                                className='resize-none'
-                                                {...field}
-                                            />
-                                        </FormControl>
-                                        <FormMessage />
-                                    </FormItem>
-                                )}
-                            />
+                        <Form {...form}>
+                            <form onSubmit={form.handleSubmit(handleSubmit)} className='w-full max-w-md space-y-5'>
+                                <FormField
+                                    control={form.control}
+                                    name='name'
+                                    render={({ field }) => (
+                                        <FormItem>
+                                            <FormLabel>Project Name</FormLabel>
+                                            <FormControl>
+                                                <Input placeholder='Enter project name' {...field} />
+                                            </FormControl>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
 
-                            <div className='flex items-center gap-3 w-full'>
-                                <Button type='button' variant="outline" className='flex-1' disabled={pending}>
-                                    cancel
-                                </Button>
-                                <Button type='submit' disabled={pending} className='flex-1'>
-                                    {pending ? "Creating..." : "Create Project"}
-                                </Button>
-                            </div>
-                        </form>
-                    </Form>
-               
-            </Card>
-                
-            </DialogContent>
-         </Dialog>
+                                <FormField
+                                    control={form.control}
+                                    name='description'
+                                    render={({ field }) => (
+                                        <FormItem>
+                                            <FormLabel>Description</FormLabel>
+                                            <FormControl>
+                                                <Textarea
+                                                    placeholder='What is this project for?'
+                                                    className='resize-none'
+                                                    {...field}
+                                                />
+                                            </FormControl>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
+                                <div>
+                                    <FormField
+                                        control={form.control}
+                                        name='membersAccess'
+                                        render={({ field }) => (
+                                            <FormItem>
+                                                <FormLabel>Members Access</FormLabel>
+                                                
+                                                   
+                                                        {workspaceMembers.map((member) => (
+                                                            <SelectItem key={member.id} value={member.id}>
+                                                                {member.name}
+                                                            </SelectItem>
+                                                        ))}
+                                                    
+                                               
+                                                <FormMessage />
+                                            </FormItem>
+                                        )}
+                                    />
+                                </div>
+
+                                <div className='flex items-center gap-3 w-full'>
+                                    <Button type='button' variant="outline" className='flex-1' disabled={pending}>
+                                        cancel
+                                    </Button>
+                                    <Button type='submit' disabled={pending} className='flex-1'>
+                                        {pending ? "Creating..." : "Create Project"}
+                                    </Button>
+                                </div>
+                            </form>
+                        </Form>
+
+                    </Card>
+
+                </DialogContent>
+            </Dialog>
 
         </>
     )
