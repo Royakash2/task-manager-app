@@ -48,11 +48,8 @@ export const CreateProjectForm = ({
                 <Card className='w-full border-none shadow-none max-w-md'>
                 <DialogHeader>
                     <DialogTitle className='text-2xl font-bold'>Create new Project</DialogTitle>
-                    <DialogDescription>
-                        Setup a project for you and your team
-                    </DialogDescription>
                 </DialogHeader>
-                <CardContent>
+               
                     <Form {...form}>
                         <form onSubmit={form.handleSubmit(handleSubmit)} className='w-full max-w-md space-y-5'>
                             <FormField
@@ -97,7 +94,7 @@ export const CreateProjectForm = ({
                             </div>
                         </form>
                     </Form>
-                </CardContent>
+               
             </Card>
                 
             </DialogContent>
