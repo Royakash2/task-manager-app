@@ -91,18 +91,19 @@ export const CreateProjectForm = ({
                                         render={({ field }) => (
                                             <FormItem>
                                                 <FormLabel>Members Access</FormLabel>
-                                                
-                                                   
-                                                        {workspaceMembers.map((member) => (
-                                                            <SelectItem key={member.id} value={member.id}>
-                                                                {member.name}
-                                                            </SelectItem>
-                                                        ))}
-                                                    
-                                               
+                                                <div>
+                                                    {workspaceMembers.map((member) => (
+                                                        <SelectItem key={member.id} value={member.id}>
+                                                            {member.name}
+                                                        </SelectItem>
+                                                    ))}
+
+                                                </div>
                                                 <FormMessage />
                                             </FormItem>
+
                                         )}
+
                                     />
                                 </div>
 
