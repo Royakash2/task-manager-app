@@ -95,18 +95,18 @@ export const CreateProjectForm = ({
                                                     {workspaceMembers.map((member) => (
                                                         <div key={member.id} className="flex items-center space-x-2" >
                                                             <Checkbox
-                                                                id={member.id}
-                                                                checked={field.value?.includes(member.id)}
+                                                                id={member.userId}
+                                                                checked={field.value?.includes(member.userId)}
                                                                 onCheckedChange={(checked) => {
                                                                     const currentValue = field.value || [];
                                                                     if (checked) {
-                                                                        field.onChange([...currentValue, member.id]);
+                                                                        field.onChange([...currentValue, member.userId]);
                                                                     } else {
-                                                                        field.onChange(currentValue.filter((id) => id !== member.id));
+                                                                        field.onChange(currentValue.filter((id) => id !== member.userId));
                                                                     }
                                                                 }}
                                                             />
-                                                            <label htmlFor={member.id}>{member.name}</label>
+                                                            <label className="font-medium text-sm leading-none peer-disabled:cursor-not-allowed cursor-pointer" htmlFor={member.userId}>{member.user.name}</label>
                                                         </div>
                                                     ))}
 
