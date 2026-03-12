@@ -14,7 +14,7 @@ import { Textarea } from "../ui/textarea"
 import { Button } from "../ui/button"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "../ui/dialog"
 import { Plus } from "lucide-react"
-import { Select, SelectItem } from "../ui/select"
+import { Checkbox } from "../ui/checkbox"
 
 interface Props {
     workspaceMembers: workspaceMembersProps[]
@@ -35,7 +35,7 @@ export const CreateProjectForm = ({
         }
     })
     const handleSubmit = async (data: projectDataType) => {
-
+        console.log(data)
     }
     return (
         <>
@@ -93,9 +93,21 @@ export const CreateProjectForm = ({
                                                 <FormLabel>Members Access</FormLabel>
                                                 <div>
                                                     {workspaceMembers.map((member) => (
-                                                        <SelectItem key={member.id} value={member.id}>
-                                                            {member.name}
-                                                        </SelectItem>
+                                                        <div key={member.id} className="flex items-center space-x-2" >
+                                                            <Checkbox
+                                                                id={member.id}
+                                                                checked={field.value?.includes(member.id)}
+                                                                onCheckedChange={(checked) => {
+                                                                    const currentValue = field.value || [];
+                                                                    if (checked) {
+                                                                        field.onChange([...currentValue, member.id]);
+                                                                    } else {
+                                                                        field.onChange(currentValue.filter((id) => id !== member.id));
+                                                                    }
+                                                                }}
+                                                            />
+                                                            <label htmlFor={member.id}>{member.name}</label>
+                                                        </div>
                                                     ))}
 
                                                 </div>
