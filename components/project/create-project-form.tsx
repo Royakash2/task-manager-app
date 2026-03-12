@@ -35,7 +35,7 @@ export const CreateProjectForm = ({
         }
     })
     const handleSubmit = async (data: projectDataType) => {
-        console.log(data)
+        console.log(data, setPending)
     }
     return (
         <>
@@ -108,7 +108,7 @@ export const CreateProjectForm = ({
                                                             />
                                                             <label className="font-medium text-sm leading-none peer-disabled:cursor-not-allowed
                                                              cursor-pointer capitalize" htmlFor={member.userId}>
-                                                                {member.user.name}</label>
+                                                                {member.user.name} ({member.accessLevel.toLowerCase()})</label>
                                                         </div>
                                                     ))}
 
