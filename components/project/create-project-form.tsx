@@ -106,7 +106,9 @@ export const CreateProjectForm = ({
                                                                     }
                                                                 }}
                                                             />
-                                                            <label className="font-medium text-sm leading-none peer-disabled:cursor-not-allowed cursor-pointer" htmlFor={member.userId}>{member.user.name}</label>
+                                                            <label className="font-medium text-sm leading-none peer-disabled:cursor-not-allowed
+                                                             cursor-pointer capitalize" htmlFor={member.userId}>
+                                                                {member.user.name}</label>
                                                         </div>
                                                     ))}
 
