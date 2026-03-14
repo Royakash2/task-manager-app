@@ -19,7 +19,7 @@ import { Checkbox } from "../ui/checkbox"
 interface Props {
     workspaceMembers: workspaceMembersProps[]
 }
-type projectDataType = z.infer<typeof projectSchema>
+export type projectDataType = z.infer<typeof projectSchema>
 export const CreateProjectForm = ({
     workspaceMembers
 }: Props) => {
