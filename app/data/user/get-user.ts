@@ -7,6 +7,9 @@ export const userRequired = async () => {
         throw new Error("Unauthorized")
     }
     const user = await getUser()
+    if (!user) {
+        throw new Error("User not found")
+    }
     return {
         user,
         isUserAuthenticated
