@@ -43,6 +43,14 @@ export const createProject = async (data: projectDataType) => {
           hasAccess: true,
         })),
       },
+      activities: {
+        create: {
+          type: "project_created",
+          description: `created Project ${validatedData.name} `,
+          userId: user.id,
+        },
+      },
     },
   });
+  return { success: true };
 };
