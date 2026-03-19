@@ -15,6 +15,8 @@ import { Button } from "../ui/button"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "../ui/dialog"
 import { Plus } from "lucide-react"
 import { Checkbox } from "../ui/checkbox"
+import { toast } from "sonner"
+import { createProject } from "@/app/actions/project"
 
 interface Props {
     workspaceMembers: workspaceMembersProps[]
@@ -35,7 +37,16 @@ export const CreateProjectForm = ({
         }
     })
     const handleSubmit = async (data: projectDataType) => {
-        console.log(data, setPending)
+        try{
+            setPending(true);
+            await createProject(data);
+            toast.success("Project created successfully")
+        }catch(error){
+            console.log(error);
+            toast.error("Failed to create project")
+        }finally{
+            setPending(false);
+        }
     }
     return (
         <>
