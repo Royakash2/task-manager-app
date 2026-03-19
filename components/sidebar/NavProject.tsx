@@ -33,7 +33,7 @@ export const NavProject = ({
                             return (
                                 <SidebarMenuItem key={project.id}>
                                     <SidebarMenuButton>
-                                        <Link href={href} className={pathName === href ? "text-primary-foreground text-semibold" : "text-muted-foreground hover:text-primary-foreground"}>
+                                        <Link href={href} className={pathName === href ? "text-primary-foreground text-semibold" : "text-muted-foreground "}>
                                             <span>{project.name}</span>
                                         </Link>
                                     </SidebarMenuButton>
