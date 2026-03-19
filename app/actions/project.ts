@@ -22,4 +22,12 @@ export const createProject = async (data: projectDataType) => {
       },
     },
   });
+  if (!isUserMember) {
+    throw new Error("You are not a member of this workspace");
+  }
+  if (validatedData.membersAccess?.length === 0) {
+    validatedData.membersAccess = [user.id];
+  } else if (!validatedData.membersAccess?.includes(user.id)) {
+    validatedData.membersAccess?.push(user.id);
+  }
 };
