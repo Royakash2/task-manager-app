@@ -14,14 +14,14 @@ export const createProject = async (data: projectDataType) => {
     },
   });
   const validatedData = projectSchema.parse(data);
-  const isUserMember = await db.workspaceMembers.findUnique({
+  const workspaceMembers = await db.workspaceMembers.findMany({
     where: {
-      userId_workspaceId: {
-        userId: user.id,
-        workspaceId: data.workspaceId,
-      },
+      workspaceId: data.workspaceId,
     },
   });
+  const isUserMember = workspaceMembers.some(
+    (member) => member.userId === user.id,
+  );
   if (!isUserMember) {
     throw new Error("You are not a member of this workspace");
   }
@@ -30,4 +30,19 @@ export const createProject = async (data: projectDataType) => {
   } else if (!validatedData.membersAccess?.includes(user.id)) {
     validatedData.membersAccess?.push(user.id);
   }
+  await db.project.create({
+    data: {
+      name: validatedData.name,
+      description: validatedData.description,
+      workspaceId: validatedData.workspaceId,
+      projectAccess: {
+        create: validatedData.membersAccess?.map((memberId) => ({
+          workspaceMemberId: workspaceMembers.find(
+            (member) => member.userId === memberId,
+          )!.id,
+          hasAccess: true,
+        })),
+      },
+    },
+  });
 };
