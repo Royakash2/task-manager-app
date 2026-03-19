@@ -17,6 +17,7 @@ import { Plus } from "lucide-react"
 import { Checkbox } from "../ui/checkbox"
 import { toast } from "sonner"
 import { createProject } from "@/app/actions/project"
+import { useRouter } from "next/navigation"
 
 interface Props {
     workspaceMembers: workspaceMembersProps[]
@@ -27,6 +28,7 @@ export const CreateProjectForm = ({
 }: Props) => {
     const workspaceId = useWorkSpaceId();
     const [pending, setPending] = useState(false);
+    const router = useRouter();
     const form = useForm<projectDataType>({
         resolver: zodResolver(projectSchema),
         defaultValues: {
@@ -41,6 +43,7 @@ export const CreateProjectForm = ({
             setPending(true);
             await createProject(data);
             toast.success("Project created successfully")
+            router.refresh();
         }catch(error){
             console.log(error);
             toast.error("Failed to create project")
