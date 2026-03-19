@@ -24,28 +24,24 @@ export const NavProject = ({
                     <span className="text-sm font-semibold text-muted-foreground uppercase">
                         Projects
                     </span>
-                 
-                    <SidebarGroupLabel>
-                           <CreateProjectForm workspaceMembers={workspaceMembers} />
-                        <SidebarMenu>
-                            {
-                                projects.map((project) => {
-                                    const href = `/workspace/${project.workspaceId}/project/${project.id}`;
-                                    // const isActive = pathName === href;
-                                    return (
-                                        <SidebarMenuItem key={project.id}>
-                                            <SidebarMenuButton>
-                                                <Link href={href} className={pathName === href ? "text-primary-foreground text-semibold" : "text-muted-foreground hover:text-primary-foreground"}>
-                                                    <span>{project.name}</span>
-                                                </Link>
-                                            </SidebarMenuButton>
-                                        </SidebarMenuItem>
-                                    )
-                                })
-                            }
-                        </SidebarMenu>
-                    </SidebarGroupLabel>
+                    <CreateProjectForm workspaceMembers={workspaceMembers} />
                 </SidebarGroupLabel>
+                <SidebarMenu>
+                    {
+                        projects.map((project) => {
+                            const href = `/workspace/${project.workspaceId}/project/${project.id}`;
+                            return (
+                                <SidebarMenuItem key={project.id}>
+                                    <SidebarMenuButton>
+                                        <Link href={href} className={pathName === href ? "text-primary-foreground text-semibold" : "text-muted-foreground hover:text-primary-foreground"}>
+                                            <span>{project.name}</span>
+                                        </Link>
+                                    </SidebarMenuButton>
+                                </SidebarMenuItem>
+                            )
+                        })
+                    }
+                </SidebarMenu>
             </SidebarGroup>
         </>
     )
