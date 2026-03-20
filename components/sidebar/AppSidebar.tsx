@@ -5,12 +5,14 @@ import React from 'react'
 import { AppSidebarDataProps } from './AppSidebarContainer'
 import { User } from '@prisma/client'
 import { projectProps, workspaceMembersProps } from '@/utils/types'
-import { Sidebar, SidebarGroupLabel, SidebarHeader, useSidebar } from '../ui/sidebar'
+import { Sidebar, SidebarContent, SidebarGroupLabel, SidebarHeader, useSidebar } from '../ui/sidebar'
 import { Avatar, AvatarImage } from '../ui/avatar'
 import { Button } from '../ui/button'
 import Link from 'next/link'
 import { Plus } from 'lucide-react'
 import WorkspaceSelector from './WorkspaceSelector'
+import { NavMain } from './NavMain'
+import { NavProject } from './NavProject'
 
 function AppSidebar(
     { user,
@@ -32,10 +34,10 @@ function AppSidebar(
             <Sidebar collapsible='icon' >
                 <SidebarHeader className='bg-background'>
                     <div className='flex items-center gap-2'>
-                        <Avatar>
+                        {/* <Avatar>
                             <AvatarImage src={'/global.svg'} />
 
-                        </Avatar>
+                        </Avatar> */}
                         <SidebarGroupLabel>
                             <span className='text-xl font-bold'>Aura</span>
                         </SidebarGroupLabel>
@@ -54,6 +56,10 @@ function AppSidebar(
                     </div>
                     <WorkspaceSelector workspaces={data.workspaces} />
                 </SidebarHeader>
+                <SidebarContent>    
+                    <NavMain/>
+                    <NavProject projects={project} workspaceMembers={workspaceMembers} />
+                </SidebarContent>
             </Sidebar>
         </>
     )

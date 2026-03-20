@@ -13,15 +13,14 @@ import { WorkspaceAvatar } from '../workspace/workspace-avatar';
 function WorkspaceSelector({ workspaces }: { workspaces: workspaceProps[] }) {
 
     const router = useRouter();
-    const workSpaceId = useWorkSpaceId() as string;
+    const workspaceId = useWorkSpaceId() as string;
 
-    const selectWorkspce = workspaces.find((workspace) => workspace.workspaceId === workSpaceId);
+    const selectedWorkspace = workspaces.find((workspace) => workspace.workspaceId === workspaceId);
 
 
     const onWorkspaceSelect = (id: string) => {
         router.push(`/workspace/${id}`);
     }
-    console.log(workspaces)
 
     return (
         <>
@@ -30,9 +29,9 @@ function WorkspaceSelector({ workspaces }: { workspaces: workspaceProps[] }) {
                     <DropdownMenu>
                         <DropdownMenuTrigger asChild>
                             <SidebarMenuButton size={'lg'} className='data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground'>
-                                <WorkspaceAvatar name={selectWorkspce?.workspace.name as string || 'W'} />
+                                <WorkspaceAvatar name={selectedWorkspace?.workspace.name as string || 'W'} />
                                 <div className='font-semibold'>
-                                    {selectWorkspce?.workspace.name}
+                                    {selectedWorkspace?.workspace.name}
                                 </div>
                                 <ChevronsUpDown className='size-4 ml-auto' />
                             </SidebarMenuButton>
@@ -45,7 +44,7 @@ function WorkspaceSelector({ workspaces }: { workspaces: workspaceProps[] }) {
                                             <WorkspaceAvatar name={workspace.workspace.name as string || 'W'} />
                                             <p>{workspace.workspace.name}</p>
                                             {
-                                                workspace.workspaceId === workSpaceId && (
+                                                workspace.workspaceId === workspaceId && (
                                                     <Check className='ml-auto' />
                                                 )
                                             }

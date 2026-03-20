@@ -19,3 +19,13 @@ export const workspaceSchema = z.object({
     .max(100, "Workspace name is too long max 100 characters"),
   description: z.string().optional(),
 });
+
+export const projectSchema = z.object({
+  name: z
+    .string()
+    .min(3, "Project name is required")
+    .max(100, "Project name is too long max 100 characters"),
+  description: z.string().optional(),
+  workspaceId: z.string(),
+  membersAccess: z.array(z.string()).optional(),
+});
