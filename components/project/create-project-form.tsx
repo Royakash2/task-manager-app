@@ -42,6 +42,7 @@ export const CreateProjectForm = ({
         try{
             setPending(true);
             await createProject(data);
+            form.reset();
             toast.success("Project created successfully")
             router.refresh();
         }catch(error){
