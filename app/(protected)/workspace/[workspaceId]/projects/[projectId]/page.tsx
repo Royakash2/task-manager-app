@@ -1,5 +1,5 @@
-import { Tabs } from '@/components/ui/tabs';
-import { TabsList } from '@radix-ui/react-tabs';
+import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import Link from 'next/link';
 import React from 'react'
 interface ProjectPageProps {
     params: Promise<{ workspaceId: string; projectId: string }>;
@@ -14,7 +14,9 @@ const ProjectPage = async (props: ProjectPageProps) => {
             <Tabs defaultValue={(searchParams.view as string) || 'Dashboard'}
             className='w-full'>
                 <TabsList>
-                    
+                    <Link href={`?view=Dashboard`}>
+                      <TabsTrigger className='px-1.5 md:px-3' value='Dashboard'>Dashboard</TabsTrigger>
+                    </Link>
                 </TabsList>
             </Tabs>
         </div>

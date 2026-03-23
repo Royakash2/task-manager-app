@@ -1,4 +1,4 @@
-'use-client'
+'use client'
 
 import { projectProps, workspaceMembersProps } from "@/utils/types"
 import { SidebarGroup, SidebarGroupLabel, SidebarMenu, SidebarMenuButton, SidebarMenuItem, useSidebar } from "../ui/sidebar"
