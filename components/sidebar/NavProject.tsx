@@ -29,7 +29,7 @@ export const NavProject = ({
                 <SidebarMenu>
                     {
                         projects.map((project) => {
-                            const href = `/workspace/${project.workspaceId}/project/${project.id}`;
+                            const href = `/workspace/${project.workspaceId}/projects/${project.id}`;
                             return (
                                 <SidebarMenuItem key={project.id}>
                                     <SidebarMenuButton>
