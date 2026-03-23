@@ -17,6 +17,12 @@ const ProjectPage = async (props: ProjectPageProps) => {
                     <Link href={`?view=Dashboard`}>
                       <TabsTrigger className='px-1.5 md:px-3' value='Dashboard'>Dashboard</TabsTrigger>
                     </Link>
+                    <Link href={`?view=Tasks`}>
+                      <TabsTrigger className='px-1.5 md:px-3' value='Tasks'>Tasks</TabsTrigger>
+                    </Link>
+                    <Link href={`?view=Calendar`}>
+                      <TabsTrigger className='px-1.5 md:px-3' value='Calendar'>Calendar</TabsTrigger>
+                    </Link>
                 </TabsList>
             </Tabs>
         </div>
