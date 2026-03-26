@@ -16,7 +16,13 @@ interface ProjectDashboardProps {
     comments: commentProps[];
 }
 
-const ProjectDashboard = () => {
+const ProjectDashboard = ({
+    project,
+    tasks,
+    activities,
+    totalWorkspaceMembers,
+    comments
+}: ProjectDashboardProps) => {
     return (
         <div>
 
