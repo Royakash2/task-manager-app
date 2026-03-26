@@ -1,4 +1,5 @@
-import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import ProjectDashboard from '@/components/project/project-dashboard';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import Link from 'next/link';
 import React from 'react'
 interface ProjectPageProps {
@@ -24,6 +25,23 @@ const ProjectPage = async (props: ProjectPageProps) => {
                       <TabsTrigger className='px-1.5 md:px-3' value='Kanban'>Kanban</TabsTrigger>
                     </Link>
                 </TabsList>
+                <TabsContent value='Dashboard'>
+                  <ProjectDashboard
+                  project={project}
+                  tasks={tasks}
+                  activities={activities}
+                  totalWorkspaceMembers={totalWorkspaceMembers}
+                  comments={comments}
+                  />
+                </TabsContent>
+                <TabsContent value='Table'>
+                    {/* <Table /> */}
+                    table
+                </TabsContent>
+                <TabsContent value='Kanban'>
+                    {/* <Kanban /> */}
+                    kanban
+                </TabsContent>
             </Tabs>
         </div>
     )
