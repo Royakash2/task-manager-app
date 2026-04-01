@@ -32,7 +32,7 @@ export interface projectProps {
       image?: string;
       email: string;
     };
-  };
+  }[];
 }
 
 export interface workspaceProps {

@@ -1,5 +1,8 @@
 import { projectProps } from "@/utils/types";
 import { ProjectAvatar } from "./Project-avatar";
+import { CreateTaskDialog } from "../task/create-task-dialog";
+import { Card } from "../ui/card";
+import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 
 export const ProjectHeader = ({ project }: { project: projectProps }) => {
     return (
@@ -17,7 +20,30 @@ export const ProjectHeader = ({ project }: { project: projectProps }) => {
                         )}
                     </div>
                 </div>
+                <div className="flex justify-end mt-3 md:mt-0 gap-3">
+                    <CreateTaskDialog project={project}/> 
+                </div>
             </div>
+
+            <Card className="p-4">
+                <div className="flex flex-col md:flex-row md:items-center gap-4">
+                    <h3 className="text-sm font-medium">Team Members</h3>
+
+                    <div className=" flex flex-wrap space-x-2">
+                        {project?.members?.map((member) => (
+                            <Avatar
+                                key={member.id}
+                                className="size-9 2xl:size-10 border-2 border-background shadow"
+                            >
+                                <AvatarImage src={member?.user.image || undefined} />
+                                <AvatarFallback className="text-sm 2xl:text-base">
+                                    {member.user.name.substring(0, 2).toUpperCase()}
+                                </AvatarFallback>
+                            </Avatar>
+                        ))}
+                    </div>
+                </div>
+            </Card>
         </div>
     );
 };
