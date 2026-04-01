@@ -108,10 +108,7 @@ export const getProjectDetails = async (workspaceId: string, projectId: string) 
         return {
            project : {
             ...project,
-           members : project?.projectAccess.map((access) => {
-            // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-            access.workspaceMember
-           })
+           members : project?.projectAccess.map((access) => access.workspaceMember)
            },
            tasks,
            activities: project?.activities,
