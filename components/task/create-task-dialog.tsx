@@ -14,6 +14,7 @@ import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Button } from "../ui/button";
 import { useWorkSpaceId } from "@/hooks/UseWorkspaceId";
+import { TaskPriority } from "@prisma/client";
 
 type TaskFormValues = z.infer<typeof taskFormSchema>;
 
@@ -90,6 +91,33 @@ export const CreateTaskDialog = ({ project }: Props) => {
                         {project.members.map((member) => (
                           <SelectItem key={member.id} value={member.userId}>
                             {member?.user?.name}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="priority"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Priority</FormLabel>
+                    <Select
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                    >
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select priority" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        {Object.values(TaskPriority).map((priority) => (
+                          <SelectItem key={priority} value={priority}>
+                            {priority}
                           </SelectItem>
                         ))}
                       </SelectContent>
