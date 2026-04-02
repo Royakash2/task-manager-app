@@ -37,6 +37,7 @@ export const CreateTaskDialog = ({ project }: Props) => {
       startDate: new Date(),
       priority: "MEDIUM",
       attachments: [],
+      assigneeId:""
     },
   });
 
