@@ -107,7 +107,7 @@ export const CreateTaskDialog = ({ project }: Props) => {
                       defaultValue={field.value}
                     >
                       <FormControl>
-                        <SelectTrigger>
+                        <SelectTrigger className="w-full">
                           <SelectValue placeholder="Select assignee" />
                         </SelectTrigger>
                       </FormControl>
@@ -134,7 +134,7 @@ export const CreateTaskDialog = ({ project }: Props) => {
                       defaultValue={field.value}
                     >
                       <FormControl>
-                        <SelectTrigger>
+                        <SelectTrigger className="w-full">
                           <SelectValue placeholder="Select priority" />
                         </SelectTrigger>
                       </FormControl>
