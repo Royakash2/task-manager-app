@@ -11,6 +11,7 @@ import { projectProps } from "@/utils/types";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Button } from "../ui/button";
 import { useWorkSpaceId } from "@/hooks/UseWorkspaceId";
@@ -72,6 +73,23 @@ export const CreateTaskDialog = ({ project }: Props) => {
                   <FormLabel>Task Title</FormLabel>
                   <FormControl>
                     <Input placeholder="Enter task title" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="description"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Description</FormLabel>
+                  <FormControl>
+                    <Textarea
+                      placeholder="Add your description..."
+                      {...field}
+                      rows={4}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -229,7 +247,7 @@ export const CreateTaskDialog = ({ project }: Props) => {
                     defaultValue={field.value}
                   >
                     <FormControl>
-                      <SelectTrigger>
+                      <SelectTrigger className="w-full">
                         <SelectValue placeholder="Select status" />
                       </SelectTrigger>
                     </FormControl>
