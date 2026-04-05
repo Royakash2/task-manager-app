@@ -263,6 +263,11 @@ export const CreateTaskDialog = ({ project }: Props) => {
                 </FormItem>
               )}
             />
+            <div className="flex justify-end space-x-2">
+              <Button type="submit" disabled={pending}>
+                Submit
+              </Button>
+            </div>
           </form>
         </Form>
       </DialogContent>
