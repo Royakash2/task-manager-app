@@ -22,6 +22,8 @@ import { cn } from "@/lib/utils";
 import { format } from "date-fns";
 import { CalendarIcon } from "lucide-react";
 import { taskStats } from "@/utils";
+import { createTask } from "@/app/actions/task";
+import { toast } from "sonner";
 
 export type TaskFormValues = z.infer<typeof taskFormSchema>;
 
@@ -49,7 +51,21 @@ export const CreateTaskDialog = ({ project }: Props) => {
     },
   });
 
-  const handleOnSubmit = async (data: TaskFormValues) => {};
+  const handleOnSubmit = async (data: TaskFormValues) => {
+    setPending(true);
+    try {
+      await createTask(data, project.id, workspaceId);
+      // form.reset();
+      // setOpen(false);
+      // router.refresh();
+      toast.success("Task created successfully");
+    } catch (error) {
+      console.log(error);
+      toast.error("Failed to create task");
+    } finally {
+      setPending(false);
+    }
+  };
 
   return (
     <Dialog>

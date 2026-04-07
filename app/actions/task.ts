@@ -55,4 +55,15 @@ export const createTask = async (
       project: true,
     },
   });
+
+  await db.activity.create({
+    data: {
+      type: "TASK_CREATED",
+      description: `created task "${validatedData.title}"`,
+      projectId,
+      userId: user.id,
+    },
+  });
+
+  return { success: true };
 };
