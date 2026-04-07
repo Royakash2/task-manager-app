@@ -56,7 +56,7 @@ export const CreateTaskDialog = ({ project }: Props) => {
     try {
       await createTask(data, project.id, workspaceId);
       form.reset();
-      // setOpen(false);
+      setOpen(false);
       router.refresh();
       toast.success("Task created successfully");
     } catch (error) {
@@ -68,7 +68,7 @@ export const CreateTaskDialog = ({ project }: Props) => {
   };
 
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button>Create Task</Button>
       </DialogTrigger>
