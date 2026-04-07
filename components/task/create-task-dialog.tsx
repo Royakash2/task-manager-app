@@ -23,7 +23,7 @@ import { format } from "date-fns";
 import { CalendarIcon } from "lucide-react";
 import { taskStats } from "@/utils";
 
-type TaskFormValues = z.infer<typeof taskFormSchema>;
+export type TaskFormValues = z.infer<typeof taskFormSchema>;
 
 type Props = {
   project: projectProps;

@@ -90,7 +90,7 @@ model ProjectAccess {
  @@unique([workspaceMemberId, projectId])
 }
 enum TaskStatus {
-  PENDING
+  TODO
   IN_PROGRESS
   COMPLETED
   IN_REVIEW
@@ -107,11 +107,11 @@ model Task {
   id String @id @default(uuid())
   title String
   description String?
-  status TaskStatus @default(PENDING)
+  status TaskStatus @default(TODO)
   priority TaskPriority @default(MEDIUM)
   startDate DateTime?
   dueDate DateTime?
-  position Int?
+  position Int
   projectId String
   project Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
   assigneeId String? 

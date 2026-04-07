@@ -30,7 +30,7 @@ export const industryTypesList = [
 
 export const taskStats = [
   {
-    status: "TODO" as unknown as TaskStatus,
+    status: TaskStatus.TODO,
     label: "TO DO",
     color: "bg-blue-500",
   },
