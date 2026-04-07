@@ -55,9 +55,9 @@ export const CreateTaskDialog = ({ project }: Props) => {
     setPending(true);
     try {
       await createTask(data, project.id, workspaceId);
-      // form.reset();
+      form.reset();
       // setOpen(false);
-      // router.refresh();
+      router.refresh();
       toast.success("Task created successfully");
     } catch (error) {
       console.log(error);
