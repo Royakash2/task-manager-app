@@ -1,6 +1,8 @@
 'use client'
 
-import { ChartConfig } from "../ui/chart";
+import { ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent } from "../ui/chart";
+import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
+import { Pie, PieChart } from "recharts";
 
 interface TaskDistributionProps {
     tasks: {
@@ -35,9 +37,24 @@ const chartConfig = {
 
 const TaskDistributionChart = ({ tasks }: TaskDistributionProps) => {
     return (
-        <div className="p-4 border rounded-lg bg-card text-card-foreground shadow-sm">
-           
-        </div>
+        <Card className="flex flex-col">
+            <CardHeader>
+                <CardTitle>Task Distribution</CardTitle>
+            </CardHeader>
+            <CardContent className="flex-1 pb-0">
+                <ChartContainer
+                    config={chartConfig}
+                    className="mx-auto aspect-square max-h-[250px]"
+                >
+                    <PieChart>
+                        <ChartTooltip
+                            cursor={false}
+                            content={<ChartTooltipContent hideLabel />}
+                        />
+                    </PieChart>
+                </ChartContainer>
+            </CardContent>
+        </Card>
     );
 };
 
