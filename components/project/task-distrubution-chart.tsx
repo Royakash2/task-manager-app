@@ -1,8 +1,8 @@
 'use client'
 
 import { ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent } from "../ui/chart";
-import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
-import { Pie, PieChart,Label } from "recharts";
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "../ui/card";
+import { Pie, PieChart, Label } from "recharts";
 
 interface TaskDistributionProps {
     tasks: {
@@ -102,6 +102,11 @@ const TaskDistributionChart = ({ tasks }: TaskDistributionProps) => {
                     </PieChart>
                 </ChartContainer>
             </CardContent>
+            <CardFooter className="flex-col gap-2 text-sm">
+                <p className="leading-none text-muted-foreground">
+                    Showing total task count for the project
+                </p>
+            </CardFooter>
         </Card>
     );
 };
