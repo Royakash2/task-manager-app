@@ -36,16 +36,18 @@ const chartConfig = {
 } satisfies ChartConfig;
 
 const TaskDistributionChart = ({ tasks }: TaskDistributionProps) => {
-    const data = [
-        { name: "Completed", value: tasks.completed, fill: "#22c55e" },
-        { name: "In Progress", value: tasks.inProgress, fill: "#f59e0b" },
-        { name: "Overdue", value: tasks.overdue, fill: "red" },
-        {
-            name: "Todo",
-            value: tasks.total - (tasks.completed + tasks.inProgress + tasks.overdue),
-            fill: "#3b82f6",
-        },
-    ].filter((item) => item.value > 0);
+    const data = tasks.total === 0
+        ? [{ name: "No Tasks", value: 1, fill: "hsl(var(--muted))" }]
+        : [
+            { name: "Completed", value: tasks.completed, fill: "#22c55e" },
+            { name: "In Progress", value: tasks.inProgress, fill: "#f59e0b" },
+            { name: "Overdue", value: tasks.overdue, fill: "#ef4444" },
+            {
+                name: "Todo",
+                value: tasks.total - (tasks.completed + tasks.inProgress + tasks.overdue),
+                fill: "#3b82f6",
+            },
+        ].filter((item) => item.value > 0);
 
     return (
         <Card className="flex flex-col">
