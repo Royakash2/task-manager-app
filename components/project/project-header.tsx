@@ -8,7 +8,7 @@ export const ProjectHeader = ({ project }: { project: projectProps }) => {
     return (
         <div className="space-y-4 ">
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-2">
-                <div className="flex gap-2">
+                <div className="flex items-start gap-2">
                     <ProjectAvatar name={project.name} />
 
                     <div>
