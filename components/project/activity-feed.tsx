@@ -1,4 +1,5 @@
 import { ProfileAvatar } from "../profile-avatar";
+import { formatDistanceToNow } from "date-fns";
 
 export interface Activity {
     id: string;
@@ -26,6 +27,18 @@ export const ActivityFeed = ({ activities }: ActivityFeedProps) => {
                         numOfChars={2}
                         size="sm"
                     />
+
+                    <div className="flex flex-col">
+                        <p className="text-sm">
+                            <span className="font-medium">{activity.user.name}</span> {""}
+                            {activity.description}
+                        </p>
+                        <span className="text-xs text-muted-foreground">
+                            {formatDistanceToNow(new Date(activity.createdAt), {
+                                addSuffix: true,
+                            })}
+                        </span>
+                    </div>
                 </div>
             ))}
         </div>

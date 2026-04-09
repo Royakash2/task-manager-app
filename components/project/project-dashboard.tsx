@@ -44,7 +44,7 @@ const ProjectDashboard = ({
                
                <Card className='p-4'>
                    <h3 className="text-lg font-semibold mb-4">Recent Activities</h3>
-                   <ActivityFeed activities={activities}/>
+                   <ActivityFeed activities={activities.slice(0, 5)}/>
                </Card>
                {/* <Card>
                    <h3 className="text-lg font-semibold mb-4">Recent Comments</h3>
