@@ -24,8 +24,8 @@ export const ProfileAvatar = ({
         className
       )}
     >
-      <AvatarImage src={url} alt={name} />
-      <AvatarFallback>
+      <AvatarImage src={url || undefined} alt={name} />
+      <AvatarFallback className="rounded-md">
         {name.substring(0, numOfChars).toUpperCase()}
       </AvatarFallback>
     </Avatar>

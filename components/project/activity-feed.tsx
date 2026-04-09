@@ -1,3 +1,5 @@
+import { ProfileAvatar } from "../profile-avatar";
+
 export interface Activity {
     id: string;
     type: string;
@@ -14,7 +16,18 @@ interface ActivityFeedProps {
 }
 
 export const ActivityFeed = ({ activities }: ActivityFeedProps) => {
-    return <div>
-
-    </div>;
+    return (
+        <div className="space-y-4">
+            {activities?.map((activity) => (
+                <div key={activity.id} className="flex items-start gap-4">
+                    <ProfileAvatar 
+                        url={activity.user.image || undefined}
+                        name={activity.user.name}
+                        numOfChars={2}
+                        size="sm"
+                    />
+                </div>
+            ))}
+        </div>
+    );
 };

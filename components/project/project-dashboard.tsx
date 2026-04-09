@@ -1,14 +1,14 @@
 import { commentProps, projectProps } from '@/utils/types';
-import { Activity, Task } from '@prisma/client';
+import { Task } from '@prisma/client';
 import React from 'react'
 import { ProjectHeader } from './project-header';
 import { Card } from '../ui/card';
 import TaskDistributionChart from './task-distrubution-chart';
-import { ActivityFeed } from './activity-feed';
+import { Activity, ActivityFeed } from './activity-feed';
 
 
 interface ProjectDashboardProps {
-    project: Project;
+    project: projectProps;
     tasks: {
         completed: number;
         inProgress: number;
@@ -42,7 +42,7 @@ const ProjectDashboard = ({
            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                <TaskDistributionChart tasks={tasks}/>
                
-               <Card>
+               <Card className='p-4'>
                    <h3 className="text-lg font-semibold mb-4">Recent Activities</h3>
                    <ActivityFeed activities={activities}/>
                </Card>
