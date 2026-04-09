@@ -29,7 +29,7 @@ export const ActivityFeed = ({ activities }: ActivityFeedProps) => {
                     />
 
                     <div className="flex flex-col">
-                        <p className="text-sm">
+                        <p className="text-xs">
                             <span className="font-medium">{activity.user.name}</span> {""}
                             {activity.description}
                         </p>
