@@ -37,7 +37,7 @@ export const ProjectHeader = ({ project }: { project: projectProps }) => {
                             >
                                 <AvatarImage src={member?.user.image || undefined} />
                                 <AvatarFallback className="text-sm 2xl:text-base">
-                                    {member.user.name.substring(0, 2).toUpperCase()}
+                                    {member.user.name.substring(0, 1).toUpperCase()}
                                 </AvatarFallback>
                             </Avatar>
                         ))}

@@ -24,7 +24,7 @@ export const ActivityFeed = ({ activities }: ActivityFeedProps) => {
                     <ProfileAvatar 
                         url={activity.user.image || undefined}
                         name={activity.user.name}
-                        numOfChars={2}
+                        numOfChars={1}
                         size="sm"
                     />
 
