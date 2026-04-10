@@ -20,12 +20,12 @@ export const ActivityFeed = ({ activities }: ActivityFeedProps) => {
     return (
         <div className="space-y-4">
             {activities?.map((activity) => (
-                <div key={activity.id} className="flex items-start gap-2">
+                <div key={activity.id} className="flex items-center gap-2">
                     <ProfileAvatar 
                         url={activity.user.image || undefined}
                         name={activity.user.name}
                         numOfChars={1}
-                        size="sm"
+                        size="md"
                     />
 
                     <div className="flex flex-col">

@@ -10,12 +10,12 @@ export const CommentList = ({ comments }: { comments: CommentProps[] }) => {
   return (
     <div className="space-y-4">
       {comments?.map((comment) => (
-        <div key={comment.id} className="flex items-start gap-2">
+        <div key={comment.id} className="flex items-center gap-2">
           <ProfileAvatar 
             url={comment.user.image || undefined}
             name={comment.user.name}
             numOfChars={2}
-            size="sm"
+            size="md"
           />
           
           <div className="flex flex-1 flex-col">
