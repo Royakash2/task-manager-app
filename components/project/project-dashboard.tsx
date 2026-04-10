@@ -1,10 +1,11 @@
-import { commentProps, projectProps } from '@/utils/types';
+import {  projectProps } from '@/utils/types';
 import { Task } from '@prisma/client';
 import React from 'react'
 import { ProjectHeader } from './project-header';
 import { Card } from '../ui/card';
 import TaskDistributionChart from './task-distrubution-chart';
 import { Activity, ActivityFeed } from './activity-feed';
+import { CommentList, CommentProps } from './comment-lists';
 
 
 interface ProjectDashboardProps {
@@ -18,7 +19,7 @@ interface ProjectDashboardProps {
     };
     activities: Activity[];
     totalWorkspaceMembers: number;
-    comments: commentProps[];
+    comments: CommentProps[];
 }
 
 const ProjectDashboard = ({
@@ -46,10 +47,10 @@ const ProjectDashboard = ({
                    <h3 className="text-lg font-semibold mb-4">Recent Activities</h3>
                    <ActivityFeed activities={activities.slice(0, 5)}/>
                </Card>
-               {/* <Card>
+               <Card className='p-4'>
                    <h3 className="text-lg font-semibold mb-4">Recent Comments</h3>
-                   <CommentList comments={comments}/>
-               </Card> */}
+                   <CommentList comments={comments.slice(0, 5) }/>
+               </Card>
            </div>
         </div>
     )
