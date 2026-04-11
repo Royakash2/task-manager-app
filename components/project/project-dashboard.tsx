@@ -26,8 +26,8 @@ const ProjectDashboard = ({
     project,
     tasks,
     activities,
-    totalWorkspaceMembers,
-    comments
+    comments,
+
 }: ProjectDashboardProps) => {
     return (
         <div className='flex flex-col gap-6 2xl:px-6 py-0'>

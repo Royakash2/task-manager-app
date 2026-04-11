@@ -17,7 +17,7 @@ export const CommentList = ({ comments }: { comments: CommentProps[] }) => {
             numOfChars={2}
             size="md"
           />
-          
+        
           <div className="flex flex-1 flex-col">
             <div className="flex items-center gap-2">
                <p className="font-medium">{comment.user.name}</p> {" "}
