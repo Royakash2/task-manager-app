@@ -33,11 +33,11 @@ export const CircleProgress = ({
                 <Progress
                     value={value}
                     className={cn(
-                        `h-20 w-20 -rotate-90deg ${variantStyles[variant as variantType]}`
+                        `h-20 w-20 -rotate-90deg ${variantStyles[variant]}`
                     )}
                 />
-                <div className="absolute inset-0 flex items-center justify-center">
-                    <span>{`${Math.round(value || 0)}%`}</span> 
+                <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                    <span >{`${Math.round(value || 0)}%`}</span> 
                 </div>
             </div>
             <p className="text-sm text-muted-foreground mt-2 text-center whitespace-nowrap">
