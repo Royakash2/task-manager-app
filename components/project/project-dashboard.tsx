@@ -36,14 +36,39 @@ const ProjectDashboard = ({
            project={project}
            
            />
-           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
-              
+           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3">
+              <Card>
               <CircleProgress
               title="Task Completion"
               value={tasks.completed / tasks.total * 100}
               subTitle={`${tasks.completed} / ${tasks.total} tasks`}
               variant="success"
               />
+              </Card>
+              <Card>
+              <CircleProgress
+              title="Task In Progress"
+              value={tasks.inProgress / tasks.total * 100}
+              subTitle={`${tasks.inProgress} ongoing`}
+              variant="inProgress"
+              />
+              </Card>
+              <Card>
+              <CircleProgress
+              title="Task Overdue"
+              value={tasks.overdue / tasks.total * 100}
+              subTitle={`${tasks.overdue} overdue tasks`}
+              variant="warning"
+              />
+              </Card>
+              <Card>
+              <CircleProgress
+              title="Team Members"
+              value={project.members.length}
+              subTitle={`${project.members.length} members`}
+              variant="default"
+              />
+              </Card>
            </div>
            
            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
