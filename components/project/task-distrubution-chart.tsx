@@ -50,8 +50,8 @@ const TaskDistributionChart = ({ tasks }: TaskDistributionProps) => {
         ].filter((item) => item.value > 0);
 
     return (
-        <Card className="flex flex-col">
-            <CardHeader className="items-center pb-0">
+        <Card className="flex flex-col  p-4">
+            <CardHeader className="items-center pb-0 px-0">
                 <CardTitle>Task Distribution</CardTitle>
             </CardHeader>
             <CardContent className="flex-1 pb-0">
@@ -104,7 +104,7 @@ const TaskDistributionChart = ({ tasks }: TaskDistributionProps) => {
                     </PieChart>
                 </ChartContainer>
             </CardContent>
-            <CardFooter className="flex-col gap-2 text-sm">
+            <CardFooter className="flex-col gap-2 text-sm px-0">
                 <p className="leading-none text-muted-foreground">
                     Showing total task count for the project
                 </p>

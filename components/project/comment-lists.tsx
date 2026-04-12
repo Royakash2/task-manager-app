@@ -27,7 +27,7 @@ export const CommentList = ({ comments }: { comments: CommentProps[] }) => {
                  })}
                </span>
             </div>
-            <p className="text-sm">{comment.content}</p>
+            <p className="text-xs 2xl:text-sm">{comment.content}</p>
           </div>
         </div>
       ))}

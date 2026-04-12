@@ -74,12 +74,12 @@ const ProjectDashboard = ({
            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                <TaskDistributionChart tasks={tasks}/>
                
-               <Card className='p-2'>
-                   <h3 className="text-lg font-semibold mb-4">Recent Activities</h3>
+               <Card className='p-4'>
+                   <h3 className="text-lg font-semibold mb-2">Recent Activities</h3>
                    <ActivityFeed activities={activities.slice(0, 5)}/>
                </Card>
-               <Card className='p-2'>
-                   <h3 className="text-lg font-semibold mb-4">Recent Comments</h3>
+               <Card className='p-4'>
+                   <h3 className="text-lg font-semibold mb-2">Recent Comments</h3>
                    <CommentList comments={comments.slice(0, 5) }/>
                </Card>
            </div>
