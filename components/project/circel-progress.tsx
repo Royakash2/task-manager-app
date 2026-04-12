@@ -39,8 +39,10 @@ export const CircleProgress = ({
                 <div className="absolute inset-0 flex items-center justify-center">
                     <span>{`${Math.round(value || 0)}%`}</span> 
                 </div>
-                <p className="text-sm text-muted-foreground mt-2">{subTitle}</p>
             </div>
+            <p className="text-sm text-muted-foreground mt-2 text-center whitespace-nowrap">
+                {subTitle}
+            </p>
         </div>
     )
 }
