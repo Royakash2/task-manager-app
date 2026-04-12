@@ -37,7 +37,7 @@ const ProjectDashboard = ({
            />
            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
                {/* TODO : cricle progress */}
-               <Card></Card>
+               {/* <Card></Card> */}
            </div>
            
            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">

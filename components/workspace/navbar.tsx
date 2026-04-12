@@ -2,8 +2,7 @@ import { LogoutLink } from "@kinde-oss/kinde-auth-nextjs";
 import { ThemeToggle } from "../theme-toggole";
 import { Button } from "../ui/button";
 import { Bell, LogOut } from "lucide-react";
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "../ui/tooltip";
-import { Popover, PopoverTrigger } from "../ui/popover";
+import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import { ProfileAvatar } from "../profile-avatar";
 
 interface WorkspaceNavbarProps {
@@ -17,10 +16,25 @@ export const WorkspaceNavbar = ({ id, name, email, image }: WorkspaceNavbarProps
     return (
         <nav className="w-full flex items-center justify-between p-4">
             <div>
-                <h1 className="text-2xl font-bold">Home</h1>
-                <span className="text-sm text-muted-foreground">
-                    Manage all your task in one place.
-                </span>
+                <Popover>
+                    <PopoverTrigger className="cursor-pointer">
+                        <ProfileAvatar url={image || undefined} name={name} size="md" />
+                    </PopoverTrigger>
+                    <PopoverContent align="start" className="w-60 p-2 space-y-2">
+                        <div className="flex flex-col space-y-1 p-2">
+                            <p className="text-sm font-medium leading-none">{name}</p>
+                            <p className="text-xs text-muted-foreground leading-none">{email}</p>
+                        </div>
+                        <div className="h-px bg-border my-1" />
+                        <LogoutLink className="w-full">
+                            <Button variant="ghost" className="w-full justify-start text-sm">
+                                <LogOut className="mr-2 h-4 w-4" />
+                                Sign out
+                            </Button>
+                        </LogoutLink>
+                    </PopoverContent>
+                </Popover>
+               
             </div>
 
             <div className="flex items-center gap-2">
@@ -28,23 +42,7 @@ export const WorkspaceNavbar = ({ id, name, email, image }: WorkspaceNavbarProps
                     <Bell />
                 </Button>
                 <ThemeToggle />
-                <TooltipProvider>
-                    <Tooltip>
-                        <TooltipTrigger asChild>
-                            <Button variant={"ghost"}>
-                                <LogoutLink><LogOut /></LogoutLink>
-                            </Button>
-                        </TooltipTrigger>
-                        <TooltipContent>
-                            <p>Sign Out</p>
-                        </TooltipContent>
-                    </Tooltip>
-                </TooltipProvider>
-                <Popover>
-                    <PopoverTrigger asChild>
-                        <ProfileAvatar url={image || undefined} name={name} />
-                    </PopoverTrigger>
-                </Popover>
+                
             </div>
         </nav>
     );
