@@ -67,6 +67,7 @@ const ProjectDashboard = ({
               value={project.members.length}
               subTitle={`${project.members.length} members`}
               variant="default"
+              showPercentage={false}
               />
               </Card>
            </div>
