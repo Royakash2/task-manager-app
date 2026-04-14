@@ -1,6 +1,6 @@
 import db from "@/lib/db";
 // refresh
-import { userRequired } from "../../user/get-user";
+import { userRequired } from "../user/get-user";
 import { Prisma } from "@/lib/generated/prisma/client";
 import { $Enums } from "@prisma/client";
 

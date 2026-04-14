@@ -1,7 +1,7 @@
 import { User } from '@prisma/client';
 // refresh
 import React from 'react'
-import { getWorkspaceProjectByWorkspaceId } from '@/app/data/workspace/project/user-workspace-project';
+import { getWorkspaceProjectByWorkspaceId } from '@/app/data/project/user-workspace-project';
 import { getUserById } from '@/app/data/user/get-user-by-id';
 import AppSidebar from './AppSidebar';
 import { projectProps, workspaceMembersProps, workspaceProps } from '@/utils/types';

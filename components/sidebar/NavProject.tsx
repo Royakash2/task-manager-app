@@ -1,4 +1,4 @@
-'use-client'
+'use client'
 
 import { projectProps, workspaceMembersProps } from "@/utils/types"
 import { SidebarGroup, SidebarGroupLabel, SidebarMenu, SidebarMenuButton, SidebarMenuItem, useSidebar } from "../ui/sidebar"
@@ -29,11 +29,11 @@ export const NavProject = ({
                 <SidebarMenu>
                     {
                         projects.map((project) => {
-                            const href = `/workspace/${project.workspaceId}/project/${project.id}`;
+                            const href = `/workspace/${project.workspaceId}/projects/${project.id}`;
                             return (
                                 <SidebarMenuItem key={project.id}>
                                     <SidebarMenuButton>
-                                        <Link href={href} className={pathName === href ? "text-primary-foreground text-semibold" : "text-muted-foreground "}>
+                                        <Link href={href} className={pathName === href ? "text-blue-600 text-semibold" : "text-muted-foreground "}>
                                             <span>{project.name}</span>
                                         </Link>
                                     </SidebarMenuButton>
