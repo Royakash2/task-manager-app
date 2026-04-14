@@ -1,7 +1,7 @@
 import db from "@/lib/db";
 // refresh
 import { userRequired } from "../user/get-user";
-import { Prisma } from "@/lib/generated/prisma/client";
+import { Prisma } from "@prisma/client";
 import { $Enums } from "@prisma/client";
 
 export const getWorkspaceProjectByWorkspaceId = async (workspaceId: string) => {
