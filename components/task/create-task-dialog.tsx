@@ -20,7 +20,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { Calendar } from "@/components/ui/calendar";
 import { cn } from "@/lib/utils";
 import { format } from "date-fns";
-import { CalendarIcon } from "lucide-react";
+import { CalendarIcon, Plus } from "lucide-react";
 import { taskStats } from "@/utils";
 import { createTask } from "@/app/actions/task";
 import { toast } from "sonner";
@@ -70,7 +70,10 @@ export const CreateTaskDialog = ({ project }: Props) => {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button>Create Task</Button>
+        <Button className="rounded-md shadow-md font-semibold px-5 flex items-center gap-2 cursor-pointer">
+          <Plus className="w-4 h-4" />
+          Create Task
+        </Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
