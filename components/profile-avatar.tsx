@@ -17,7 +17,7 @@ export const ProfileAvatar = ({
   return (
     <Avatar
       className={cn(
-        "h-8 w-8 rounded-md",
+        "h-8 w-8 rounded-full",
         size === "sm" && "h-6 w-6",
         size === "md" && "h-8 w-8",
         size === "lg" && "h-10 w-10",
@@ -25,7 +25,7 @@ export const ProfileAvatar = ({
       )}
     >
       <AvatarImage src={url || undefined} alt={name} />
-      <AvatarFallback className="rounded-md">
+      <AvatarFallback className="rounded-full bg-blue-600/10 text-blue-600 font-medium">
         {name.substring(0, numOfChars).toUpperCase()}
       </AvatarFallback>
     </Avatar>

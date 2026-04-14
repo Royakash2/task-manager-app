@@ -4,16 +4,18 @@ import { Avatar, AvatarFallback } from "../ui/avatar";
 export const ProjectAvatar = ({
     name,
     className,
+    fallbackClassName,
 }: {
     name: string;
     className?: string;
+    fallbackClassName?: string;
 }) => {
     return (
         <Avatar
-            className={cn("size-6 2xl:size-8 rounded-md items-center", className)}
+            className={cn("size-6 rounded-md", className)}
         >
-            <AvatarFallback className="w-6 2xl:w-8 h-6 2xl:h-8 bg-blue-600 text-base text-white rounded-md">
-                {name.charAt(0)}
+            <AvatarFallback className={cn("bg-blue-600 text-white rounded-md font-medium", fallbackClassName)}>
+                {name.charAt(0).toUpperCase()}
             </AvatarFallback>
         </Avatar>
     );

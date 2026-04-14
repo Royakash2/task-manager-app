@@ -12,7 +12,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { Input } from "../ui/input"
 import { Textarea } from "../ui/textarea"
 import { Button } from "../ui/button"
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "../ui/dialog"
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "../ui/dialog"
 import { Plus } from "lucide-react"
 import { Checkbox } from "../ui/checkbox"
 import { toast } from "sonner"
@@ -64,6 +64,7 @@ export const CreateProjectForm = ({
                     <Card className='w-full border-none shadow-none max-w-md'>
                         <DialogHeader>
                             <DialogTitle className='text-2xl font-bold'>Create new Project</DialogTitle>
+                            <DialogDescription>Fill in the details to create a new project and manage member access.</DialogDescription>
                         </DialogHeader>
 
                         <Form {...form}>

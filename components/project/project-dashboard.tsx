@@ -1,12 +1,13 @@
-import {  projectProps } from '@/utils/types';
+import { projectProps, Activity, CommentProps } from '@/utils/types';
 import { Task } from '@prisma/client';
 import React from 'react'
 import { ProjectHeader } from './project-header';
 import { Card } from '../ui/card';
 import TaskDistributionChart from './task-distrubution-chart';
-import { Activity, ActivityFeed } from './activity-feed';
-import { CommentList, CommentProps } from './comment-lists';
+import { ActivityFeed } from './activity-feed';
+import { CommentList } from './comment-lists';
 import { CircleProgress } from './circel-progress';
+import { History, MessageSquare } from "lucide-react";
 
 
 interface ProjectDashboardProps {
@@ -67,6 +68,7 @@ const ProjectDashboard = ({
               value={project.members.length}
               subTitle={`${project.members.length} members`}
               variant="default"
+              showPercentage={false}
               />
               </Card>
            </div>
@@ -74,12 +76,22 @@ const ProjectDashboard = ({
            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                <TaskDistributionChart tasks={tasks}/>
                
-               <Card className='p-4'>
-                   <h3 className="text-lg font-semibold mb-2">Recent Activities</h3>
+                <Card className='p-6 flex flex-col'>
+                    <div className="flex items-center justify-between pb-6">
+                        <h3 className="tracking-tight text-sm font-medium text-muted-foreground">
+                            Recent Activities
+                        </h3>
+                        <History className="w-4 h-4 text-muted-foreground" />
+                    </div>
                    <ActivityFeed activities={activities.slice(0, 5)}/>
                </Card>
-               <Card className='p-4'>
-                   <h3 className="text-lg font-semibold mb-2">Recent Comments</h3>
+                <Card className='p-6 flex flex-col'>
+                    <div className="flex items-center justify-between pb-6">
+                        <h3 className="tracking-tight text-sm font-medium text-muted-foreground">
+                            Recent Comments
+                        </h3>
+                        <MessageSquare className="w-4 h-4 text-muted-foreground" />
+                    </div>
                    <CommentList comments={comments.slice(0, 5) }/>
                </Card>
            </div>
