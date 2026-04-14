@@ -1,7 +1,7 @@
 import { getProjectDetails } from '@/app/data/project/get-project-details';
 import ProjectDashboard from '@/components/project/project-dashboard';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { commentProps } from '@/utils/types';
+import { Activity, CommentProps, projectProps } from '@/utils/types';
 import Link from 'next/link';
 import React from 'react'
 interface ProjectPageProps {
@@ -30,12 +30,12 @@ const ProjectPage = async (props: ProjectPageProps) => {
                 </TabsList>
                 <TabsContent value='Dashboard'>
                   <ProjectDashboard
-                  project={project}
+                  project={project as projectProps}
                  // eslint-disable-next-line @typescript-eslint/no-explicit-any
                  tasks={tasks as any}
-                 activities={activities!}
+                 activities={activities as Activity[]}
                  totalWorkspaceMembers={totalWorkspaceMembers!}
-                 comments={comments as commentProps[]}
+                 comments={comments as CommentProps[]}
                   />
                 </TabsContent>
                 <TabsContent value='Table'>

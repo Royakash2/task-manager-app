@@ -1,10 +1,6 @@
 import { formatDistanceToNow } from "date-fns";
 import { ProfileAvatar } from "../profile-avatar";
-import { Comment } from "@prisma/client";
-
-export interface CommentProps extends Comment {
-  user: { id: string; name: string; image: string | null };
-}
+import { CommentProps } from "@/utils/types";
 
 export const CommentList = ({ comments }: { comments: CommentProps[] }) => {
   return (

@@ -1,16 +1,6 @@
 import { ProfileAvatar } from "../profile-avatar";
 import { formatDistanceToNow } from "date-fns";
-
-export interface Activity {
-    id: string;
-    type: string;
-    description: string;
-    createdAt: Date;
-    user: {
-        name: string;
-        image: string | null;
-    };
-}
+import { Activity } from "@/utils/types";
 
 interface ActivityFeedProps {
     activities: Activity[];

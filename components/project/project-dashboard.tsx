@@ -1,11 +1,11 @@
-import {  projectProps } from '@/utils/types';
+import { projectProps, Activity, CommentProps } from '@/utils/types';
 import { Task } from '@prisma/client';
 import React from 'react'
 import { ProjectHeader } from './project-header';
 import { Card } from '../ui/card';
 import TaskDistributionChart from './task-distrubution-chart';
-import { Activity, ActivityFeed } from './activity-feed';
-import { CommentList, CommentProps } from './comment-lists';
+import { ActivityFeed } from './activity-feed';
+import { CommentList } from './comment-lists';
 import { CircleProgress } from './circel-progress';
 
 
