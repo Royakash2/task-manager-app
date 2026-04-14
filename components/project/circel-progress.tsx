@@ -37,11 +37,11 @@ export const CircleProgress = ({
     showPercentage = true,
 }: CircleProgressProps & { showPercentage?: boolean }) => {
     // Math logic hoisted/memoized to prevent redundant calculations per render
-    const displayValue = Math.round(value || 0);
+    const safeValue = Number.isFinite(value) ? value : 0;
+    const displayValue = Math.round(safeValue);
     const strokeDashoffset = showPercentage 
-        ? CIRCUMFERENCE - (value / 100) * CIRCUMFERENCE 
+        ? CIRCUMFERENCE - (safeValue / 100) * CIRCUMFERENCE 
         : 0; 
-        
     return (
         <div className="flex flex-col p-6 w-full">
             <div className="flex flex-row items-center justify-between space-y-0 pb-2">

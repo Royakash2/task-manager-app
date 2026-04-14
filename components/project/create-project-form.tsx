@@ -7,7 +7,6 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { useState } from "react"
 import { useForm } from "react-hook-form"
 import z from "zod"
-import { Card } from "../ui/card"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "../ui/form"
 import { Input } from "../ui/input"
 import { Textarea } from "../ui/textarea"
@@ -61,7 +60,7 @@ export const CreateProjectForm = ({
                     </Button>
                 </DialogTrigger>
                 <DialogContent>
-                    <Card className='w-full border-none shadow-none max-w-md'>
+                    {/* <Card className='w-full border-none shadow-none max-w-md'> */}
                         <DialogHeader>
                             <DialogTitle className='text-2xl font-bold'>Create new Project</DialogTitle>
                             <DialogDescription>Fill in the details to create a new project and manage member access.</DialogDescription>
@@ -148,7 +147,7 @@ export const CreateProjectForm = ({
                             </form>
                         </Form>
 
-                    </Card>
+                    {/* </Card> */}
 
                 </DialogContent>
             </Dialog>

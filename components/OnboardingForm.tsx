@@ -2,6 +2,7 @@
 
 import { userSchema } from '@/lib/schema';
 import React, { useState } from 'react'
+import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import z from 'zod';
@@ -27,7 +28,8 @@ export type userDatatype = z.infer<typeof userSchema>
 
 export const OnboardingForm = ({ name, email, image }: Props) => {
     const [pending, setPending] = useState(false);
-    console.log(pending, setPending);
+    const router = useRouter();
+
     const form = useForm<userDatatype>({
         resolver: zodResolver(userSchema), defaultValues: {
             about: '',
@@ -36,19 +38,22 @@ export const OnboardingForm = ({ name, email, image }: Props) => {
             image: image || '',
             role: '',
             industryType: '',
-
         }
-
     })
+
     const onSubmit = async (data: userDatatype) => {
         try {
             setPending(true);
-           await createUser(data)
+            const response = await createUser(data);
+           
+            if (response?.success && response.redirectTo) {
+                router.push(response.redirectTo);
+            }
         } catch (error) {
             console.log(error);
             toast.error("Something went wrong. try again later")
+            setPending(false);
         }
-
     }
     return (
         <div className='min-h-screen flex items-center justify-center bg-background'>

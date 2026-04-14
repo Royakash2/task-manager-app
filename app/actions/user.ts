@@ -4,7 +4,6 @@ import { userDatatype } from "@/components/OnboardingForm";
 import { userRequired } from "../data/user/get-user";
 import { userSchema } from "@/lib/schema";
 import db from "@/lib/db";
-import { redirect } from "next/navigation";
 
 export const createUser = async (data: userDatatype) => {
   const { user } = await userRequired();
@@ -44,9 +43,10 @@ export const createUser = async (data: userDatatype) => {
         workspaces:true,
     }
   });
-//  Todo send user welcome email
-if(userData.workspaces.length === 0){
-   redirect("/create-workspace") 
-}
-redirect("/workspace")
+
+  //  Todo send user welcome email
+  if (userData.workspaces.length === 0) {
+    return { success: true, redirectTo: "/create-workspace" } 
+  }
+  return { success: true, redirectTo: "/workspace" }
 };
