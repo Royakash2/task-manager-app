@@ -8,7 +8,7 @@ import { z } from "zod";
 import { taskFormSchema } from "@/lib/schema";
 import { projectProps } from "@/utils/types";
 
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -75,6 +75,7 @@ export const CreateTaskDialog = ({ project }: Props) => {
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Create Task</DialogTitle>
+          <DialogDescription>Fill in the details below to create a new task.</DialogDescription>
         </DialogHeader>
         <Form {...form}>
           <form
