@@ -1,8 +1,9 @@
 'use client'
 
 import { ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent } from "../ui/chart";
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "../ui/card";
+import { Card, CardContent, CardFooter,} from "../ui/card";
 import { Pie, PieChart, Label } from "recharts";
+import { PieChart as PieChartIcon } from "lucide-react";
 
 interface TaskDistributionProps {
     tasks: {
@@ -50,11 +51,15 @@ const TaskDistributionChart = ({ tasks }: TaskDistributionProps) => {
         ].filter((item) => item.value > 0);
 
     return (
-        <Card className="flex flex-col  p-4">
-            <CardHeader className="items-center pb-0 px-0">
-                <CardTitle>Task Distribution</CardTitle>
-            </CardHeader>
-            <CardContent className="flex-1 pb-0">
+        <Card className="flex flex-col p-6">
+            <div className="flex items-center justify-between pb-6">
+                <h3 className="tracking-tight text-sm font-medium text-muted-foreground">
+                    Task Distribution
+                </h3>
+                <PieChartIcon className="w-4 h-4 text-muted-foreground" />
+            </div>
+            
+            <CardContent className="flex-1 pb-0 px-0">
                 <ChartContainer
                     config={chartConfig}
                     className="mx-auto aspect-square max-h-[250px]"
