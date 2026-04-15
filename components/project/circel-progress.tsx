@@ -13,7 +13,7 @@ interface CircleProgressProps {
 
 const variantIcons = {
     success: <CheckCircle2 className="h-4 w-4 text-green-600" />,
-    inProgress: <Activity className="h-4 w-4 text-red-600" />,
+    inProgress: <Activity className="h-4 w-4 text-orange-500" />,
     warning: <Clock className="h-4 w-4 text-yellow-600" />,
     default: <Users className="h-4 w-4 text-blue-600" />,
 };
@@ -21,7 +21,7 @@ const variantIcons = {
 const strokeColors = {
     default: "text-blue-600",
     warning: "text-yellow-600",
-    inProgress: "text-red-600",
+    inProgress: "text-orange-500",
     success: "text-green-600",
 };
 
