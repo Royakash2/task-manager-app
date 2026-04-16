@@ -3,6 +3,10 @@
 import { Task, File } from "@prisma/client";
 import { ColumnDef } from "@tanstack/react-table";
 import { Checkbox } from "../ui/checkbox";
+import Link from "next/link";
+import { Button } from "../ui/button";
+import { ArrowUpDown } from "lucide-react";
+import { ProjectAvatar } from "./Project-avatar";
 
 export type TaskTableItem = Task & {
   assigneeTo: {
@@ -39,6 +43,35 @@ export const columns: ColumnDef<TaskTableItem>[] = [
         aria-label="select row"
       />
     ),
-    
+    enableSorting: false,
+    enableHiding: false,
   },
+  {
+    accessorKey: "title",
+    header: ({ column }) => (
+      <Button
+        variant={"ghost"}
+        onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+      >
+        Task Title <ArrowUpDown />
+      </Button>
+    ),
+    cell: ({ row }) => {
+      const title = row.getValue("title") as string;
+
+      return (
+        <Link 
+          href={`/workspace/${row.original.project.workspaceId}/projects/${row.original.project.id}/${row.original.id}`}
+        >
+          <div className="flex items-center gap-2">
+            <ProjectAvatar name={title} />
+            <span className="text-sm font-medium xl:text-base capitalize">
+              {title}
+            </span>
+          </div>
+        </Link>
+      );
+    },
+  },
+ 
 ];
