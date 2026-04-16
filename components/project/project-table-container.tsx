@@ -9,7 +9,7 @@ export const ProjectTableContainer = async ({
     const { tasks } = await getProjectById(projectId);
     return (
         <>
-            <ProjectTable projectId={projectId} tasks={tasks} />
+            <ProjectTable tasks={tasks} />
         </>
     );
 };

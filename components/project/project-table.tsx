@@ -1,14 +1,15 @@
-import { Task } from "@prisma/client";
 
+import { DataTable } from "../data-table";
+import { columns, TaskTableItem } from "./columns";
 export const ProjectTable = ({
-    projectId,
     tasks
-}: {
-    projectId: string;
-    tasks: Task[];
-}) => {
+}: {tasks: TaskTableItem[]}) => {
     return (
         <>
+        <DataTable
+        data={tasks}
+        columns={columns}
+        />
         </>
     );
 };
