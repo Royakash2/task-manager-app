@@ -32,5 +32,13 @@ export const columns: ColumnDef<TaskTableItem>[] = [
         aria-label="select all"
       />
     ),
+    cell: ({ row }) => (
+      <Checkbox
+        checked={row.getIsSelected()}
+        onCheckedChange={(value) => row.toggleSelected(!!value)}
+        aria-label="select row"
+      />
+    ),
+    
   },
 ];
