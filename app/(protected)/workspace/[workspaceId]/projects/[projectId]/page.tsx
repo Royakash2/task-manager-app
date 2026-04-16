@@ -1,5 +1,6 @@
 import { getProjectDetails } from '@/app/data/project/get-project-details';
 import ProjectDashboard from '@/components/project/project-dashboard';
+import { ProjectTableContainer } from '@/components/project/project-table-container';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Activity, CommentProps, projectProps } from '@/utils/types';
 import Link from 'next/link';
@@ -39,8 +40,9 @@ const ProjectPage = async (props: ProjectPageProps) => {
                   />
                 </TabsContent>
                 <TabsContent value='Table'>
-                    {/* <Table /> */}
-                    table
+                  <ProjectTableContainer
+                  projectId={projectId}
+                  />
                 </TabsContent>
                 <TabsContent value='Kanban'>
                     {/* <Kanban /> */}
