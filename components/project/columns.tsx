@@ -7,6 +7,7 @@ import Link from "next/link";
 import { Button } from "../ui/button";
 import { ArrowUpDown } from "lucide-react";
 import { ProjectAvatar } from "./Project-avatar";
+import { Badge } from "../ui/badge";
 
 export type TaskTableItem = Task & {
   assigneeTo: {
@@ -73,5 +74,20 @@ export const columns: ColumnDef<TaskTableItem>[] = [
       );
     },
   },
+  {
+    accessorKey: "status",
+    header:"status",
+    cell:({row}) =>{
+      const status = row.getValue("status") as string ;
+      return (
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        <Badge variant={status as any}>
+          {status === "IN_PROGRESS" ? "IN_PROGRESS" : status }
+        </Badge>
+      )
+    }
+  },
+  
+
  
 ];
