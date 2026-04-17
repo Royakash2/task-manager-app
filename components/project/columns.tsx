@@ -8,6 +8,7 @@ import { Button } from "../ui/button";
 import { ArrowUpDown } from "lucide-react";
 import { ProjectAvatar } from "./Project-avatar";
 import { Badge } from "../ui/badge";
+import { format } from "date-fns";
 
 export type TaskTableItem = Task & {
   assigneeTo: {
@@ -61,7 +62,7 @@ export const columns: ColumnDef<TaskTableItem>[] = [
       const title = row.getValue("title") as string;
 
       return (
-        <Link 
+        <Link
           href={`/workspace/${row.original.project.workspaceId}/projects/${row.original.project.id}/${row.original.id}`}
         >
           <div className="flex items-center gap-2">
@@ -76,18 +77,88 @@ export const columns: ColumnDef<TaskTableItem>[] = [
   },
   {
     accessorKey: "status",
-    header:"status",
-    cell:({row}) =>{
-      const status = row.getValue("status") as string ;
+    header: "status",
+    cell: ({ row }) => {
+      const status = row.getValue("status") as string;
       return (
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         <Badge variant={status as any}>
-          {status === "IN_PROGRESS" ? "IN_PROGRESS" : status }
+          {status === "IN_PROGRESS" ? "IN_PROGRESS" : status}
         </Badge>
       )
     }
   },
-  
+  {
+    accessorKey: "priority",
+    header: "priority",
+    cell: ({ row }) => {
+      const priority = row.getValue("priority") as string;
+      return (
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        <Badge variant={"secondary"}>
+          {priority}
+        </Badge>
+      )
+    }
 
+  },
+  {
+    accessorKey: "assigneeTo",
+    header: "Assignee",
+    cell: ({ row }) => {
+      const assignee = row.getValue("assigneeTo") as {
+        name: string;
+        image: string | null;
+      } | null;
+
+      if (!assignee) {
+        return (
+          <span className="text-sm font-medium xl:text-base text-muted-foreground italic">
+            Unassigned
+          </span>
+        )
+      }
+
+      return (
+        <div className="flex items-center gap-2">
+          <ProjectAvatar name={assignee.name} />
+          <span className="text-sm font-medium xl:text-base capitalize">
+            {assignee.name}
+          </span>
+        </div>
+      )
+    }
+
+  },
+  {
+    accessorKey: "dueDate",
+    header: "Due Date",
+    cell: ({ row }) => {
+      const dueDate = row.getValue("dueDate") as Date | null;
+      return (
+        <span className="text-sm font-medium xl:text-base capitalize">
+          {dueDate ? format(new Date(dueDate), "PPP") : "No due date"}
+        </span>
+      )
+    }
+
+  },
+
+  {
+    accessorKey: "createdAt",
+    header: "Created At",
+    cell: ({ row }) => {
+      const createdAt = row.getValue("createdAt") as Date;
+      return (
+        <span className="text-sm font-medium xl:text-base capitalize">
+          {format(new Date(createdAt), "PPP")}
+        </span>
+      )
+    }
+
+  },
  
+
+
+
 ];
