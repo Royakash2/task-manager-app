@@ -6,13 +6,13 @@ import { AppSidebarDataProps } from './AppSidebarContainer'
 import { User } from '@prisma/client'
 import { projectProps, workspaceMembersProps } from '@/utils/types'
 import { Sidebar, SidebarContent, SidebarGroupLabel, SidebarHeader, useSidebar } from '../ui/sidebar'
-import { Avatar, AvatarImage } from '../ui/avatar'
 import { Button } from '../ui/button'
 import Link from 'next/link'
 import { Plus } from 'lucide-react'
 import WorkspaceSelector from './WorkspaceSelector'
 import { NavMain } from './NavMain'
 import { NavProject } from './NavProject'
+import { Logo } from '../Logo'
 
 function AppSidebar(
     { user,
@@ -33,14 +33,8 @@ function AppSidebar(
         <>
             <Sidebar collapsible='icon' >
                 <SidebarHeader className='bg-background'>
-                    <div className='flex items-center gap-2'>
-                        {/* <Avatar>
-                            <AvatarImage src={'/global.svg'} />
-
-                        </Avatar> */}
-                        <SidebarGroupLabel>
-                            <span className='text-xl font-bold'>Aura</span>
-                        </SidebarGroupLabel>
+                    <div className='px-2 py-2'>
+                        <Logo />
                     </div>
                     <div className='flex justify-between items-center gap-0'>
                         <SidebarGroupLabel className='mb-2 uppercase text-sm text-muted-foreground font-semibold'>
