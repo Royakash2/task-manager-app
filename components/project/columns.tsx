@@ -5,10 +5,12 @@ import { ColumnDef } from "@tanstack/react-table";
 import { Checkbox } from "../ui/checkbox";
 import Link from "next/link";
 import { Button } from "../ui/button";
-import { ArrowUpDown } from "lucide-react";
+import { ArrowUpDown, EllipsisVertical, Paperclip } from "lucide-react";
 import { ProjectAvatar } from "./Project-avatar";
 import { Badge } from "../ui/badge";
 import { format } from "date-fns";
+import { ProfileAvatar } from "../profile-avatar";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "../ui/dropdown-menu";
 
 export type TaskTableItem = Task & {
   assigneeTo: {
@@ -68,7 +70,7 @@ export const columns: ColumnDef<TaskTableItem>[] = [
           <div className="flex items-center gap-2">
             <ProjectAvatar name={title} />
             <span className="text-sm font-medium xl:text-base capitalize">
-              {title}
+              {title.length > 20 ? title.slice(0, 20) + "..." : title}
             </span>
           </div>
         </Link>
@@ -94,7 +96,6 @@ export const columns: ColumnDef<TaskTableItem>[] = [
     cell: ({ row }) => {
       const priority = row.getValue("priority") as string;
       return (
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         <Badge variant={"secondary"}>
           {priority}
         </Badge>
@@ -103,29 +104,14 @@ export const columns: ColumnDef<TaskTableItem>[] = [
 
   },
   {
-    accessorKey: "assigneeTo",
-    header: "Assignee",
+    accessorKey: "createdAt",
+    header: "Created At",
     cell: ({ row }) => {
-      const assignee = row.getValue("assigneeTo") as {
-        name: string;
-        image: string | null;
-      } | null;
-
-      if (!assignee) {
-        return (
-          <span className="text-sm font-medium xl:text-base text-muted-foreground italic">
-            Unassigned
-          </span>
-        )
-      }
-
+      const createdAt = row.getValue("createdAt") as Date;
       return (
-        <div className="flex items-center gap-2">
-          <ProjectAvatar name={assignee.name} />
-          <span className="text-sm font-medium xl:text-base capitalize">
-            {assignee.name}
-          </span>
-        </div>
+        <span className="text-sm font-medium xl:text-base capitalize">
+          {format(new Date(createdAt), "MMM d, yyyy")}
+        </span>
       )
     }
 
@@ -137,7 +123,7 @@ export const columns: ColumnDef<TaskTableItem>[] = [
       const dueDate = row.getValue("dueDate") as Date | null;
       return (
         <span className="text-sm font-medium xl:text-base capitalize">
-          {dueDate ? format(new Date(dueDate), "PPP") : "No due date"}
+          {dueDate ? format(new Date(dueDate), "MMM d, yyyy") : "No due date"}
         </span>
       )
     }
@@ -145,20 +131,66 @@ export const columns: ColumnDef<TaskTableItem>[] = [
   },
 
   {
-    accessorKey: "createdAt",
-    header: "Created At",
+    accessorKey: "assigneeTo",
+    header: "Assigned To",
     cell: ({ row }) => {
-      const createdAt = row.getValue("createdAt") as Date;
+      const assignedTo = row.getValue("assigneeTo") as {
+        name: string;
+        image?: string;
+      };
       return (
-        <span className="text-sm font-medium xl:text-base capitalize">
-          {format(new Date(createdAt), "PPP")}
-        </span>
-      )
-    }
-
+        <div className="flex items-center gap-2">
+          <ProfileAvatar
+            name={assignedTo?.name || "Unassigned"}
+            url={assignedTo?.image}
+            size="sm"
+          />
+          <span>{assignedTo?.name || "Unassigned"}</span>
+        </div>
+      );
+    },
   },
- 
-
-
-
+  {
+    accessorKey: "attachments",
+    header: "Attachments",
+    cell: ({ row }) => {
+      const attachments = row.getValue("attachments") as string[];
+      return (
+        <div className="flex items-center gap-2">
+          <Paperclip className="w-4 h-4" />
+          {attachments?.length || 0}
+        </div>
+      );
+    },
+  },
+  {
+    accessorKey: "actions",
+    header: "Actions",
+    cell: ({ row }) => {
+      return (
+        <div>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant={"ghost"} size={"icon"}>
+                <EllipsisVertical className="w-4 h-4" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent>
+              <DropdownMenuItem>
+                <Link
+                  href={`/workspace/${row.original.project.workspaceId}/projects/${row.original.project.id}/${row.original.id}`}
+                >
+                  View Task
+                </Link>
+              </DropdownMenuItem>
+              <DropdownMenuItem asChild>
+                Delete Task
+                {/* <DeleteTask taskId={row.original.id} /> */}
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
+      );
+    },
+  },
 ];
