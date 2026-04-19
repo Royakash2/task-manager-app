@@ -5,6 +5,7 @@ import { SidebarGroup, SidebarGroupLabel, SidebarMenu, SidebarMenuButton, Sideba
 import { usePathname } from "next/navigation"
 import Link from "next/link"
 import { CreateProjectForm } from "../project/create-project-form"
+import { FolderKanban } from "lucide-react"
 
 
 export const NavProject = ({
@@ -32,8 +33,13 @@ export const NavProject = ({
                             const href = `/workspace/${project.workspaceId}/projects/${project.id}`;
                             return (
                                 <SidebarMenuItem key={project.id}>
-                                    <SidebarMenuButton>
-                                        <Link href={href} className={pathName === href ? "text-blue-600 text-semibold" : "text-muted-foreground "}>
+                                    <SidebarMenuButton
+                                        asChild
+                                        isActive={pathName === href}
+                                        tooltip={project.name}
+                                    >
+                                        <Link href={href} onClick={() => setOpenMobile(false)}>
+                                            <FolderKanban className="size-4" />
                                             <span>{project.name}</span>
                                         </Link>
                                     </SidebarMenuButton>
