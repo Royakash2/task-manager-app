@@ -3,7 +3,7 @@ import KanbanBoardContainer from '@/components/project/kanban-board-container';
 import ProjectDashboard from '@/components/project/project-dashboard';
 import { ProjectTableContainer } from '@/components/project/project-table-container';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Activity, CommentProps, projectProps } from '@/utils/types';
+import { Activity, CommentProps, projectProps, ProjectTaskProps } from '@/utils/types';
 import Link from 'next/link';
 import React from 'react'
 interface ProjectPageProps {
@@ -46,7 +46,7 @@ const ProjectPage = async (props: ProjectPageProps) => {
                   />
                 </TabsContent>
                 <TabsContent value='Kanban'>
-                  <KanbanBoardContainer />
+                  <KanbanBoardContainer initialTasks={(tasks?.items ?? []) as ProjectTaskProps[]} />
                 </TabsContent>
             </Tabs>
         </div>
