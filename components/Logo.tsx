@@ -1,4 +1,4 @@
-import Image from "next/image";
+
 import Link from "next/link";
 import React from "react";
 
@@ -10,15 +10,15 @@ interface LogoProps {
 export function Logo({ className = "", linkHref }: LogoProps) {
   const logoContent = (
     <div className={`flex items-center gap-1 ${className}`}>
-      <div className="relative w-10 h-10 rounded-xl overflow-hidden shrink-0">
+      {/* <div className="relative w-10 h-10 rounded-xl overflow-hidden shrink-0">
         <Image
           src="/Logo.png"
           alt="AlignerHQ Logo"
           fill
-          className="object-cover"
+          className="object-center"
         />
-      </div>
-      <span className="text-xl font-bold tracking-tight font-mono">VelloX</span>
+      </div> */}
+      <span className="text-2xl font-bold tracking-tight font-mono">VelloX</span>
     </div>
   );
 
