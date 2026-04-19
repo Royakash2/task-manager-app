@@ -1,4 +1,5 @@
 import { getProjectDetails } from '@/app/data/project/get-project-details';
+import KanbanBoardContainer from '@/components/project/kanban-board-container';
 import ProjectDashboard from '@/components/project/project-dashboard';
 import { ProjectTableContainer } from '@/components/project/project-table-container';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -45,8 +46,7 @@ const ProjectPage = async (props: ProjectPageProps) => {
                   />
                 </TabsContent>
                 <TabsContent value='Kanban'>
-                    {/* <Kanban /> */}
-                    kanban
+                  <KanbanBoardContainer />
                 </TabsContent>
             </Tabs>
         </div>
