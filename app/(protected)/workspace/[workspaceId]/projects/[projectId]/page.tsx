@@ -46,7 +46,7 @@ const ProjectPage = async (props: ProjectPageProps) => {
                   />
                 </TabsContent>
                 <TabsContent value='Kanban'>
-                  <KanbanBoardContainer initialTasks={(tasks?.items ?? []) as ProjectTaskProps[]} />
+                  <KanbanBoardContainer initialTasks={tasks?.items as unknown as ProjectTaskProps[]} />
                 </TabsContent>
             </Tabs>
         </div>
