@@ -1,7 +1,6 @@
 "use client"
 import { $Enums } from "@/lib/generated/prisma/browser"
 import { Column, ProjectTaskProps } from "@/utils/types"
-import { useRouter } from "next/navigation"
 import { startTransition, useEffect, useState } from "react"
 import { DragDropContext, DropResult } from "@hello-pangea/dnd"
 import KanbanColumn from "./kanban-column"
@@ -17,8 +16,6 @@ const columnsTitle: Record<$Enums.TaskStatus, string> = {
 }
 
 export default function KanbanBoardContainer({ initialTasks }: { initialTasks: ProjectTaskProps[] }) {
-    const router = useRouter();
-
     const [columns, setColumns] = useState<Column[]>([]);
 
     useEffect(() => {
