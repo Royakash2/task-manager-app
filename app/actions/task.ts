@@ -67,3 +67,46 @@ export const createTask = async (
 
   return { success: true };
 };
+
+export const updateTaskPosition = async (
+  taskId: string,
+  newStatus: string,
+  newPosition: number,
+) => {
+  try {
+    const { user } = await userRequired();
+
+    // 1. Update the dragged task's status and position
+    await db.task.update({
+      where: { id: taskId },
+      data: {
+        status: newStatus as "TODO" | "IN_PROGRESS" | "IN_REVIEW" | "BACKLOG" | "COMPLETED" | "BLOCKED",
+        position: newPosition * 1000,
+      },
+    });
+
+    // 2. Re-index all tasks in the destination column to keep positions clean
+    const tasksInColumn = await db.task.findMany({
+      where: {
+        status: newStatus as "TODO" | "IN_PROGRESS" | "IN_REVIEW" | "BACKLOG" | "COMPLETED" | "BLOCKED",
+        projectId: (await db.task.findUnique({ where: { id: taskId }, select: { projectId: true } }))!.projectId,
+      },
+      orderBy: { position: "asc" },
+    });
+
+    // 3. Batch update positions with consistent gaps of 1000
+    const updates = tasksInColumn.map((task, index) =>
+      db.task.update({
+        where: { id: task.id },
+        data: { position: (index + 1) * 1000 },
+      })
+    );
+
+    await db.$transaction(updates);
+
+    return { success: true };
+  } catch (error) {
+    console.error("Failed to update task position:", error);
+    return { success: false, error: "Failed to update task position" };
+  }
+};
