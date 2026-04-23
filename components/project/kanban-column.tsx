@@ -21,26 +21,23 @@ const statusColors: Record<string, string> = {
 export default function KanbanColumn({ column }: KanbanColumnProps) {
     return (
         <div className={cn(
-            "min-w-[250px] w-[250px]", // Made columns much smaller! (Was 280px-320px)
+            "min-w-[250px] w-[250px]",
             "bg-muted/40 dark:bg-muted/20 rounded-xl overflow-hidden",
             "flex flex-col h-full",
             "border-t-[3px]",
             statusColors[column.id] || "border-t-gray-400"
         )}>
-            {/* Column Header - Fixed/Sticky at the top */}
             <div className="flex items-center justify-between px-3 py-3 bg-muted/20 border-b border-border/50 sticky top-0 z-10">
                 <div className="flex items-center gap-2">
                     <h3 className="text-[13px] font-semibold text-foreground tracking-tight">
                         {column.title}
                     </h3>
-                    {/* Number of tasks in column */}
                     <span className="flex items-center justify-center h-5 min-w-[20px] px-1.5 text-[11px] font-medium rounded-full bg-background text-muted-foreground border border-border shadow-sm">
                         {column.tasks.length}
                     </span>
                 </div>
             </div>
 
-            {/* Droppable Task Area - Scrollable */}
             <Droppable droppableId={column.id}>
                 {(provided, snapshot) => (
                     <div

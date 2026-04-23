@@ -28,10 +28,9 @@ export default function KanbanCard({ task, index }: KanbanCardProps) {
                         "group bg-background border border-border rounded-lg p-2.5 mb-2 cursor-grab active:cursor-grabbing",
                         "transition-shadow duration-200",
                         "hover:border-primary/30 hover:shadow-sm",
-                        snapshot.isDragging && "shadow-lg border-primary/50 rotate-[2deg] scale-[1.02]"
+                        snapshot.isDragging && "shadow-lg border-primary/50 rotate-2 scale-[1.02]"
                     )}
                 >
-                    {/* Top Row: Drag handle + Priority */}
                     <div className="flex items-center justify-between mb-1.5">
                         <div
                             {...provided.dragHandleProps}
@@ -45,14 +44,11 @@ export default function KanbanCard({ task, index }: KanbanCardProps) {
                         </Badge>
                     </div>
 
-                    {/* Task Title */}
                     <p className="text-[13px] font-medium leading-snug mb-3 line-clamp-2">
                         {task.title}
                     </p>
 
-                    {/* Bottom Row: Assignee + Due Date */}
                     <div className="flex items-center justify-between mt-auto">
-                        {/* Assignee */}
                         <div className="flex items-center gap-1.5">
                             <ProfileAvatar
                                 name={task.assigneeTo?.name || "?"}
@@ -61,7 +57,6 @@ export default function KanbanCard({ task, index }: KanbanCardProps) {
                             />
                         </div>
 
-                        {/* Due Date */}
                         {task.dueDate && (
                             <div className={cn(
                                 "flex items-center gap-1 text-[11px] text-muted-foreground",

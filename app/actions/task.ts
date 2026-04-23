@@ -76,7 +76,13 @@ export const updateTaskPosition = async (
   try {
     const { user } = await userRequired();
 
-    // 1. Update the dragged task's status and position
+    const currentTask = await db.task.findUnique({
+      where: { id: taskId },
+      select: { projectId: true, status: true, title: true }
+    });
+
+    if (!currentTask) return { success: false, error: "Task not found" };
+
     await db.task.update({
       where: { id: taskId },
       data: {
@@ -85,16 +91,14 @@ export const updateTaskPosition = async (
       },
     });
 
-    // 2. Re-index all tasks in the destination column to keep positions clean
     const tasksInColumn = await db.task.findMany({
       where: {
         status: newStatus as "TODO" | "IN_PROGRESS" | "IN_REVIEW" | "BACKLOG" | "COMPLETED" | "BLOCKED",
-        projectId: (await db.task.findUnique({ where: { id: taskId }, select: { projectId: true } }))!.projectId,
+        projectId: currentTask.projectId,
       },
       orderBy: { position: "asc" },
     });
 
-    // 3. Batch update positions with consistent gaps of 1000
     const updates = tasksInColumn.map((task, index) =>
       db.task.update({
         where: { id: task.id },
@@ -103,6 +107,17 @@ export const updateTaskPosition = async (
     );
 
     await db.$transaction(updates);
+
+    if (currentTask.status !== newStatus) {
+      await db.activity.create({
+        data: {
+          type: "TASK_UPDATED",
+          description: `moved task "${currentTask.title}" to ${newStatus.replace("_", " ")}`,
+          projectId: currentTask.projectId,
+          userId: user.id,
+        },
+      });
+    }
 
     return { success: true };
   } catch (error) {
