@@ -4,6 +4,7 @@ import { TaskFormValues } from "@/components/task/create-task-dialog";
 import { userRequired } from "../data/user/get-user";
 import { taskFormSchema } from "@/lib/schema";
 import db from "@/lib/db";
+import { TaskStatus } from "@prisma/client";
 
 export const createTask = async (
   data: TaskFormValues,
@@ -86,14 +87,14 @@ export const updateTaskPosition = async (
     await db.task.update({
       where: { id: taskId },
       data: {
-        status: newStatus as "TODO" | "IN_PROGRESS" | "IN_REVIEW" | "BACKLOG" | "COMPLETED" | "BLOCKED",
+        status: newStatus as TaskStatus,
         position: newPosition * 1000,
       },
     });
 
     const tasksInColumn = await db.task.findMany({
       where: {
-        status: newStatus as "TODO" | "IN_PROGRESS" | "IN_REVIEW" | "BACKLOG" | "COMPLETED" | "BLOCKED",
+        status: newStatus as TaskStatus,
         projectId: currentTask.projectId,
       },
       orderBy: { position: "asc" },
