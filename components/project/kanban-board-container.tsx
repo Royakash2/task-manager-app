@@ -1,5 +1,5 @@
 "use client"
-import { $Enums } from "@/lib/generated/prisma/browser"
+import { $Enums } from "@prisma/client"
 import { Column, ProjectTaskProps } from "@/utils/types"
 import { startTransition, useEffect, useState } from "react"
 import { DragDropContext, DropResult } from "@hello-pangea/dnd"
