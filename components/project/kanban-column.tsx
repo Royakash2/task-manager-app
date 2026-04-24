@@ -21,7 +21,7 @@ const statusColors: Record<string, string> = {
 export default function KanbanColumn({ column }: KanbanColumnProps) {
     return (
         <div className={cn(
-            "min-w-[280px] w-[280px]",
+            "min-w-[230px] w-[230px]",
             "bg-[#f8f9fa] dark:bg-muted/10 rounded-xl overflow-hidden",
             "flex flex-col h-full border border-border/40"
         )}>
