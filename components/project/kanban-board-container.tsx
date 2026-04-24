@@ -69,9 +69,9 @@ export default function KanbanBoardContainer({ initialTasks }: { initialTasks: P
 
     return (
         <DragDropContext onDragEnd={onDragEnd}>
-            <div className="flex gap-4 py-4 overflow-x-auto w-full h-[calc(100vh-200px)] [&::-webkit-scrollbar]:h-2 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:bg-border hover:[&::-webkit-scrollbar-thumb]:bg-muted-foreground/30">
+            <div className="flex gap-4 py-4 overflow-x-auto w-full h-full  [&::-webkit-scrollbar]:h-2 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:bg-border hover:[&::-webkit-scrollbar-thumb]:bg-muted-foreground/30">
                 {columns.map((column) => (
-                    <KanbanColumn key={column.id} column={column} />
+                    <KanbanColumn key={column.id} column={column} /> 
                 ))}
             </div>
         </DragDropContext>

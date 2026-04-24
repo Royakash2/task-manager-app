@@ -10,31 +10,27 @@ interface KanbanColumnProps {
 }
 
 const statusColors: Record<string, string> = {
-    TODO: "border-t-blue-500",
-    IN_PROGRESS: "border-t-yellow-500",
-    IN_REVIEW: "border-t-purple-500",
-    BACKLOG: "border-t-pink-500",
-    COMPLETED: "border-t-green-500",
-    BLOCKED: "border-t-red-500",
+    TODO: "bg-[#4b71f3]",
+    IN_PROGRESS: "bg-[#f59e0b]",
+    IN_REVIEW: "bg-[#a855f7]",
+    BACKLOG: "bg-[#ec4899]",
+    COMPLETED: "bg-[#10b981]",
+    BLOCKED: "bg-[#ef4444]",
 }
 
 export default function KanbanColumn({ column }: KanbanColumnProps) {
     return (
         <div className={cn(
-            "min-w-[250px] w-[250px]",
-            "bg-muted/40 dark:bg-muted/20 rounded-xl overflow-hidden",
-            "flex flex-col h-full",
-            "border-t-[3px]",
-            statusColors[column.id] || "border-t-gray-400"
+            "min-w-[280px] w-[280px]",
+            "bg-[#f8f9fa] dark:bg-muted/10 rounded-xl overflow-hidden",
+            "flex flex-col h-full border border-border/40"
         )}>
-            <div className="flex items-center justify-between px-3 py-3 bg-muted/20 border-b border-border/50 sticky top-0 z-10">
-                <div className="flex items-center gap-2">
-                    <h3 className="text-[13px] font-semibold text-foreground tracking-tight">
+            <div className="flex items-center justify-between px-4 py-4 bg-transparent border-b border-border/40 sticky top-0 z-10">
+                <div className="flex items-center gap-2.5">
+                    <div className={cn("w-3.5 h-3.5 rounded-[4px]", statusColors[column.id] || "bg-gray-400")} />
+                    <h3 className="text-[14px] font-bold text-foreground tracking-tight">
                         {column.title}
                     </h3>
-                    <span className="flex items-center justify-center h-5 min-w-[20px] px-1.5 text-[11px] font-medium rounded-full bg-background text-muted-foreground border border-border shadow-sm">
-                        {column.tasks.length}
-                    </span>
                 </div>
             </div>
 
@@ -44,7 +40,7 @@ export default function KanbanColumn({ column }: KanbanColumnProps) {
                         ref={provided.innerRef}
                         {...provided.droppableProps}
                         className={cn(
-                            "flex-1 overflow-y-auto p-2 min-h-[120px] transition-colors duration-200",
+                            "flex-1 overflow-y-auto p-3 min-h-[120px] transition-colors duration-200",
                             "[&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]",
                             snapshot.isDraggingOver && "bg-primary/5 dark:bg-primary/10"
                         )}
