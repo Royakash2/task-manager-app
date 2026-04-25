@@ -10,27 +10,30 @@ interface KanbanColumnProps {
 }
 
 const statusColors: Record<string, string> = {
-    TODO: "bg-[#4b71f3]",
-    IN_PROGRESS: "bg-[#f59e0b]",
-    IN_REVIEW: "bg-[#a855f7]",
-    BACKLOG: "bg-[#ec4899]",
-    COMPLETED: "bg-[#10b981]",
-    BLOCKED: "bg-[#ef4444]",
+    TODO: "bg-[#94a3b8]",
+    IN_PROGRESS: "bg-[#a3a3a3]",
+    IN_REVIEW: "bg-[#9ca3af]",
+    BACKLOG: "bg-[#b0b0b0]",
+    COMPLETED: "bg-[#86a89a]",
+    BLOCKED: "bg-[#bfa0a0]",
 }
 
 export default function KanbanColumn({ column }: KanbanColumnProps) {
     return (
         <div className={cn(
-            "min-w-[230px] w-[230px]",
-            "bg-[#f8f9fa] dark:bg-muted/10 rounded-xl overflow-hidden",
-            "flex flex-col h-full border border-border/40"
+            "flex-1 min-w-[200px]",
+            "bg-transparent",
+            "flex flex-col h-full border-r border-border last:border-r-0"
         )}>
-            <div className="flex items-center justify-between px-4 py-4 bg-transparent border-b border-border/40 sticky top-0 z-10">
+            <div className="flex items-center justify-between px-4 py-3.5 bg-transparent sticky top-0 z-10">
                 <div className="flex items-center gap-2.5">
-                    <div className={cn("w-3.5 h-3.5 rounded-[4px]", statusColors[column.id] || "bg-gray-400")} />
-                    <h3 className="text-[14px] font-bold text-foreground tracking-tight">
+                    <div className={cn("w-2.5 h-2.5 rounded-full", statusColors[column.id] || "bg-gray-400")} />
+                    <h3 className="text-[13px] font-medium text-muted-foreground tracking-tight">
                         {column.title}
                     </h3>
+                    <span className="text-[11px] text-muted-foreground/50 font-normal">
+                        {column.tasks.length}
+                    </span>
                 </div>
             </div>
 
