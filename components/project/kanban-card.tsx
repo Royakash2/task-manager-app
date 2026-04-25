@@ -55,7 +55,7 @@ export default function KanbanCard({ task, index }: KanbanCardProps) {
                         </Badge>
                     </div>
                     <div className="flex items-start justify-between gap-2 mb-2">
-                        <p className="text-xs font-semibold  text-foreground leading-snug line-clamp-3">
+                        <p className="text-xs 2xl:text-sm font-semibold  text-foreground leading-snug line-clamp-3">
                             {task.title}
                         </p>
 
