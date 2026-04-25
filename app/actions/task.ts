@@ -4,6 +4,7 @@ import { TaskFormValues } from "@/components/task/create-task-dialog";
 import { userRequired } from "../data/user/get-user";
 import { taskFormSchema } from "@/lib/schema";
 import db from "@/lib/db";
+import { TaskStatus } from "@prisma/client";
 
 export const createTask = async (
   data: TaskFormValues,
@@ -66,4 +67,62 @@ export const createTask = async (
   });
 
   return { success: true };
+};
+
+export const updateTaskPosition = async (
+  taskId: string,
+  newStatus: string,
+  newPosition: number,
+) => {
+  try {
+    const { user } = await userRequired();
+
+    const currentTask = await db.task.findUnique({
+      where: { id: taskId },
+      select: { projectId: true, status: true, title: true }
+    });
+
+    if (!currentTask) return { success: false, error: "Task not found" };
+
+    await db.task.update({
+      where: { id: taskId },
+      data: {
+        status: newStatus as TaskStatus,
+        position: newPosition * 1000,
+      },
+    });
+
+    const tasksInColumn = await db.task.findMany({
+      where: {
+        status: newStatus as TaskStatus,
+        projectId: currentTask.projectId,
+      },
+      orderBy: { position: "asc" },
+    });
+
+    const updates = tasksInColumn.map((task, index) =>
+      db.task.update({
+        where: { id: task.id },
+        data: { position: (index + 1) * 1000 },
+      })
+    );
+
+    await db.$transaction(updates);
+
+    if (currentTask.status !== newStatus) {
+      await db.activity.create({
+        data: {
+          type: "TASK_UPDATED",
+          description: `moved task "${currentTask.title}" to ${newStatus.replace("_", " ")}`,
+          projectId: currentTask.projectId,
+          userId: user.id,
+        },
+      });
+    }
+
+    return { success: true };
+  } catch (error) {
+    console.error("Failed to update task position:", error);
+    return { success: false, error: "Failed to update task position" };
+  }
 };
