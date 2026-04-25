@@ -10,7 +10,7 @@ export const ProfileAvatar = ({
 }: {
   name: string;
   url?: string;
-  size?: "sm" | "md" | "lg";
+  size?: "xs" | "sm" | "md" | "lg";
   className?: string;
   numOfChars?: number;
 }) => {
@@ -21,6 +21,7 @@ export const ProfileAvatar = ({
         size === "sm" && "h-6 w-6",
         size === "md" && "h-8 w-8",
         size === "lg" && "h-10 w-10",
+        size === "xs" && "h-5 w-5",
         className
       )}
     >
