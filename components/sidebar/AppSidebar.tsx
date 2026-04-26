@@ -34,10 +34,12 @@ function AppSidebar(
             <Sidebar collapsible='icon' >
                 <SidebarHeader className='bg-background'>
                     <div className='px-2 py-2 group-data-[collapsible=icon]:hidden'>
-                        <Logo />
+                        <Logo linkHref="/" />
                     </div>
                     <div className='hidden group-data-[collapsible=icon]:flex items-center justify-center py-2 mt-1'>
-                        <span className="text-2xl font-bold tracking-tight font-mono">V</span>
+                        <Link href="/">
+                            <span className="text-2xl font-bold tracking-tight font-mono">V</span>
+                        </Link>
                     </div>
                     <div className='flex justify-between items-center gap-0 group-data-[collapsible=icon]:hidden'>
                         <SidebarGroupLabel className='mb-2 uppercase text-sm text-muted-foreground font-semibold'>
