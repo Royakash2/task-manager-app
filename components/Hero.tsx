@@ -3,6 +3,7 @@ import { RegisterLink, LoginLink } from "@kinde-oss/kinde-auth-nextjs/components
 import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
+import { AnimatedBackground } from "@/components/ui/animated-background";
 
 export const Hero = async () => {
   const { isAuthenticated } = getKindeServerSession();
@@ -11,8 +12,8 @@ export const Hero = async () => {
   return (
     <section className="relative w-full pt-20 pb-16 md:pt-0 md:pb-0 md:h-[calc(100vh-64px)] flex flex-col md:justify-center items-center px-4 overflow-hidden">
       
-      {/* Subtle Background Glow Effect */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[400px] bg-blue-500/10 dark:bg-blue-600/10 rounded-full blur-[100px] -z-10 pointer-events-none" />
+      {/* Animated Particle Network Background */}
+      <AnimatedBackground />
 
       <div className="max-w-7xl mx-auto relative z-10">
         <div className="text-center">
