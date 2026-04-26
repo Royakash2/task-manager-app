@@ -53,7 +53,7 @@ function AppSidebar(
                     </div>
                     <WorkspaceSelector workspaces={data.workspaces} />
                 </SidebarHeader>
-                <SidebarContent>    
+                <SidebarContent className="[&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">    
                     <NavMain/>
                     <NavProject projects={project} workspaceMembers={workspaceMembers} />
                 </SidebarContent>
