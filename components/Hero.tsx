@@ -2,38 +2,56 @@ import { Button } from "@/components/ui/button";
 import { RegisterLink, LoginLink } from "@kinde-oss/kinde-auth-nextjs/components";
 import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
 import Link from "next/link";
+import { ArrowRight } from "lucide-react";
 
 export const Hero = async () => {
   const { isAuthenticated } = getKindeServerSession();
   const isLogin = await isAuthenticated();
 
   return (
-    <section className="w-full h-[calc(100vh-64px)] flex space-y-6 flex-col justify-center items-center px-4">
-      <div className="max-w-7xl mx-auto">
+    <section className="relative w-full pt-20 pb-16 md:pt-0 md:pb-0 md:h-[calc(100vh-64px)] flex flex-col md:justify-center items-center px-4 overflow-hidden">
+      
+      {/* Subtle Background Glow Effect */}
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[400px] bg-blue-500/10 dark:bg-blue-600/10 rounded-full blur-[100px] -z-10 pointer-events-none" />
+
+      <div className="max-w-7xl mx-auto relative z-10">
         <div className="text-center">
-          <h1 className="text-5xl md:text-6xl font-bold tracking-tight">
-            your personal workspace <br />
-            <span className="text-blue-600">VelloX</span> for better productivity
+          
+          {/* Announcement Pill Badge */}
+          <div className="flex justify-center mb-6">
+            <div className="inline-flex items-center rounded-md border border-blue-200/50 bg-blue-50/50 px-3 py-1 text-sm text-blue-600 backdrop-blur-sm dark:border-blue-900/50 dark:bg-blue-900/20 dark:text-blue-400">
+              <span className="flex h-2 w-2 rounded-full bg-blue-600 mr-2 animate-pulse"></span>
+              Introducing VelloX for Teams
+            </div>
+          </div>
+
+          <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight text-foreground/90 mb-4">
+            Your personal workspace <br className="hidden sm:block" />
+            <span className="bg-linear-to-r from-blue-600 to-indigo-500 bg-clip-text text-transparent">
+              VelloX
+            </span> for better productivity
           </h1>
-          <p className="lg:text-lg mt-6 max-w-2xl text-muted-foreground mx-auto text-base">
-            VelloX is a premium task management platform designed to bring clarity and speed to your workflow.
+          
+          <p className="text-base sm:text-lg mt-4 sm:mt-6 max-w-2xl text-muted-foreground mx-auto">
+            VelloX is a premium task management platform designed to bring clarity and speed to your workflow. Stop managing tasks, start executing them.
           </p>
         </div>
-        <div className="flex justify-center items-center mt-8 gap-4">
+
+        <div className="flex flex-col sm:flex-row justify-center items-center mt-8 sm:mt-10 gap-3 sm:gap-4 w-full px-2 sm:px-0">
           {isLogin ? (
-            <Button asChild size="lg">
+            <Button asChild size="lg" className="w-full sm:w-auto">
               <Link href="/workspace">
-                Goto Workspace
+                Goto Workspace <ArrowRight className="ml-2 h-4 w-4" />
               </Link>
             </Button>
           ) : (
             <>
-              <Button size="lg" asChild>
+              <Button size="lg" asChild className="w-full sm:w-auto">
                 <RegisterLink>
-                  Get Started Free
+                  Get Started Free <ArrowRight className="ml-2 h-4 w-4" />
                 </RegisterLink>
               </Button>
-              <Button asChild variant="outline" size="lg">
+              <Button asChild variant="outline" size="lg" className="w-full sm:w-auto">
                 <LoginLink>
                   See How It Works
                 </LoginLink>
