@@ -3,7 +3,7 @@ import { useWorkSpaceId } from '@/hooks/UseWorkspaceId';
 import { workspaceProps } from '@/utils/types'
 
 import React from 'react'
-import { SidebarMenu, SidebarMenuButton, SidebarMenuSubItem } from '../ui/sidebar';
+import { SidebarMenu, SidebarMenuButton, SidebarMenuItem } from '../ui/sidebar';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '../ui/dropdown-menu';
 import { Check, ChevronsUpDown } from 'lucide-react';
 import { useRouter } from 'next/navigation';
@@ -25,15 +25,15 @@ function WorkspaceSelector({ workspaces }: { workspaces: workspaceProps[] }) {
     return (
         <>
             <SidebarMenu>
-                <SidebarMenuSubItem>
+                <SidebarMenuItem>
                     <DropdownMenu>
                         <DropdownMenuTrigger asChild>
-                            <SidebarMenuButton size={'lg'} className='data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground'>
+                            <SidebarMenuButton size={'lg'} className='data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground group-data-[collapsible=icon]:justify-center'>
                                 <WorkspaceAvatar name={selectedWorkspace?.workspace.name as string || 'W'} />
-                                <div className='font-semibold'>
+                                <div className='font-semibold group-data-[collapsible=icon]:hidden truncate'>
                                     {selectedWorkspace?.workspace.name}
                                 </div>
-                                <ChevronsUpDown className='size-4 ml-auto' />
+                                <ChevronsUpDown className='size-4 ml-auto group-data-[collapsible=icon]:hidden' />
                             </SidebarMenuButton>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align='start' className='w-(--radix-dropdown-menu-trigger-width)'>
@@ -56,7 +56,7 @@ function WorkspaceSelector({ workspaces }: { workspaces: workspaceProps[] }) {
                             }
                         </DropdownMenuContent>
                     </DropdownMenu>
-                </SidebarMenuSubItem>
+                </SidebarMenuItem>
             </SidebarMenu>
         </>
     )
