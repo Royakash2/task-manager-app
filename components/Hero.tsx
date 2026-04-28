@@ -28,7 +28,7 @@ export const Hero = async () => {
 
           <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight text-foreground/90 mb-4">
             Your personal workspace <br className="hidden sm:block" />
-            <span className="bg-linear-to-r from-blue-600 to-indigo-500 bg-clip-text text-transparent">
+            <span className="font-mono bg-linear-to-r from-blue-600 to-indigo-500 bg-clip-text text-transparent">
               VelloX
             </span> for better productivity
           </h1>
