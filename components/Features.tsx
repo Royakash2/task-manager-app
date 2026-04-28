@@ -32,7 +32,7 @@ export const Features = () => {
   return (
     <section
       id="features"
-      className="w-full py-24 md:py-32 border-t border-border/40"
+      className="w-full py-24 md:py-32 bg-muted/30 dark:bg-muted/10 border-t border-border/40"
     >
       <div className="max-w-7xl mx-auto px-4 md:px-6">
         <SectionHeader
@@ -48,7 +48,7 @@ export const Features = () => {
             return (
               <div
                 key={index}
-                className="group relative h-full p-7 bg-background rounded-xl border border-border/50 shadow-sm hover:shadow-lg hover:border-border transition-all duration-300 flex flex-col hover:-translate-y-0.5"
+                className="group relative h-full p-7 bg-white dark:bg-card rounded-xl border border-border/60 dark:border-border shadow-sm hover:shadow-lg hover:border-border transition-all duration-300 flex flex-col hover:-translate-y-0.5"
               >
                 {/* Icon */}
                 <div className="w-11 h-11 rounded-lg bg-blue-50 dark:bg-blue-950/30 flex items-center justify-center mb-5 text-blue-600 dark:text-blue-400 transition-colors duration-300 group-hover:bg-blue-100 dark:group-hover:bg-blue-900/40">
