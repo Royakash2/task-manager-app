@@ -2,6 +2,7 @@
 import { Hero } from "@/components/hero-section/Hero";
 import { Features } from "@/components/Features";
 import { Testimonials } from "@/components/testimonials/Testimonials";
+import { Pricing } from "@/components/pricing/Pricing";
 import { Footer } from "@/components/footer/Footer";
 import { Navbar } from "@/components/navbar/Navbar";
 
@@ -13,6 +14,7 @@ export default function Home() {
         <Hero />
         <Features />
         <Testimonials />
+        <Pricing />
       </main>
       <Footer />
     </div>

@@ -1,5 +1,11 @@
 import { LayoutDashboard, Users, BarChart3, Shield } from "lucide-react";
 import { SectionHeader } from "@/components/ui/section-header";
+import {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+} from "@/components/ui/card";
 
 const features = [
   {
@@ -42,29 +48,31 @@ export const Features = () => {
         />
 
         {/* Feature Cards */}
-        <div className="grid md:grid-cols-2  lg:grid-cols-4 gap-5 md:gap-6">
+        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-5 md:gap-6">
           {features.map((feature, index) => {
             const Icon = feature.icon;
             return (
-              <div
+              <Card
                 key={index}
-                className="group relative h-full p-7 bg-white dark:bg-card rounded-xl border border-border/60 dark:border-border shadow-sm hover:shadow-lg hover:border-border transition-all duration-300 flex flex-col hover:-translate-y-0.5"
+                className="group relative h-full p-7 py-7 bg-white dark:bg-card border-border/60 dark:border-border shadow-sm hover:shadow-lg hover:border-border transition-all duration-300 hover:-translate-y-0.5 gap-0"
               >
-                {/* Icon */}
-                <div className="w-11 h-11 rounded-lg bg-blue-50 dark:bg-blue-950/30 flex items-center justify-center mb-5 text-blue-600 dark:text-blue-400 transition-colors duration-300 group-hover:bg-blue-100 dark:group-hover:bg-blue-900/40">
-                  <Icon className="w-5 h-5" />
-                </div>
+                <CardHeader className="p-0 gap-0">
+                  {/* Icon */}
+                  <div className="w-11 h-11 rounded-lg bg-blue-50 dark:bg-blue-950/30 flex items-center justify-center mb-5 text-blue-600 dark:text-blue-400 transition-colors duration-300 group-hover:bg-blue-100 dark:group-hover:bg-blue-900/40">
+                    <Icon className="w-5 h-5" />
+                  </div>
 
-                {/* Title */}
-                <h3 className="text-lg font-semibold mb-2 tracking-tight text-foreground/90">
-                  {feature.title}
-                </h3>
+                  {/* Title */}
+                  <CardTitle className="text-lg font-semibold mb-2 tracking-tight text-foreground/90">
+                    {feature.title}
+                  </CardTitle>
 
-                {/* Description */}
-                <p className="text-sm text-muted-foreground leading-relaxed flex-1">
-                  {feature.description}
-                </p>
-              </div>
+                  {/* Description */}
+                  <CardDescription className="text-sm text-muted-foreground leading-relaxed flex-1">
+                    {feature.description}
+                  </CardDescription>
+                </CardHeader>
+              </Card>
             );
           })}
         </div>
