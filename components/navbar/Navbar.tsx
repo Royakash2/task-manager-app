@@ -1,8 +1,9 @@
 import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
-import { Logo } from "./Logo";
-import { ThemeToggle } from "./theme-toggole";
+import { Logo } from "../Logo";
+import { ThemeToggle } from "../theme-toggole";
 import { MobileMenu } from "./MobileMenu";
 import { DesktopMenu } from "./DesktopMenu";
+
 
 export const Navbar = async () => {
   const { isAuthenticated } = getKindeServerSession();

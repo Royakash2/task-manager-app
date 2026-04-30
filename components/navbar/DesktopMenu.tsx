@@ -1,8 +1,9 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { RegisterLink, LoginLink } from "@kinde-oss/kinde-auth-nextjs/components";
-import { Logo } from "./Logo";
-import { ThemeToggle } from "./theme-toggole";
+import { ThemeToggle } from "../theme-toggole";
+import { Logo } from "../Logo";
+
 
 export const DesktopMenu = ({ isLogin }: { isLogin: boolean }) => {
   return (

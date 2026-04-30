@@ -3,7 +3,8 @@ import { Menu } from "lucide-react";
 import { Sheet, SheetContent, SheetTrigger, SheetTitle } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
 import { RegisterLink, LoginLink } from "@kinde-oss/kinde-auth-nextjs/components";
-import { Logo } from "./Logo";
+import { Logo } from "../Logo";
+
 
 interface MobileMenuProps {
   isLogin: boolean;
