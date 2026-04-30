@@ -1,4 +1,5 @@
 import { Star } from "lucide-react";
+import Image from "next/image";
 import type { Testimonial } from "./testimonials.data";
 
 export const TestimonialCard = ({ testimonial }: { testimonial: Testimonial }) => (
@@ -12,8 +13,8 @@ export const TestimonialCard = ({ testimonial }: { testimonial: Testimonial }) =
       &quot;{testimonial.content}&quot;
     </p>
     <div className="flex items-center gap-3 mt-2 pt-4 border-t border-slate-100 dark:border-slate-800/80">
-      <div className={`w-10 h-10 rounded-full bg-linear-to-br ${testimonial.color} flex items-center justify-center text-white font-bold shadow-md`}>
-        {testimonial.avatar}
+      <div className={`relative w-10 h-10 rounded-full bg-linear-to-br ${testimonial.color} flex items-center justify-center text-white font-bold shadow-md overflow-hidden ring-2 ring-white dark:ring-slate-900`}>
+        <Image src={testimonial.avatar} alt={testimonial.name} fill className="object-cover" sizes="40px" />
       </div>
       <div>
         <h4 className="font-semibold text-slate-900 dark:text-slate-100 text-sm">{testimonial.name}</h4>
