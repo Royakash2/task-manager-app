@@ -43,13 +43,13 @@ export const CtaBlock = ({
               {description}
             </p>
             <div className="flex w-full flex-col justify-center gap-3 sm:flex-row lg:justify-start">
-              <Button asChild size="lg" className="rounded-full">
+              <Button asChild size="lg" className="">
                 <a href={buttonPrimary.href}>
                   {buttonPrimary.label}
                   <ArrowRight className="ml-2 w-4 h-4" />
                 </a>
               </Button>
-              <Button variant="outline" size="lg" asChild className="rounded-full">
+              <Button variant="outline" size="lg" asChild className="">
                 <a href={buttonSecondary.href}>
                   {buttonSecondary.label}
                 </a>

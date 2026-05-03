@@ -10,6 +10,7 @@ export const Testimonials = () => {
     <section className="w-full max-w-7xl mx-auto py-24 md:py-32 dark:bg-background border-t border-border/40 overflow-hidden relative">
       <div className="px-4 md:px-6 relative z-10 mb-16">
         <SectionHeader
+          badge="Testimonials"
           title="Loved by modern teams"
           description="Don't just take our word for it. Here is what industry leaders have to say about their experience with VelloX."
         />

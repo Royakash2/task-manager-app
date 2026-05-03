@@ -1,7 +1,9 @@
 import { ReactNode } from "react";
+import { Badge } from "@/components/ui/badge";
 
 interface SectionHeaderProps {
   title: string;
+  badge?: string;
   highlight?: string;
   description: string;
   children?: ReactNode;
@@ -9,12 +11,18 @@ interface SectionHeaderProps {
 
 export function SectionHeader({
   title,
+  badge,
   highlight,
   description,
 }: SectionHeaderProps) {
   return (
-    <div className="text-center max-w-2xl mx-auto mb-16 md:mb-20">
-      <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight text-foreground/90 mb-5">
+    <div className="flex flex-col items-center gap-4 text-center mb-16 md:mb-20">
+      {badge && (
+        <Badge variant="outline" className="text-primary bg-primary/10 border-primary/20 rounded-md">
+          {badge}
+        </Badge>
+      )}
+      <h2 className="max-w-2xl text-3xl font-bold md:text-5xl tracking-tight">
         {title}{" "}
         {highlight && (
           <span className="bg-linear-to-r from-blue-600 to-indigo-500 bg-clip-text text-transparent">
@@ -22,7 +30,7 @@ export function SectionHeader({
           </span>
         )}
       </h2>
-      <p className="text-muted-foreground text-base sm:text-lg max-w-xl mx-auto">
+      <p className="text-muted-foreground md:text-lg max-w-2xl mt-2">
         {description}
       </p>
     </div>

@@ -22,15 +22,15 @@ export const Hero = async () => {
 
           {/* Announcement Pill Badge */}
           <div className="flex justify-center mb-6">
-            <div className="inline-flex items-center rounded-md border border-blue-200/50 bg-blue-50/50 px-3 py-1 text-sm text-blue-600 backdrop-blur-sm dark:border-blue-900/50 dark:bg-blue-900/20 dark:text-blue-400">
-              <span className="flex h-2 w-2 rounded-full bg-blue-600 mr-2 animate-pulse"></span>
+            <div className="inline-flex items-center rounded-md border border-black/20 bg-black/5 px-3 py-1 text-sm text-black backdrop-blur-sm dark:border-white/20 dark:bg-white/10 dark:text-white">
+              <span className="flex h-2 w-2 rounded-full bg-black dark:bg-white mr-2 animate-pulse"></span>
               Introducing VelloX for Teams
             </div>
           </div>
 
           <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight text-foreground/90 mb-4">
             Your personal workspace <br className="hidden sm:block" />
-            <span className="font-mono bg-linear-to-r from-blue-600 to-indigo-500 bg-clip-text text-transparent">
+            <span className="font-mono bg-linear-to-r from-violet-600 to-fuchsia-500 dark:from-violet-400 dark:to-fuchsia-400 bg-clip-text text-transparent">
               VelloX
             </span> for better productivity
           </h1>

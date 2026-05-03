@@ -1,6 +1,7 @@
 
 import { Hero } from "@/components/hero-section/Hero";
 import { Features } from "@/components/Features";
+import { ProductShowcase } from "@/components/product-showcase/Product-showcase";
 import { Testimonials } from "@/components/testimonials/Testimonials";
 import { Pricing } from "@/components/pricing/Pricing";
 import { Cta } from "@/components/cta-section/Cta";
@@ -14,6 +15,7 @@ export default function Home() {
       <main className="flex-1">
         <Hero />
         <Features />
+        <ProductShowcase />
         <Testimonials />
         <Pricing />
         <Cta />

@@ -12,8 +12,8 @@ export const Cta = () => {
         href: "/api/auth/register"
       }}
       buttonSecondary={{
-        label: "View Documentation",
-        href: "#"
+        label: "See Pricing",
+        href: "#pricing"
       }}
     />
   );

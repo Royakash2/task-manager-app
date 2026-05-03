@@ -8,6 +8,7 @@ export const Pricing = () => {
       <div className="max-w-7xl mx-auto px-4 md:px-6 ">
       
         <SectionHeader
+          badge="Pricing"
           title="Simple pricing for every team"
           description="Whether youre starting small or scaling fast, our product grows with your needs."
         />

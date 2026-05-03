@@ -69,6 +69,7 @@ export const Features = () => {
       >
         <motion.div variants={itemVariants} className="flex flex-col items-center text-center">
           <SectionHeader
+          badge="Features"
             title={featureData.title}
             description={featureData.subtitle}
 
