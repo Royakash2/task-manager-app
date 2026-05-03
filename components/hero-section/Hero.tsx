@@ -14,7 +14,7 @@ export const Hero = async () => {
     <section className="relative w-full pt-20 pb-16 md:pt-32 md:pb-24 flex flex-col items-center px-4 overflow-hidden">
 
 
-      <div className="max-w-7xl mx-auto relative z-10">
+      <div className="w-full max-w-7xl mx-auto relative z-10 px-4 md:px-6">
         {/* Animated Particle Network Background */}
         <AnimatedBackground />
 
@@ -64,14 +64,14 @@ export const Hero = async () => {
         </div>
 
         {/* Dashboard Showcase Image */}
-        <div className="mt-16 sm:mt-24 w-full max-w-5xl mx-auto relative rounded-xl sm:rounded-2xl border border-border/50 shadow-2xl shadow-blue-900/5 overflow-hidden">
+        <div className="mt-16 sm:mt-24 w-full max-w-7xl mx-auto relative rounded-xl sm:rounded-2xl border border-border/50 shadow-2xl shadow-blue-900/5 overflow-hidden">
 
           <Image
             src="/dashboard-hero.png"
             alt="VelloX Dashboard Preview"
             width={1200}
-            height={800}
-            className="w-full h-auto object-cover rounded-xl sm:rounded-2xl transform hover:scale-[1.01] transition-transform duration-700 ease-out"
+            height={400}
+            className="w-full h-auto max-h-[600px] object-cover object-top rounded-xl sm:rounded-2xl transform hover:scale-[1.01] transition-transform duration-700 ease-out"
             priority
           />
         </div>
