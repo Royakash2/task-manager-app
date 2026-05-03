@@ -5,7 +5,7 @@ import { Separator } from "@/components/ui/separator";
 
 export const Footer = () => {
   return (
-    <footer className="w-full bg-background pt-16 pb-8">
+    <footer className="w-full bg-background pb-8">
       <Separator className="bg-border/40 mb-16" />
       <div className="max-w-7xl mx-auto px-4 md:px-6">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-12 md:gap-8 mb-16">

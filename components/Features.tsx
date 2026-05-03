@@ -1,82 +1,95 @@
-import { LayoutDashboard, Users, BarChart3, Shield } from "lucide-react";
-import { SectionHeader } from "@/components/ui/section-header";
-import {
-  Card,
-  CardHeader,
-  CardTitle,
-  CardDescription,
-} from "@/components/ui/card";
+"use client";
 
-const features = [
-  {
-    title: "Kanban Boards",
-    description:
-      "Drag and drop tasks across customizable columns to visualize your workflow",
-    icon: LayoutDashboard,
+import * as React from "react";
+import { motion, Variants } from "framer-motion";
+import { LayoutDashboard, Users, BarChart3, Shield } from "lucide-react";
+import { SectionHeader } from "./ui/section-header";
+
+
+// Animation variants for the container and items
+const containerVariants: Variants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.1,
+    },
   },
-  {
-    title: "Team Collaboration",
-    description:
-      "Assign tasks, leave comments, and keep your team aligned in real-time",
-    icon: Users,
+}
+
+const itemVariants: Variants = {
+  hidden: { y: 20, opacity: 0 },
+  visible: {
+    y: 0,
+    opacity: 1,
+    transition: {
+      duration: 0.5,
+      ease: "easeInOut",
+    },
   },
-  {
-    title: "Project Dashboard",
-    description:
-      "Get instant insights with task distribution charts and activity feeds",
-    icon: BarChart3,
-  },
-  {
-    title: "Role-Based Access",
-    description:
-      "Control who sees what with workspace-level permissions and access levels",
-    icon: Shield,
-  },
-];
+}
 
 export const Features = () => {
+  const featureData = {
+    title: "Features you need",
+    subtitle: "Simple, powerful tools that help your team stay organized and productive — all in one place.",
+    features: [
+      {
+        icon: <LayoutDashboard className="h-6 w-6" />,
+        title: "Kanban Boards",
+        description: "Drag and drop tasks across customizable columns to visualize your workflow.",
+      },
+      {
+        icon: <Users className="h-6 w-6" />,
+        title: "Team Collaboration",
+        description: "Assign tasks, leave comments, and keep your team aligned in real-time.",
+      },
+      {
+        icon: <BarChart3 className="h-6 w-6" />,
+        title: "Project Dashboard",
+        description: "Get instant insights with task distribution charts and activity feeds.",
+      },
+      {
+        icon: <Shield className="h-6 w-6" />,
+        title: "Role-Based Access",
+        description: "Control who sees what with workspace-level permissions and access levels.",
+      },
+    ],
+    
+  }
+
   return (
-    <section
-      id="features"
-      className="w-full py-24 md:py-32 bg-muted/30 dark:bg-muted/10 border-t border-border/40"
-    >
-      <div className="max-w-7xl mx-auto px-4 md:px-6">
-        <SectionHeader
-          title="Everything you need to manage projects"
-          
-          description="Simple, powerful tools that help your team stay organized and productive — all in one place."
-        />
+    <section id="features" className="w-full py-24 md:py-32 bg-muted/30 dark:bg-muted/10 border-t border-border/40 overflow-hidden">
+      <motion.div
+        className="container mx-auto max-w-7xl px-4 md:px-6"
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, margin: "-100px" }}
+        variants={containerVariants}
+      >
+        <motion.div variants={itemVariants} className="flex flex-col items-center text-center">
+          <SectionHeader
+            title={featureData.title}
+            description={featureData.subtitle}
 
-        {/* Feature Cards */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-5 md:gap-6">
-          {features.map((feature, index) => {
-            const Icon = feature.icon;
-            return (
-              <Card
-                key={index}
-                className="group relative h-full p-7 py-7 bg-white dark:bg-card border-border/60 dark:border-border shadow-sm hover:shadow-lg hover:border-border transition-all duration-300 hover:-translate-y-0.5 gap-0"
-              >
-                <CardHeader className="p-0 gap-0">
-                  {/* Icon */}
-                  <div className="w-11 h-11 rounded-lg bg-blue-50 dark:bg-blue-950/30 flex items-center justify-center mb-5 text-blue-600 dark:text-blue-400 transition-colors duration-300 group-hover:bg-blue-100 dark:group-hover:bg-blue-900/40">
-                    <Icon className="w-5 h-5" />
-                  </div>
+          />
+        </motion.div>
 
-                  {/* Title */}
-                  <CardTitle className="text-lg font-semibold mb-2 tracking-tight text-foreground/90">
-                    {feature.title}
-                  </CardTitle>
-
-                  {/* Description */}
-                  <CardDescription className="text-sm text-muted-foreground leading-relaxed flex-1">
-                    {feature.description}
-                  </CardDescription>
-                </CardHeader>
-              </Card>
-            );
-          })}
+        {/* Features Grid */}
+        <div className="mx-auto  grid max-w-2xl grid-cols-1 gap-8 text-left  lg:max-w-none lg:grid-cols-2">
+          {featureData.features.map((feature, index) => (
+            <motion.div variants={itemVariants} key={index} className="flex gap-x-6">
+              <div className="flex h-10 w-10 flex-none items-center justify-center rounded-lg bg-primary/10 text-primary">
+                {feature.icon}
+              </div>
+              <div>
+                <h3 className="text-base font-semibold leading-7 text-foreground">{feature.title}</h3>
+                <p className="mt-1 text-base leading-7 text-muted-foreground">{feature.description}</p>
+              </div>
+            </motion.div>
+          ))}
         </div>
-      </div>
+      </motion.div>
     </section>
-  );
-};
+  )
+}

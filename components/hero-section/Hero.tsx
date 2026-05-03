@@ -65,8 +65,6 @@ export const Hero = async () => {
 
         {/* Dashboard Showcase Image */}
         <div className="mt-16 sm:mt-24 w-full max-w-5xl mx-auto relative rounded-xl sm:rounded-2xl border border-border/50 shadow-2xl shadow-blue-900/5 overflow-hidden">
-          {/* Subtle gradient overlay at the bottom to fade into next section */}
-          <div className="absolute inset-x-0 bottom-0 h-32 bg-linear-to-t from-background to-transparent z-10 pointer-events-none" />
 
           <Image
             src="/dashboard-hero.png"

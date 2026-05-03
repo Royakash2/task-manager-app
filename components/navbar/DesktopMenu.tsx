@@ -47,7 +47,7 @@ export const DesktopMenu = ({ isLogin, user }: DesktopMenuProps) => {
             
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="ghost" size="icon" className="rounded-full">
+                <Button variant="ghost" size="icon" className="rounded-full cursor-pointer">
                   <Avatar className="h-8 w-8">
                     <AvatarImage src={user?.picture || ""} alt={user?.given_name || "User avatar"} />
                     <AvatarFallback className="bg-primary/10 text-primary">{fallbackText}</AvatarFallback>
