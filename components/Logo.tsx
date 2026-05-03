@@ -18,7 +18,7 @@ export function Logo({ className = "", linkHref }: LogoProps) {
           className="object-center"
         />
       </div> */}
-      <span className="text-2xl font-bold tracking-tight font-mono">VelloX</span>
+      <span className="text-3xl font-bold tracking-tight font-mono">VelloX</span>
     </div>
   );
 
