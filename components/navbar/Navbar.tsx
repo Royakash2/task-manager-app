@@ -4,10 +4,10 @@ import { ThemeToggle } from "../theme-toggole";
 import { MobileMenu } from "./MobileMenu";
 import { DesktopMenu } from "./DesktopMenu";
 
-
 export const Navbar = async () => {
-  const { isAuthenticated } = getKindeServerSession();
+  const { isAuthenticated, getUser } = getKindeServerSession();
   const isLogin = await isAuthenticated();
+  const user = isLogin ? await getUser() : null;
 
   return (
     <nav className="w-full border-b border-border/40 bg-background/95 backdrop-blur supports-backdrop-filter:bg-background/60 sticky top-0 z-50">
@@ -18,12 +18,12 @@ export const Navbar = async () => {
           <Logo linkHref="/" />
           <div className="flex items-center gap-2">
             <ThemeToggle />
-            <MobileMenu isLogin={isLogin ?? false} />
+            <MobileMenu isLogin={isLogin ?? false} user={user} />
           </div>
         </div>
 
         {/* Desktop Navbar */}
-        <DesktopMenu isLogin={isLogin ?? false} />
+        <DesktopMenu isLogin={isLogin ?? false} user={user} />
         
       </div>
     </nav>

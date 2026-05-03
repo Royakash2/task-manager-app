@@ -4,7 +4,7 @@ import type { Testimonial } from "./testimonials.data";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 
 export const TestimonialCard = ({ testimonial }: { testimonial: Testimonial }) => (
-  <Card className="w-[300px] md:w-[380px] shrink-0 h-fit bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800 rounded-2xl p-5 py-5 shadow-sm gap-3">
+  <Card className="w-[300px] md:w-[380px] shrink-0 h-fit bg-white dark:bg-card border-slate-200 dark:border-slate-800 rounded-2xl p-5 py-5 shadow-sm gap-3">
     <CardContent className="p-0 flex flex-col gap-3">
       <div className="flex items-center gap-1 text-yellow-400">
         {[...Array(5)].map((_, i) => (
