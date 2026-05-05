@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { format } from 'date-fns';
-import { CalendarIcon } from 'lucide-react';
+import { UserIcon, CircleDashed, Flag, CalendarPlus, CalendarClock } from 'lucide-react';
 import {
   Select,
   SelectContent,
@@ -17,7 +17,6 @@ import {
 } from '@/components/ui/popover';
 import { Calendar } from '@/components/ui/calendar';
 import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
 import { TaskStatus, TaskPriority } from '@prisma/client'; 
 
@@ -41,10 +40,6 @@ interface TaskDetailPropertiesProps {
   onDueDateChange?: (date: Date | null) => Promise<void>;
 }
 
-/**
- * TaskDetailProperties Component
- * Displays and manages task properties in the sidebar (status, priority, assignee, dates)
- */
 export const TaskDetailProperties = ({
   status,
   priority,
@@ -64,42 +59,6 @@ export const TaskDetailProperties = ({
   const [isLoadingAssignee, setIsLoadingAssignee] = useState(false);
   const [isLoadingStartDate, setIsLoadingStartDate] = useState(false);
   const [isLoadingDueDate, setIsLoadingDueDate] = useState(false);
-
-  // Helper function to get status color
-  const getStatusColor = (s: TaskStatus) => {
-    switch (s) {
-      case 'TODO':
-        return 'bg-gray-100 dark:bg-slate-800 text-gray-800 dark:text-gray-200';
-      case 'IN_PROGRESS':
-        return 'bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200';
-      case 'COMPLETED':
-        return 'bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200';
-      case 'IN_REVIEW':
-        return 'bg-purple-100 dark:bg-purple-900 text-purple-800 dark:text-purple-200';
-      case 'BACKLOG':
-        return 'bg-yellow-100 dark:bg-yellow-900 text-yellow-800 dark:text-yellow-200';
-      case 'BLOCKED':
-        return 'bg-red-100 dark:bg-red-900 text-red-800 dark:text-red-200';
-      default:
-        return 'bg-gray-100 dark:bg-slate-800 text-gray-800 dark:text-gray-200';
-    }
-  };
-
-  // Helper function to get priority color
-  const getPriorityColor = (p: TaskPriority) => {
-    switch (p) {
-      case 'LOW':
-        return 'bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200';
-      case 'MEDIUM':
-        return 'bg-yellow-100 dark:bg-yellow-900 text-yellow-800 dark:text-yellow-200';
-      case 'HIGH':
-        return 'bg-orange-100 dark:bg-orange-900 text-orange-800 dark:text-orange-200';
-      case 'CRITICAL':
-        return 'bg-red-100 dark:bg-red-900 text-red-800 dark:text-red-200';
-      default:
-        return 'bg-gray-100 dark:bg-slate-800 text-gray-800 dark:text-gray-200';
-    }
-  };
 
   // Handle status change
   const handleStatusChange = async (newStatus: string) => {
@@ -162,182 +121,163 @@ export const TaskDetailProperties = ({
   };
 
   return (
-    <div className='bg-white dark:bg-slate-900 rounded-lg border border-gray-200 dark:border-slate-800 p-6 space-y-6'>
-      <h3 className='font-semibold text-lg text-gray-900 dark:text-white'>
-        Task Properties
-      </h3>
+    <div className='bg-background dark:bg-slate-900/40 rounded-xl border border-border/50 p-5 space-y-5 shadow-sm backdrop-blur-sm'>
+      <h3 className='font-semibold text-base text-foreground'>Properties</h3>
 
-      {/* Status */}
-      <div className='space-y-2'>
-        <label className='text-sm font-medium text-gray-700 dark:text-gray-300'>
-          Status
-        </label>
-        <Select value={status} onValueChange={handleStatusChange} disabled={isLoadingStatus}>
-          <SelectTrigger className='w-full bg-white dark:bg-slate-800 border-gray-200 dark:border-slate-700'>
-            <SelectValue />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value='TODO'>📝 To Do</SelectItem>
-            <SelectItem value='IN_PROGRESS'>🔄 In Progress</SelectItem>
-            <SelectItem value='IN_REVIEW'>👀 In Review</SelectItem>
-            <SelectItem value='COMPLETED'>✅ Completed</SelectItem>
-            <SelectItem value='BACKLOG'>📋 Backlog</SelectItem>
-            <SelectItem value='BLOCKED'>🚫 Blocked</SelectItem>
-          </SelectContent>
-        </Select>
-        <div className='pt-1'>
-          <Badge className={cn('text-xs', getStatusColor(status))}>
-            {status.replace(/_/g, ' ')}
-          </Badge>
-        </div>
-      </div>
-
-      {/* Priority */}
-      <div className='space-y-2'>
-        <label className='text-sm font-medium text-gray-700 dark:text-gray-300'>
-          Priority
-        </label>
-        <Select value={priority} onValueChange={handlePriorityChange} disabled={isLoadingPriority}>
-          <SelectTrigger className='w-full bg-white dark:bg-slate-800 border-gray-200 dark:border-slate-700'>
-            <SelectValue />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value='LOW'>🟢 Low</SelectItem>
-            <SelectItem value='MEDIUM'>🟡 Medium</SelectItem>
-            <SelectItem value='HIGH'>🟠 High</SelectItem>
-            <SelectItem value='CRITICAL'>🔴 Critical</SelectItem>
-          </SelectContent>
-        </Select>
-        <div className='pt-1'>
-          <Badge className={cn('text-xs', getPriorityColor(priority))}>
-            {priority}
-          </Badge>
-        </div>
-      </div>
-
-      {/* Assignee */}
-      <div className='space-y-2'>
-        <label className='text-sm font-medium text-gray-700 dark:text-gray-300'>
-          Assigned To
-        </label>
-        <Select
-          value={assigneeId || 'unassigned'}
-          onValueChange={handleAssigneeChange}
-          disabled={isLoadingAssignee}
-        >
-          <SelectTrigger className='w-full bg-white dark:bg-slate-800 border-gray-200 dark:border-slate-700'>
-            <SelectValue />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value='unassigned'>👤 Unassigned</SelectItem>
-            {workspaceMembers.map((member) => (
-              <SelectItem key={member.id} value={member.id}>
-                {member.name}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-        {assigneeName && (
-          <div className='pt-1'>
-            <Badge variant='secondary' className='dark:bg-slate-800'>
-              {assigneeName}
-            </Badge>
+      <div className='flex flex-col gap-1'>
+        {/* Status */}
+        <div className='flex items-center min-h-10 group'>
+          <div className='w-32 shrink-0 flex items-center text-sm text-muted-foreground'>
+            <CircleDashed className='w-4 h-4 mr-2' />
+            Status
           </div>
-        )}
-      </div>
+          <div className='flex-1 min-w-0'>
+            <Select value={status} onValueChange={handleStatusChange} disabled={isLoadingStatus}>
+              <SelectTrigger className='h-8 w-full border-transparent bg-transparent hover:bg-muted/50 hover:border-border focus:ring-0 shadow-none transition-all'>
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value='TODO'>To Do</SelectItem>
+                <SelectItem value='IN_PROGRESS'>In Progress</SelectItem>
+                <SelectItem value='IN_REVIEW'>In Review</SelectItem>
+                <SelectItem value='COMPLETED'>Completed</SelectItem>
+                <SelectItem value='BACKLOG'>Backlog</SelectItem>
+                <SelectItem value='BLOCKED'>Blocked</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+        </div>
 
-      {/* Start Date */}
-      <div className='space-y-2'>
-        <label className='text-sm font-medium text-gray-700 dark:text-gray-300'>
-          Start Date
-        </label>
-        <Popover>
-          <PopoverTrigger asChild>
-            <Button
-              variant='outline'
-              className={cn(
-                'w-full justify-start text-left font-normal bg-white dark:bg-slate-800 border-gray-200 dark:border-slate-700',
-                !startDate && 'text-gray-500 dark:text-gray-400'
-              )}
-              disabled={isLoadingStartDate}
-            >
-              <CalendarIcon className='mr-2 h-4 w-4' />
-              {startDate ? format(new Date(startDate), 'MMM d, yyyy') : 'Pick a date'}
-            </Button>
-          </PopoverTrigger>
-          <PopoverContent className='w-auto p-0' align='start'>
-            <Calendar
-              mode='single'
-              selected={startDate ? new Date(startDate) : undefined}
-              onSelect={handleStartDateChange}
-              disabled={(date) =>
-                dueDate ? date > new Date(dueDate) : false
-              }
-            />
-          </PopoverContent>
-        </Popover>
-        {startDate && (
-          <button
-            onClick={() => handleStartDateChange(undefined)}
-            className='text-xs text-blue-600 dark:text-blue-400 hover:underline'
-          >
-            Clear date
-          </button>
-        )}
-      </div>
+        {/* Priority */}
+        <div className='flex items-center min-h-10 group'>
+          <div className='w-32 shrink-0 flex items-center text-sm text-muted-foreground'>
+            <Flag className='w-4 h-4 mr-2' />
+            Priority
+          </div>
+          <div className='flex-1 min-w-0'>
+            <Select value={priority} onValueChange={handlePriorityChange} disabled={isLoadingPriority}>
+              <SelectTrigger className='h-8 w-full border-transparent bg-transparent hover:bg-muted/50 hover:border-border focus:ring-0 shadow-none transition-all'>
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value='LOW'>Low</SelectItem>
+                <SelectItem value='MEDIUM'>Medium</SelectItem>
+                <SelectItem value='HIGH'>High</SelectItem>
+                <SelectItem value='CRITICAL'>Critical</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+        </div>
 
-      {/* Due Date */}
-      <div className='space-y-2'>
-        <label className='text-sm font-medium text-gray-700 dark:text-gray-300'>
-          Due Date
-        </label>
-        <Popover>
-          <PopoverTrigger asChild>
-            <Button
-              variant='outline'
-              className={cn(
-                'w-full justify-start text-left font-normal bg-white dark:bg-slate-800 border-gray-200 dark:border-slate-700',
-                !dueDate && 'text-gray-500 dark:text-gray-400'
-              )}
-              disabled={isLoadingDueDate}
+        {/* Assignee */}
+        <div className='flex items-center min-h-10 group'>
+          <div className='w-32 shrink-0 flex items-center text-sm text-muted-foreground'>
+            <UserIcon className='w-4 h-4 mr-2' />
+            Assignee
+          </div>
+          <div className='flex-1 min-w-0'>
+            <Select
+              value={assigneeId || 'unassigned'}
+              onValueChange={handleAssigneeChange}
+              disabled={isLoadingAssignee}
             >
-              <CalendarIcon className='mr-2 h-4 w-4' />
-              {dueDate ? format(new Date(dueDate), 'MMM d, yyyy') : 'Pick a date'}
-            </Button>
-          </PopoverTrigger>
-          <PopoverContent className='w-auto p-0' align='start'>
-            <Calendar
-              mode='single'
-              selected={dueDate ? new Date(dueDate) : undefined}
-              onSelect={handleDueDateChange}
-              disabled={(date) =>
-                startDate ? date < new Date(startDate) : false
-              }
-            />
-          </PopoverContent>
-        </Popover>
-        {dueDate && (
-          <button
-            onClick={() => handleDueDateChange(undefined)}
-            className='text-xs text-blue-600 dark:text-blue-400 hover:underline'
-          >
-            Clear date
-          </button>
-        )}
+              <SelectTrigger className='h-8 w-full border-transparent bg-transparent hover:bg-muted/50 hover:border-border focus:ring-0 shadow-none transition-all'>
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value='unassigned'>Unassigned</SelectItem>
+                {workspaceMembers.map((member) => (
+                  <SelectItem key={member.id} value={member.id}>
+                    {member.name}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+        </div>
+
+        {/* Start Date */}
+        <div className='flex items-center min-h-10 group'>
+          <div className='w-32 shrink-0 flex items-center text-sm text-muted-foreground'>
+            <CalendarPlus className='w-4 h-4 mr-2' />
+            Start Date
+          </div>
+          <div className='flex-1 flex items-center gap-2 min-w-0'>
+            <Popover>
+              <PopoverTrigger asChild>
+                <Button
+                  variant='ghost'
+                  className={cn(
+                    'h-8 w-full justify-start text-left font-normal border border-transparent hover:border-border hover:bg-muted/50 focus:ring-0 shadow-none transition-all px-3',
+                    !startDate && 'text-muted-foreground'
+                  )}
+                  disabled={isLoadingStartDate}
+                >
+                  {startDate ? format(new Date(startDate), 'MMM d, yyyy') : 'Empty'}
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent className='w-auto p-0' align='start'>
+                <Calendar
+                  mode='single'
+                  selected={startDate ? new Date(startDate) : undefined}
+                  onSelect={handleStartDateChange}
+                  disabled={(date) =>
+                    dueDate ? date > new Date(dueDate) : false
+                  }
+                />
+              </PopoverContent>
+            </Popover>
+          </div>
+        </div>
+
+        {/* Due Date */}
+        <div className='flex items-center min-h-10 group'>
+          <div className='w-32 shrink-0 flex items-center text-sm text-muted-foreground'>
+            <CalendarClock className='w-4 h-4 mr-2' />
+            Due Date
+          </div>
+          <div className='flex-1 flex items-center gap-2 min-w-0'>
+            <Popover>
+              <PopoverTrigger asChild>
+                <Button
+                  variant='ghost'
+                  className={cn(
+                    'h-8 w-full justify-start text-left font-normal border border-transparent hover:border-border hover:bg-muted/50 focus:ring-0 shadow-none transition-all px-3',
+                    !dueDate && 'text-muted-foreground'
+                  )}
+                  disabled={isLoadingDueDate}
+                >
+                  {dueDate ? format(new Date(dueDate), 'MMM d, yyyy') : 'Empty'}
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent className='w-auto p-0' align='start'>
+                <Calendar
+                  mode='single'
+                  selected={dueDate ? new Date(dueDate) : undefined}
+                  onSelect={handleDueDateChange}
+                  disabled={(date) =>
+                    startDate ? date < new Date(startDate) : false
+                  }
+                />
+              </PopoverContent>
+            </Popover>
+          </div>
+        </div>
+
       </div>
 
       {/* Days Remaining */}
       {dueDate && (
-        <div className='bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded p-3'>
-          <p className='text-sm text-blue-800 dark:text-blue-200'>
-            <span className='font-semibold'>
-              {Math.ceil(
-                (new Date(dueDate).getTime() - new Date().getTime()) /
-                  (1000 * 60 * 60 * 24)
-              )}
-            </span>{' '}
-            days remaining
-          </p>
+        <div className='mt-6 pt-4 border-t border-border/50'>
+          <div className='flex items-center justify-between text-sm'>
+             <span className='text-muted-foreground'>Time Remaining</span>
+             <span className={cn(
+                 "font-medium", 
+                 Math.ceil((new Date(dueDate).getTime() - new Date().getTime()) / (1000 * 60 * 60 * 24)) < 0 ? "text-destructive" : "text-emerald-600 dark:text-emerald-400"
+             )}>
+               {Math.ceil((new Date(dueDate).getTime() - new Date().getTime()) / (1000 * 60 * 60 * 24))} days
+             </span>
+          </div>
         </div>
       )}
     </div>
