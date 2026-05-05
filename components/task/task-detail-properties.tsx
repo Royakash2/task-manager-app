@@ -19,7 +19,7 @@ import { Calendar } from '@/components/ui/calendar';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
-import { TaskStatus, TaskPriority } from '@prisma/client';
+import { TaskStatus, TaskPriority } from '@prisma/client'; 
 
 interface TaskDetailPropertiesProps {
   status: TaskStatus;
