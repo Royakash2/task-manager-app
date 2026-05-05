@@ -1,3 +1,4 @@
+import { getTaskById } from '@/app/data/project/get-task-by-id';
 import React from 'react'
 
 interface TaskDetailPageProps {
@@ -9,14 +10,16 @@ interface TaskDetailPageProps {
 }
 
 const TaskDetailPage = async (props: TaskDetailPageProps) => {
-  const { workspaceId, projectId, taskId } = await props.params;
+  const { taskId } = await props.params;
+  const { task } = await getTaskById(taskId);
 
   return (
     <div className='flex flex-col pb-3 px-3'>
-      <h1>Task Detail Page</h1>
-      <p>Workspace: {workspaceId}</p>
-      <p>Project: {projectId}</p>
-      <p>Task: {taskId}</p>
+      <h1>{task.title}</h1>
+      <p>{task.description}</p>
+      <p>Status: {task.status}</p>
+      <p>Priority: {task.priority}</p>
+      <p>Assigned To: {task.assigneeTo?.name || "Unassigned"}</p>
     </div>
   )
 }
