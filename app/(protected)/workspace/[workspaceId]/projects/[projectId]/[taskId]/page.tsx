@@ -1,6 +1,7 @@
 import { getTaskById } from '@/app/data/project/get-task-by-id';
 import { TaskDetailHeader } from '@/components/task/task-detail-header';
 import { TaskDetailProperties } from '@/components/task/task-detail-properties';
+import { TaskDetailDescription } from '@/components/task/task-detail-description';
 import React from 'react'
 
 interface TaskDetailPageProps {
@@ -31,10 +32,9 @@ const TaskDetailPage = async (props: TaskDetailPageProps) => {
         <div className='grid grid-cols-1 lg:grid-cols-3 gap-6'>
           {/* Left Content Area (2/3) */}
           <div className='lg:col-span-2 space-y-6'>
-            <div className='bg-white dark:bg-slate-900 rounded-lg border border-gray-200 dark:border-slate-800 p-6'>
-              <h1 className='text-3xl font-bold mb-4 text-gray-900 dark:text-white'>{task.title}</h1>
-              <p className='text-gray-600 dark:text-gray-400'>{task.description}</p>
-            </div>
+            <TaskDetailDescription
+              initialDescription={task.description}
+            />
           </div>
 
           {/* Right Sidebar (1/3) */}
