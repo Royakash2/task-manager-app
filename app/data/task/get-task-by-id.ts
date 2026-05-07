@@ -1,38 +1,77 @@
 import db from "@/lib/db";
 import { userRequired } from "../user/get-user";
 
-export const getTaskById = async (taskId: string) => {
- 
-  await userRequired();
+export const getTaskById = async (
+  taskId: string,
+  workspaceId: string,
+  projectId: string
+) => {
+  const { user } = await userRequired();
 
-  
-  const task = await db.task.findUnique({
-    where: { id: taskId },
-    include: {
-      assigneeTo: {
-        select: {
-          id: true,
-          name: true,
-          email: true,
-          image: true,
-        },
+  const isUserMember = await db.workspaceMembers.findUnique({
+    where: {
+      userId_workspaceId: {
+        userId: user.id,
+        workspaceId,
       },
-
-      project: {
-        select: {
-          id: true,
-          name: true,
-          workspaceId: true,
-        },
-      },
-
-      attachments: true,
     },
   });
 
-  if (!task) {
-    throw new Error("Task not found");
+  if (!isUserMember) throw new Error("You are not a member of this workspace");
+
+  const projectAccess = await db.projectAccess.findUnique({
+    where: {
+      workspaceMemberId_projectId: {
+        workspaceMemberId: isUserMember.id,
+        projectId,
+      },
+    },
+  });
+
+  if (!projectAccess) {
+    throw new Error("You are not allowed to view this project");
   }
 
-  return { task };
+  const [task, comments] = await Promise.all([
+    db.task.findUnique({
+      where: { id: taskId },
+      include: {
+        assigneeTo: { select: { id: true, name: true, image: true } },
+        attachments: { select: { id: true, name: true, url: true } },
+        project: {
+          include: {
+            projectAccess: {
+              include: {
+                workspaceMember: {
+                  include: {
+                    user: {
+                      select: { id: true, name: true, image: true },
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+    }),
+
+    db.comment.findMany({
+      where: { projectId },
+      include: { user: { select: { id: true, name: true, image: true } } },
+      orderBy: { createdAt: "desc" },
+    }),
+  ]);
+
+  const project = {
+    ...task?.project,
+    members: task?.project.projectAccess.map(
+      (access) => access.workspaceMember
+    ),
+  };
+
+  return {
+    task: { ...task, project },
+    comments,
+  };
 };

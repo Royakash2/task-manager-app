@@ -1,7 +1,4 @@
 import { getTaskById } from '@/app/data/task/get-task-by-id';
-import { TaskDetailHeader } from '@/components/task/task-detail-header';
-import { TaskDetailProperties } from '@/components/task/task-detail-properties';
-import { TaskDetailDescription } from '@/components/task/task-detail-description';
 import React from 'react'
 
 interface TaskDetailPageProps {
@@ -14,42 +11,14 @@ interface TaskDetailPageProps {
 
 const TaskDetailPage = async (props: TaskDetailPageProps) => {
   const { taskId, workspaceId, projectId } = await props.params;
-  const { task } = await getTaskById(taskId);
+  const { task } = await getTaskById(taskId, workspaceId, projectId);
+  console.log('task',task);
+  
 
   return (
     <div className='flex flex-col min-h-screen bg-gray-50 dark:bg-slate-950'>
       {/* Header */}
-      <TaskDetailHeader
-        taskTitle={task.title}
-        taskId={taskId}
-        projectId={projectId}
-        projectName={task.project.name}
-        workspaceId={workspaceId}
-      />
-
-      {/* Main Content */}
-      <div className='flex-1 py-6 px-6'>
-        <div className='grid grid-cols-1 lg:grid-cols-3 gap-6'>
-          {/* Left Content Area (2/3) */}
-          <div className='lg:col-span-2 space-y-6'>
-            <TaskDetailDescription
-              initialDescription={task.description}
-            />
-          </div>
-
-          {/* Right Sidebar (1/3) */}
-          <div className='lg:col-span-1 space-y-6'>
-            <TaskDetailProperties
-              status={task.status}
-              priority={task.priority}
-              assigneeId={task.assigneeId}
-              assigneeName={task.assigneeTo?.name}
-              startDate={task.startDate}
-              dueDate={task.dueDate}
-            />
-          </div>
-        </div>
-      </div>
+      task detail page
     </div>
   );
 }
