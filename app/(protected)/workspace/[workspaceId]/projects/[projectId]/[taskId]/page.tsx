@@ -1,4 +1,4 @@
-import { getTaskById } from '@/app/data/project/get-task-by-id';
+import { getTaskById } from '@/app/data/task/get-task-by-id';
 import { TaskDetailHeader } from '@/components/task/task-detail-header';
 import { TaskDetailProperties } from '@/components/task/task-detail-properties';
 import { TaskDetailDescription } from '@/components/task/task-detail-description';
