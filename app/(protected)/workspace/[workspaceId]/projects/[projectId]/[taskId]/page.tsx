@@ -16,7 +16,7 @@ const TaskDetailPage = async (props: TaskDetailPageProps) => {
   
 
   return (
-    <div className='flex flex-col min-h-screen bg-gray-50 dark:bg-slate-950'>
+    <div className='flex flex-col min-h-screen bg-background'>
       {/* Header */}
       task detail page
     </div>
