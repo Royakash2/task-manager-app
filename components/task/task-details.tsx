@@ -4,6 +4,9 @@ import React from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/card'
 import { ProjectAvatar } from '../project/Project-avatar'
 import { ProfileAvatar } from '../profile-avatar'
+import { Badge } from '../ui/badge'
+import { format } from 'date-fns'
+import { Separator } from '../ui/separator'
 export interface TaskProps {
   task:Task & {
   assigneeTo: User,
@@ -44,9 +47,34 @@ const TaskDetails = ({ task }: TaskProps) => {
           </div>
 
         </CardHeader>
+        <Separator className='my-3' />
+        <CardContent className="space-y-6">
+          <div>
+            <h4 className="text-sm font-semibold mb-2">Description</h4>
+            <p className="text-sm text-muted-foreground">
+              {task.description || "No description"}
+            </p>
+          </div>
 
-        <CardContent>
-
+          <div>
+            <h4 className="text-sm font-semibold mb-4">Additional Details</h4>
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <p className="text-sm text-muted-foreground mb-1">Status</p>
+                <Badge variant={task.status }>{task.status}</Badge>
+              </div>
+              <div>
+                <p className="text-sm text-muted-foreground mb-1">Due Date</p>
+                <p className="text-sm font-medium">
+                  {task.dueDate ? format(new Date(task.dueDate), "MMM d, yyyy") : "No due date"}
+                </p>
+              </div>
+              <div>
+                <p className="text-sm text-muted-foreground mb-1">Priority</p>
+                <Badge variant={task.priority}>{task.priority}</Badge>
+              </div>
+            </div>
+          </div>
         </CardContent>
     </Card>
 
