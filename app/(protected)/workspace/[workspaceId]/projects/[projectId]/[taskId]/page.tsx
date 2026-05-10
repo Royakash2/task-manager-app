@@ -1,7 +1,6 @@
 import { getTaskById } from '@/app/data/task/get-task-by-id';
 import TaskComments from '@/components/task/task-comments';
 import TaskDetails from '@/components/task/task-details';
-import { Task } from '@prisma/client';
 import { redirect } from 'next/navigation';
 import React from 'react'
 
@@ -23,7 +22,7 @@ const TaskDetailPage = async (props: TaskDetailPageProps) => {
     <div className='flex flex-col lg:flex-row gap-6 md:px-6 pb-6 min-h-screen bg-background'>
       {/* Header */}
       <div className='flex-1'>
-       <TaskDetails task={task as Task} />
+       <TaskDetails task={task} />
       </div>
      <div className='w-full lg:w-[400px]'>
       <TaskComments taskId={taskId}comments={comments}/>
