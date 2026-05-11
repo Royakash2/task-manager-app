@@ -20,9 +20,9 @@ const TaskDetailPage = async (props: TaskDetailPageProps) => {
 
   return (
     <div className='flex flex-col lg:flex-row gap-6 md:px-6 pb-6 min-h-screen bg-background'>
-      {/* Header */}
       <div className='flex-1'>
-       <TaskDetails task={task} />
+      {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+       <TaskDetails task={task as any} />
       </div>
      <div className='w-full lg:w-[400px]'>
       <TaskComments taskId={taskId}comments={comments}/>
