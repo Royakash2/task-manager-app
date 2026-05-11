@@ -1,5 +1,5 @@
 import { projectProps } from '@/utils/types'
-import { Task, User } from '@prisma/client'
+import { File, Task, User } from '@prisma/client'
 import React from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/card'
 import { ProjectAvatar } from '../project/Project-avatar'
@@ -10,7 +10,8 @@ import { Separator } from '../ui/separator'
 export interface TaskProps {
   task:Task & {
   assigneeTo: User,
-  project: projectProps
+  project: projectProps,
+  attachments: File[]
   }
 }
 
@@ -73,6 +74,16 @@ const TaskDetails = ({ task }: TaskProps) => {
                 <p className="text-sm text-muted-foreground mb-1">Priority</p>
                 <Badge variant={task.priority}>{task.priority}</Badge>
               </div>
+            </div>
+          </div>
+          <div>
+            <h4 className='text-sm font-semibold mb-4'>Attachments</h4>
+            <div className='grid grid-cols-2 md:grid-cols-3 gap-4'>
+              {task.attachments.map((file: File) => (
+                <div key={file.id} className="flex items-center gap-2 mb-2">
+                  <p className="text-sm text-muted-foreground">{file.name}</p> 
+                </div>
+              ))}
             </div>
           </div>
         </CardContent>
