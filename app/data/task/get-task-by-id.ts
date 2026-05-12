@@ -4,7 +4,7 @@ import { userRequired } from "../user/get-user";
 export const getTaskById = async (
   taskId: string,
   workspaceId: string,
-  projectId: string
+  projectId: string,
 ) => {
   const { user } = await userRequired();
 
@@ -57,17 +57,22 @@ export const getTaskById = async (
     }),
 
     db.comment.findMany({
-      where: { projectId },
+      where: { taskId: taskId },
       include: { user: { select: { id: true, name: true, image: true } } },
       orderBy: { createdAt: "desc" },
     }),
   ]);
 
+  if (!task) {
+    return {
+      task: null,
+      comments: [],
+    };
+  }
+
   const project = {
-    ...task?.project,
-    members: task?.project.projectAccess.map(
-      (access) => access.workspaceMember
-    ),
+    ...task.project,
+    members: task.project.projectAccess.map((access) => access.workspaceMember),
   };
 
   return {
