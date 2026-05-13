@@ -58,7 +58,7 @@ const TaskComments = ({ taskId, comments }: TaskCommentProps) => {
     return (
         <Card className="shadow-sm border-muted-foreground/10">
             <CardHeader className="pb-3">
-                <CardTitle className="text-lg font-semibold">Comments</CardTitle>
+                <CardTitle className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Comments</CardTitle>
             </CardHeader>
             <CardContent className="space-y-6">
                 <div className="space-y-3">
@@ -74,7 +74,7 @@ const TaskComments = ({ taskId, comments }: TaskCommentProps) => {
                         <Button
                             disabled={isSubmitting || !newComment.trim()}
                             onClick={handleSubmit}
-                            className='cursor-pointer px-6'
+                            className='cursor-pointer px-6 text-sm'
                             size="sm"
                         >
                             {isSubmitting ? "Posting..." : "Post Comment"}

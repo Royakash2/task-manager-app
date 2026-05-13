@@ -14,9 +14,13 @@ interface WorkspaceNavbarProps {
 
 export const WorkspaceNavbar = ({ id, name, email, image }: WorkspaceNavbarProps) => {
     return (
-        <nav className="w-full flex items-center justify-between p-4">
-            <div>
-                <Popover>
+        <nav className="w-full flex items-center p-4">
+            <div className="flex items-center gap-2 ml-auto">
+                <Button variant={"ghost"}>
+                    <Bell />
+                </Button>
+                <ThemeToggle />
+                 <Popover>
                     <PopoverTrigger className="cursor-pointer">
                         <ProfileAvatar url={image || undefined} name={name} size="md" />
                     </PopoverTrigger>
@@ -34,14 +38,6 @@ export const WorkspaceNavbar = ({ id, name, email, image }: WorkspaceNavbarProps
                         </LogoutLink>
                     </PopoverContent>
                 </Popover>
-               
-            </div>
-
-            <div className="flex items-center gap-2">
-                <Button variant={"ghost"}>
-                    <Bell />
-                </Button>
-                <ThemeToggle />
                 
             </div>
         </nav>

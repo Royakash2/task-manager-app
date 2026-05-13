@@ -20,47 +20,54 @@ const TaskDetails = ({ task }: TaskProps) => {
   return (
     <Card>
         <CardHeader className='flex flex-col gap-4'>
-          <CardTitle className='text-xl md:text-2xl font-bold leading-tight'>{task.title}</CardTitle>
+          <div className='flex items-start justify-between gap-4'>
+            <CardTitle className='text-xl md:text-2xl font-semibold leading-tight'>{task.title}</CardTitle>
+            {/* <EditTaskDialog
+              key={new Date().getTime()}
+              task={task}
+              project={task.project}
+            /> */}
+          </div>
           <div className='flex flex-wrap items-center gap-4'>
             <div className='flex items-center gap-2'>
                 <ProjectAvatar name={task.project.name} />
-                <p className='text-sm text-muted-foreground'>
+                <p className='text-xs text-muted-foreground'>
                     {task.project.name}
                 </p>
             </div>
             <Separator orientation='vertical' className='h-5 hidden sm:block' />
             <div className="flex items-center gap-2">
-              <span className="text-sm text-muted-foreground">Assigned To:</span>
+              <span className="text-xs text-muted-foreground">Assigned To:</span>
               <ProfileAvatar
                 url={task.assigneeTo?.image || undefined}
                 name={task.assigneeTo?.name}
               />
-              <span className="text-sm font-medium">{task.assigneeTo?.name}</span>
+              <span className="text-xs font-medium">{task.assigneeTo?.name}</span>
             </div>
           </div>
         </CardHeader>
         <Separator className='my-3' />
         <CardContent className="space-y-6">
           <div>
-            <h4 className="text-sm font-semibold mb-2">Description</h4>
+            <h4 className="text-xs font-semibold uppercase tracking-wide text-muted-foreground mb-2">Description</h4>
             <p className={`text-sm text-muted-foreground ${!task.description ? 'italic' : ''}`}>
               {task.description || "No description provided for this task."}
             </p>
           </div>
 
           <div>
-            <h4 className="text-sm font-semibold mb-4">Additional Details</h4>
+            <h4 className="text-xs font-semibold uppercase tracking-wide text-muted-foreground mb-4">Details</h4>
             <div className="grid grid-cols-3 gap-4">
               <div>
-                <p className="text-sm text-muted-foreground mb-1">Status</p>
+                <p className="text-xs text-muted-foreground mb-1">Status</p>
                 <Badge variant={task.status}>{task.status}</Badge>
               </div>
               <div>
-                <p className="text-sm text-muted-foreground mb-1">Priority</p>
+                <p className="text-xs text-muted-foreground mb-1">Priority</p>
                 <Badge variant={task.priority}>{task.priority}</Badge>
               </div>
               <div>
-                <p className="text-sm text-muted-foreground mb-1">Due Date</p>
+                <p className="text-xs text-muted-foreground mb-1">Due Date</p>
                 <p className="text-sm font-medium">
                   {task.dueDate ? format(new Date(task.dueDate), "MMM d, yyyy") : "No due date"}
                 </p>
@@ -68,7 +75,7 @@ const TaskDetails = ({ task }: TaskProps) => {
             </div>
           </div>
           <div>
-            <h4 className='text-sm font-semibold mb-4'>Attachments</h4>
+            <h4 className='text-xs font-semibold uppercase tracking-wide text-muted-foreground mb-4'>Attachments</h4>
             <div className='grid grid-cols-2 md:grid-cols-3 gap-4'>
               {task.attachments.map((file: File) => (
                 <div key={file.id} className="relative group cursor-pointer ">
@@ -87,8 +94,8 @@ const TaskDetails = ({ task }: TaskProps) => {
               ))}
             </div>
             {task.attachments.length === 0 && (
-              <div className="text-sm text-muted-foreground flex items-center h-20">
-                <p>No attachments found</p>
+              <div className="flex items-center h-20">
+                <p className="text-sm italic text-muted-foreground">No attachments found</p>
               </div>
             )}
           </div>
