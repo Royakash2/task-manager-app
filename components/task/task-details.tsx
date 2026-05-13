@@ -18,7 +18,7 @@ export interface TaskProps {
 
 const TaskDetails = ({ task }: TaskProps) => {
   return (
-    <Card>
+    <Card className=' shadow-none'>
         <CardHeader className='flex flex-col gap-4'>
           <div className='flex items-start justify-between gap-4'>
             <CardTitle className='text-xl md:text-2xl font-semibold leading-tight'>{task.title}</CardTitle>
@@ -39,6 +39,7 @@ const TaskDetails = ({ task }: TaskProps) => {
             <div className="flex items-center gap-2">
               <span className="text-xs text-muted-foreground">Assigned To:</span>
               <ProfileAvatar
+              size='sm'
                 url={task.assigneeTo?.image || undefined}
                 name={task.assigneeTo?.name}
               />

@@ -31,4 +31,4 @@ export const CommentList = ({ comments }: { comments: CommentProps[] }) => {
       ))}
     </div>
   );
-};
+};
