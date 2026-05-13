@@ -19,25 +19,16 @@ export interface TaskProps {
 const TaskDetails = ({ task }: TaskProps) => {
   return (
     <Card>
-        <CardHeader className='flex flex-col md:flex-row justify-between items-start md:items-end '>
-          <div >
-            <CardTitle >{task.title}</CardTitle>
-            <div className='flex items-center gap-2 mt-3 '>
+        <CardHeader className='flex flex-col gap-4'>
+          <CardTitle className='text-xl md:text-2xl font-bold leading-tight'>{task.title}</CardTitle>
+          <div className='flex flex-wrap items-center gap-4'>
+            <div className='flex items-center gap-2'>
                 <ProjectAvatar name={task.project.name} />
-                <p className='text-base text-muted-foreground'>
+                <p className='text-sm text-muted-foreground'>
                     {task.project.name}
                 </p>
-                
             </div>
-          </div>
-
-          <div className="w-full  md:w-auto flex flex-col justify-end items-end gap-2">
-            {/* <EditTaskDialog
-              key={new Date().getTime()}
-              task={task}
-              project={task.project}
-            /> */}
-
+            <Separator orientation='vertical' className='h-5 hidden sm:block' />
             <div className="flex items-center gap-2">
               <span className="text-sm text-muted-foreground">Assigned To:</span>
               <ProfileAvatar
@@ -47,33 +38,32 @@ const TaskDetails = ({ task }: TaskProps) => {
               <span className="text-sm font-medium">{task.assigneeTo?.name}</span>
             </div>
           </div>
-
         </CardHeader>
         <Separator className='my-3' />
         <CardContent className="space-y-6">
           <div>
             <h4 className="text-sm font-semibold mb-2">Description</h4>
-            <p className="text-sm text-muted-foreground">
-              {task.description || "No description"}
+            <p className={`text-sm text-muted-foreground ${!task.description ? 'italic' : ''}`}>
+              {task.description || "No description provided for this task."}
             </p>
           </div>
 
           <div>
             <h4 className="text-sm font-semibold mb-4">Additional Details</h4>
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-3 gap-4">
               <div>
                 <p className="text-sm text-muted-foreground mb-1">Status</p>
-                <Badge variant={task.status }>{task.status}</Badge>
+                <Badge variant={task.status}>{task.status}</Badge>
+              </div>
+              <div>
+                <p className="text-sm text-muted-foreground mb-1">Priority</p>
+                <Badge variant={task.priority}>{task.priority}</Badge>
               </div>
               <div>
                 <p className="text-sm text-muted-foreground mb-1">Due Date</p>
                 <p className="text-sm font-medium">
                   {task.dueDate ? format(new Date(task.dueDate), "MMM d, yyyy") : "No due date"}
                 </p>
-              </div>
-              <div>
-                <p className="text-sm text-muted-foreground mb-1">Priority</p>
-                <Badge variant={task.priority}>{task.priority}</Badge>
               </div>
             </div>
           </div>
