@@ -51,7 +51,7 @@ const TaskDetails = ({ task }: TaskProps) => {
         <CardContent className="space-y-6">
           <div>
             <h4 className="text-xs font-semibold uppercase tracking-wide text-muted-foreground mb-2">Description</h4>
-            <p className={`text-sm text-muted-foreground ${!task.description ? 'italic' : ''}`}>
+            <p className={`text-sm text-muted-foreground `}>
               {task.description || "No description provided for this task."}
             </p>
           </div>
