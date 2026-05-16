@@ -13,17 +13,17 @@ export const SidebarUserProfile = ({ user }: { user: User }) => {
     return (
         <SidebarFooter className="border-t bg-background p-3">
             {state === 'expanded' ? (
-                <div className="flex items-center gap-3">
+                <div className="flex items-center gap-3 py-2">
                     <ProfileAvatar
                         url={user?.image || undefined}
                         name={user?.name || 'User'}
                         size="sm"
                     />
                     <div className="flex flex-col min-w-0 flex-1">
-                        <p className="text-sm font-medium leading-none truncate">
+                        <p className="text-sm font-medium leading-none">
                             {user?.name}
                         </p>
-                        <p className="text-xs text-muted-foreground leading-none mt-1 truncate">
+                        <p className="text-xs text-muted-foreground leading-none mt-1">
                             {user?.email}
                         </p>
                     </div>
