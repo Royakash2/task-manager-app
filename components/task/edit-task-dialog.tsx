@@ -75,8 +75,8 @@ export const EditTaskDialog = ({ task, project }: Props) => {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button variant={"ghost"} className="rounded-md shadow-md font-semibold px-5 flex items-center gap-2 cursor-pointer">
-          <EditIcon className="w-4 h-4" />
+        <Button variant={"ghost"} size="icon" className="h-7 w-7 rounded-md cursor-pointer">
+          <EditIcon className="w-3.5 h-3.5" />
         </Button>
       </DialogTrigger>
       <DialogContent>

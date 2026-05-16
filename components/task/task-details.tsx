@@ -21,15 +21,7 @@ const TaskDetails = ({ task }: TaskProps) => {
   return (
     <Card className=' shadow-none'>
         <CardHeader className='flex flex-col gap-4'>
-          <div className='flex items-start justify-between gap-4'>
-            <CardTitle className='text-xl md:text-2xl font-semibold leading-tight'>{task.title}</CardTitle>
-            <EditTaskDialog
-              key={new Date().getTime()}
-              task={task}
-              project={task.project}
-            />
-          </div>
-          <div className='flex flex-wrap items-center gap-4'>
+           <div className='flex flex-wrap justify-between w-full items-center gap-4'>
             <div className='flex items-center gap-2'>
                 <ProjectAvatar name={task.project.name} />
                 <p className='text-xs text-muted-foreground'>
@@ -47,11 +39,21 @@ const TaskDetails = ({ task }: TaskProps) => {
               <span className="text-xs font-medium">{task.assigneeTo?.name}</span>
             </div>
           </div>
+          <div className='flex items-start justify-between gap-4'>
+            <CardTitle className='text-xl md:text-2xl font-semibold leading-tight'>{task.title}</CardTitle>
+          </div>
         </CardHeader>
         <Separator className='my-3' />
         <CardContent className="space-y-6">
           <div>
-            <h4 className="text-xs font-semibold uppercase tracking-wide text-muted-foreground mb-2">Description</h4>
+            <div className='flex items-center justify-between mb-2'>
+              <h4 className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Description</h4>
+              <EditTaskDialog
+                key={new Date().getTime()}
+                task={task}
+                project={task.project}
+              />
+            </div>
             <p className={`text-sm text-muted-foreground `}>
               {task.description || "No description provided for this task."}
             </p>
