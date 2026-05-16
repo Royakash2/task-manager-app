@@ -8,6 +8,7 @@ import { Badge } from '../ui/badge'
 import { format } from 'date-fns'
 import { Separator } from '../ui/separator'
 import Image from 'next/image'
+import { EditTaskDialog } from './edit-task-dialog'
 export interface TaskProps {
   task:Task & {
   assigneeTo: User,
@@ -22,11 +23,11 @@ const TaskDetails = ({ task }: TaskProps) => {
         <CardHeader className='flex flex-col gap-4'>
           <div className='flex items-start justify-between gap-4'>
             <CardTitle className='text-xl md:text-2xl font-semibold leading-tight'>{task.title}</CardTitle>
-            {/* <EditTaskDialog
+            <EditTaskDialog
               key={new Date().getTime()}
               task={task}
               project={task.project}
-            /> */}
+            />
           </div>
           <div className='flex flex-wrap items-center gap-4'>
             <div className='flex items-center gap-2'>
