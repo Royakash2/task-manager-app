@@ -13,6 +13,7 @@ import WorkspaceSelector from './WorkspaceSelector'
 import { NavMain } from './NavMain'
 import { NavProject } from './NavProject'
 import { Logo } from '../Logo'
+import { SidebarUserProfile } from './SidebarUserProfile'
 
 function AppSidebar(
     { user,
@@ -59,9 +60,10 @@ function AppSidebar(
                     <NavMain/>
                     <NavProject projects={project} workspaceMembers={workspaceMembers} />
                 </SidebarContent>
+                <SidebarUserProfile user={user} />
             </Sidebar>
         </>
     )
 }
 
-export default AppSidebar;
+export default AppSidebar;
