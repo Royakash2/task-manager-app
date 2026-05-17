@@ -22,7 +22,7 @@ import { cn } from "@/lib/utils";
 import { format } from "date-fns";
 import { CalendarIcon,  EditIcon, } from "lucide-react";
 import { taskStats } from "@/utils";
-import { createTask } from "@/app/actions/task";
+import { updateTaskDetails } from "@/app/actions/task";
 import { toast } from "sonner";
 
 export type TaskFormValues = z.infer<typeof taskFormSchema>;
@@ -59,14 +59,17 @@ export const EditTaskDialog = ({ task, project }: Props) => {
   const handleOnSubmit = async (data: TaskFormValues) => {
     setPending(true);
     try {
-      await createTask(data, project.id, workspaceId);
-      form.reset();
+      const res = await updateTaskDetails(task.id, data);
+      if (res.error) {
+        toast.error(res.error);
+        return;
+      }
       setOpen(false);
       router.refresh();
-      toast.success("Task created successfully");
+      toast.success("Task updated successfully");
     } catch (error) {
       console.log(error);
-      toast.error("Failed to create task");
+      toast.error("Failed to update task");
     } finally {
       setPending(false);
     }

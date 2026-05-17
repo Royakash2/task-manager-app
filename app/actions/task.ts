@@ -5,6 +5,7 @@ import { userRequired } from "../data/user/get-user";
 import { taskFormSchema } from "@/lib/schema";
 import db from "@/lib/db";
 import { TaskStatus } from "@prisma/client";
+import { revalidatePath } from "next/cache";
 
 export const createTask = async (
   data: TaskFormValues,
@@ -24,7 +25,7 @@ export const createTask = async (
     },
   });
 
-  if(!isUserMember){
+  if (!isUserMember) {
     throw new Error("You are not a member of this workspace");
   }
 
@@ -36,7 +37,7 @@ export const createTask = async (
 
   const lastTask = tasks
     ?.filter((task) => task.status === data.status)
-    .sort((a, b) => (b.position - a.position))[0];
+    .sort((a, b) => b.position - a.position)[0];
 
   const position = lastTask ? lastTask.position + 1000 : 1000;
 
@@ -66,6 +67,8 @@ export const createTask = async (
     },
   });
 
+  revalidatePath(`/workspace/${workspaceId}/projects/${projectId}`);
+
   return { success: true };
 };
 
@@ -79,7 +82,14 @@ export const updateTaskPosition = async (
 
     const currentTask = await db.task.findUnique({
       where: { id: taskId },
-      select: { projectId: true, status: true, title: true }
+      select: { 
+        projectId: true, 
+        status: true, 
+        title: true,
+        project: {
+          select: { workspaceId: true }
+        }
+      },
     });
 
     if (!currentTask) return { success: false, error: "Task not found" };
@@ -104,7 +114,7 @@ export const updateTaskPosition = async (
       db.task.update({
         where: { id: task.id },
         data: { position: (index + 1) * 1000 },
-      })
+      }),
     );
 
     await db.$transaction(updates);
@@ -120,9 +130,92 @@ export const updateTaskPosition = async (
       });
     }
 
+    revalidatePath(`/workspace/${currentTask.project.workspaceId}/projects/${currentTask.projectId}`);
+
     return { success: true };
   } catch (error) {
     console.error("Failed to update task position:", error);
     return { success: false, error: "Failed to update task position" };
+  }
+};
+
+export const updateTaskDetails = async (
+  taskId: string,
+  data: TaskFormValues,
+) => {
+  try {
+    const { user } = await userRequired();
+
+    const validatedData = taskFormSchema.parse(data);
+
+    const existingTask = await db.task.findUnique({
+      where: { id: taskId },
+      include: {
+        project: {
+          select: { workspaceId: true },
+        },
+      },
+    });
+
+    if (!existingTask) {
+      throw new Error("Task not found");
+    }
+
+    const isUserMember = await db.workspaceMembers.findUnique({
+      where: {
+        userId_workspaceId: {
+          userId: user.id,
+          workspaceId: existingTask.project.workspaceId,
+        },
+      },
+    });
+
+    if (!isUserMember) {
+      throw new Error("You are not a member of this workspace");
+    }
+
+    const hasProjectAccess = await db.projectAccess.findUnique({
+      where: {
+        workspaceMemberId_projectId: {
+          workspaceMemberId: isUserMember.id,
+          projectId: existingTask.projectId,
+        },
+      },
+    });
+
+    if (!hasProjectAccess?.hasAccess) {
+      throw new Error(
+        "You do not have permission to modify tasks in this project",
+      );
+    }
+
+    await db.task.update({
+      where: { id: taskId },
+      data: {
+        title: validatedData.title,
+        description: validatedData.description,
+        startDate: new Date(validatedData.startDate),
+        dueDate: new Date(validatedData.dueDate),
+        assigneeId: validatedData.assigneeId,
+        status: validatedData.status,
+        priority: validatedData.priority,
+      },
+    });
+
+    await db.activity.create({
+      data: {
+        type: "TASK_UPDATED",
+        description: `updated task "${validatedData.title}"`,
+        projectId: existingTask.projectId,
+        userId: user.id,
+      },
+    });
+
+    revalidatePath(`/workspace/${existingTask.project.workspaceId}/projects/${existingTask.projectId}`);
+
+    return { success: true };
+  } catch (error) {
+    console.error("Failed to update task:", error);
+    return { success: false, error: "Failed to update task" };
   }
 };

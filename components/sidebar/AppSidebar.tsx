@@ -5,7 +5,7 @@ import React from 'react'
 import { AppSidebarDataProps } from './AppSidebarContainer'
 import { User } from '@prisma/client'
 import { projectProps, workspaceMembersProps } from '@/utils/types'
-import { Sidebar, SidebarContent, SidebarGroupLabel, SidebarHeader, useSidebar } from '../ui/sidebar'
+import { Sidebar, SidebarContent, SidebarHeader, useSidebar } from '../ui/sidebar'
 import { Button } from '../ui/button'
 import Link from 'next/link'
 import { Plus } from 'lucide-react'
@@ -63,8 +63,8 @@ function AppSidebar(
                         )}
                     </div>
                 </SidebarHeader>
-                <SidebarContent className="[&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">    
-                    <NavMain/>
+                <SidebarContent className="[&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
+                    <NavMain />
                     <NavProject projects={project} workspaceMembers={workspaceMembers} />
                 </SidebarContent>
                 <SidebarUserProfile user={user} />
@@ -73,4 +73,4 @@ function AppSidebar(
     )
 }
 
-export default AppSidebar;
+export default AppSidebar;
