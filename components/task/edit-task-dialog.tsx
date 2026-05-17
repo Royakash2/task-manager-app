@@ -14,7 +14,6 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Button } from "../ui/button";
-import { useWorkSpaceId } from "@/hooks/UseWorkspaceId";
 import { Task, TaskPriority, User, File } from "@prisma/client";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Calendar } from "@/components/ui/calendar";
@@ -39,7 +38,6 @@ type Props = {
 export const EditTaskDialog = ({ task, project }: Props) => {
   const router = useRouter();
   const [open, setOpen] = useState(false);
-  const workspaceId = useWorkSpaceId();
   const [pending, setPending] = useState(false);
 
   const form = useForm<TaskFormValues>({

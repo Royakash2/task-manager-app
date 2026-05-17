@@ -54,7 +54,11 @@ export const CreateTaskDialog = ({ project }: Props) => {
   const handleOnSubmit = async (data: TaskFormValues) => {
     setPending(true);
     try {
-      await createTask(data, project.id, workspaceId);
+      const res = await createTask(data, project.id, workspaceId);
+      if (res.error) {
+        toast.error(res.error);
+        return;
+      }
       form.reset();
       setOpen(false);
       router.refresh();
