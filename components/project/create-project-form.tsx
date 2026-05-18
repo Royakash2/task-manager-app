@@ -68,7 +68,6 @@ export const CreateProjectForm = ({
                     </TooltipContent>
                 </Tooltip>
                 <DialogContent>
-                    {/* <Card className='w-full border-none shadow-none max-w-md'> */}
                         <DialogHeader>
                             <DialogTitle className='text-2xl font-bold'>Create new Project</DialogTitle>
                             <DialogDescription>Fill in the details to create a new project and manage member access.</DialogDescription>
@@ -145,17 +144,15 @@ export const CreateProjectForm = ({
                                 </div>
 
                                 <div className='flex items-center gap-3 w-full'>
-                                    <Button type='button' variant="outline" className='flex-1' disabled={pending}>
+                                    <Button type='button' variant="outline" className='flex-1 cursor-pointer' disabled={pending}>
                                         cancel
                                     </Button>
-                                    <Button type='submit' disabled={pending} className='flex-1'>
+                                    <Button type='submit' disabled={pending} className='flex-1 cursor-pointer'>
                                         {pending ? "Creating..." : "Create Project"}
                                     </Button>
                                 </div>
                             </form>
                         </Form>
-
-                    {/* </Card> */}
 
                 </DialogContent>
             </Dialog>

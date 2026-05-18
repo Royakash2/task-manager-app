@@ -289,7 +289,7 @@ export const EditTaskDialog = ({ task, project }: Props) => {
               )}
             />
             <div className="flex justify-end space-x-2">
-              <Button type="submit" disabled={pending}>
+              <Button type="submit" disabled={pending} className="cursor-pointer">
                 Update
               </Button>
             </div>
