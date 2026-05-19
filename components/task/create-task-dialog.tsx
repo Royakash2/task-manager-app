@@ -24,6 +24,7 @@ import { CalendarIcon, Plus } from "lucide-react";
 import { taskStats } from "@/utils";
 import { createTask } from "@/app/actions/task";
 import { toast } from "sonner";
+import { FileUpload } from "../file-upload";
 
 export type TaskFormValues = z.infer<typeof taskFormSchema>;
 
@@ -283,6 +284,22 @@ export const CreateTaskDialog = ({ project }: Props) => {
                       ))}
                     </SelectContent>
                   </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+             <FormField
+              control={form.control}
+              name="attachments"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Attachments</FormLabel>
+                  <FormControl>
+                   <FileUpload
+                    value={field.value}
+                    onChange={field.onChange}
+                     />
+                  </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
