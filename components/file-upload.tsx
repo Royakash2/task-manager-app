@@ -6,6 +6,8 @@ import { UploadDropzone } from "@/utils/uploadthing";
 import { Button } from "./ui/button";
 import { cn } from "@/lib/utils";
 import { X } from "lucide-react";
+import Image from "next/image";
+import { toast } from "sonner";
 
 interface FileUploadProps {
     onChange: (value: { name: string, url: string, type: $Enums.FileTypes }[]) => void;
@@ -20,9 +22,33 @@ export const FileUpload = ({value = [],onChange}: FileUploadProps) => {
 
     return (
         <div>
-          {
-            // dispaly files
-          }
+          {value?.length > 0 && (
+            <div className="flex flex-wrap gap-4 mb-4">
+              {value.map((file) => (
+                <div 
+                  key={file?.url}
+                  className="relative w-[200px] h-[200px] rounded-lg"
+                >
+                  <Image 
+                    src={file.type === "IMAGE" ? file.url : "/pdf.png"}
+                    alt={file.name}
+                    className="object-cover rounded-lg"
+                    fill
+                  />
+
+                  <button
+                    type="button"
+                    onClick={() => {
+                      onChange(value.filter((f) => f.url !== file.url));
+                    }}
+                    className="absolute -top-2 -right-2 p-1 bg-black/50 hover:bg-rose-400/90 rounded-full text-white cursor-pointer"
+                  >
+                    <X className="h-4 w-4" />
+                  </button>
+                </div>
+              ))}
+            </div>
+          )}
 
           {selectedType ? (
             <div className="relative">
@@ -51,8 +77,8 @@ export const FileUpload = ({value = [],onChange}: FileUploadProps) => {
                     setSelectedType(undefined)
                 }}
                 onUploadError={(error: Error) => {
-                    console.log(`Error: upload  ${error.message}`)
-                   
+                    console.log(`Error: upload  ${error.message}`);
+                    toast.error(`Upload failed: ${error.message}`);
                 }}
               />
             </div>

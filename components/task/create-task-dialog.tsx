@@ -80,7 +80,7 @@ export const CreateTaskDialog = ({ project }: Props) => {
           Create Task
         </Button>
       </DialogTrigger>
-      <DialogContent className="max-h-[90vh] overflow-y-auto">
+      <DialogContent className="max-h-[95vh] overflow-y-auto no-scrollbar">
         <DialogHeader>
           <DialogTitle>Create Task</DialogTitle>
           <DialogDescription>Fill in the details below to create a new task.</DialogDescription>

@@ -80,7 +80,7 @@ export const EditTaskDialog = ({ task, project }: Props) => {
           <EditIcon className="w-3.5 h-3.5" />
         </Button>
       </DialogTrigger>
-      <DialogContent>
+      <DialogContent className="max-h-[95vh] overflow-y-auto no-scrollbar">
         <DialogHeader>
           <DialogTitle>Update Task</DialogTitle>
           <DialogDescription>Fill in the details below to update the task.</DialogDescription>
