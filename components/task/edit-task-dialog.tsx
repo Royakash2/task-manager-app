@@ -14,59 +14,60 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Button } from "../ui/button";
-import { useWorkSpaceId } from "@/hooks/UseWorkspaceId";
-import { TaskPriority } from "@prisma/client";
+import { Task, TaskPriority, User, File } from "@prisma/client";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Calendar } from "@/components/ui/calendar";
 import { cn } from "@/lib/utils";
 import { format } from "date-fns";
-import { CalendarIcon, Plus } from "lucide-react";
+import { CalendarIcon,  EditIcon, } from "lucide-react";
 import { taskStats } from "@/utils";
-import { createTask } from "@/app/actions/task";
+import { updateTaskDetails } from "@/app/actions/task";
 import { toast } from "sonner";
-import { FileUpload } from "../file-upload";
 
 export type TaskFormValues = z.infer<typeof taskFormSchema>;
 
 type Props = {
+  task: Task & {
+    assigneeTo: User;
+    project: projectProps;
+    attachments: File[];
+  };
   project: projectProps;
 };
 
-export const CreateTaskDialog = ({ project }: Props) => {
+export const EditTaskDialog = ({ task, project }: Props) => {
   const router = useRouter();
   const [open, setOpen] = useState(false);
-  const workspaceId = useWorkSpaceId();
   const [pending, setPending] = useState(false);
 
   const form = useForm<TaskFormValues>({
     resolver: zodResolver(taskFormSchema),
     defaultValues: {
-      title: "",
-      description: "",
-      status: "TODO",
-      dueDate: new Date(),
-      startDate: new Date(),
-      priority: "MEDIUM",
+      title: task.title || "",
+      description: task.description || "",
+      status: task.status || "TODO",
+      dueDate: task.dueDate ? new Date(task.dueDate) : new Date(),
+      startDate: task.startDate ? new Date(task.startDate) : new Date(),
+      priority: task.priority || "MEDIUM",
       attachments: [],
-      assigneeId:""
+      assigneeId: task.assigneeId || ""
     },
   });
 
   const handleOnSubmit = async (data: TaskFormValues) => {
     setPending(true);
     try {
-      const res = await createTask(data, project.id, workspaceId);
+      const res = await updateTaskDetails(task.id, data);
       if (res.error) {
         toast.error(res.error);
         return;
       }
-      form.reset();
       setOpen(false);
       router.refresh();
-      toast.success("Task created successfully");
+      toast.success("Task updated successfully");
     } catch (error) {
       console.log(error);
-      toast.error("Failed to create task");
+      toast.error("Failed to update task");
     } finally {
       setPending(false);
     }
@@ -75,15 +76,14 @@ export const CreateTaskDialog = ({ project }: Props) => {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button className="rounded-md shadow-md font-semibold px-5 flex items-center gap-2 cursor-pointer">
-          <Plus className="w-4 h-4" />
-          Create Task
+        <Button variant={"ghost"} size="icon" className="h-7 w-7 rounded-md cursor-pointer">
+          <EditIcon className="w-3.5 h-3.5" />
         </Button>
       </DialogTrigger>
       <DialogContent className="max-h-[95vh] overflow-y-auto no-scrollbar">
         <DialogHeader>
-          <DialogTitle>Create Task</DialogTitle>
-          <DialogDescription>Fill in the details below to create a new task.</DialogDescription>
+          <DialogTitle>Update Task</DialogTitle>
+          <DialogDescription>Fill in the details below to update the task.</DialogDescription>
         </DialogHeader>
         <Form {...form}>
           <form
@@ -288,25 +288,9 @@ export const CreateTaskDialog = ({ project }: Props) => {
                 </FormItem>
               )}
             />
-             <FormField
-              control={form.control}
-              name="attachments"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Attachments</FormLabel>
-                  <FormControl>
-                   <FileUpload
-                    value={field.value}
-                    onChange={field.onChange}
-                     />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <div className="flex justify-end space-x-2 ">
+            <div className="flex justify-end space-x-2">
               <Button type="submit" disabled={pending} className="cursor-pointer">
-                Submit
+                Update
               </Button>
             </div>
           </form>
