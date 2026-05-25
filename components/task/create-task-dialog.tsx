@@ -25,6 +25,8 @@ import { taskStats } from "@/utils";
 import { createTask } from "@/app/actions/task";
 import { toast } from "sonner";
 import { FileUpload } from "../file-upload";
+import { useUploadThing } from "@/utils/uploadthing";
+import { uploadPendingAttachments } from "@/utils/upload-attachments";
 
 export type TaskFormValues = z.infer<typeof taskFormSchema>;
 
@@ -37,6 +39,9 @@ export const CreateTaskDialog = ({ project }: Props) => {
   const [open, setOpen] = useState(false);
   const workspaceId = useWorkSpaceId();
   const [pending, setPending] = useState(false);
+
+  const [pendingFiles, setPendingFiles] = useState<File[]>([]);
+  const { startUpload } = useUploadThing("attachmentUploader");
 
   const form = useForm<TaskFormValues>({
     resolver: zodResolver(taskFormSchema),
@@ -55,7 +60,13 @@ export const CreateTaskDialog = ({ project }: Props) => {
   const handleOnSubmit = async (data: TaskFormValues) => {
     setPending(true);
     try {
-      const res = await createTask(data, project.id, workspaceId);
+      const finalAttachments = await uploadPendingAttachments(
+        pendingFiles,
+        data.attachments || [],
+        startUpload,
+      );
+      setPendingFiles([]);
+      const res = await createTask({ ...data, attachments: finalAttachments }, project.id, workspaceId);
       if (res.error) {
         toast.error(res.error);
         return;
@@ -298,6 +309,7 @@ export const CreateTaskDialog = ({ project }: Props) => {
                    <FileUpload
                     value={field.value}
                     onChange={field.onChange}
+                    onPendingChange={setPendingFiles}
                      />
                   </FormControl>
                   <FormMessage />

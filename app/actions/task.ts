@@ -7,6 +7,7 @@ import db from "@/lib/db";
 import { TaskStatus } from "@prisma/client";
 import { revalidatePath } from "next/cache";
 import { verifyProjectAccess } from "@/lib/permissions";
+import { syncTaskAttachments, deleteAttachments } from "@/utils/file-attachments";
 
 export const createTask = async (
   data: TaskFormValues,
@@ -26,7 +27,7 @@ export const createTask = async (
 
     const position = lastTask ? lastTask.position + 1000 : 1000;
 
-    await db.task.create({
+    const newTask = await db.task.create({
       data: {
         title: validatedData.title,
         description: validatedData.description,
@@ -38,10 +39,10 @@ export const createTask = async (
         priority: validatedData.priority,
         position,
       },
-      include: {
-        project: true,
-      },
     });
+
+    // Link pre-registered Uploadthing files or create fallbacks
+    await syncTaskAttachments(newTask.id, projectId, validatedData.attachments || []);
 
     await db.activity.create({
       data: {
@@ -144,6 +145,7 @@ export const updateTaskDetails = async (
         project: {
           select: { workspaceId: true },
         },
+        attachments: true,
       },
     });
 
@@ -153,6 +155,17 @@ export const updateTaskDetails = async (
 
     await verifyProjectAccess(user.id, existingTask.project.workspaceId, existingTask.projectId);
 
+    const incomingUrls = new Set(validatedData.attachments?.map((file) => file.url) || []);
+
+    const filesToDelete = existingTask.attachments.filter((file) => !incomingUrls.has(file.url));
+    const filesToKeepOrUpdate = (validatedData.attachments || []);
+
+    // 1. Delete files that were removed by the user
+    if (filesToDelete.length > 0) {
+      await deleteAttachments(filesToDelete.map((f) => f.url));
+    }
+
+    // 2. Update core task properties
     await db.task.update({
       where: { id: taskId },
       data: {
@@ -165,6 +178,9 @@ export const updateTaskDetails = async (
         priority: validatedData.priority,
       },
     });
+
+    // 3. Sync remaining/new attachments
+    await syncTaskAttachments(taskId, existingTask.projectId, filesToKeepOrUpdate);
 
     await db.activity.create({
       data: {
@@ -183,4 +199,3 @@ export const updateTaskDetails = async (
     return { success: false, error: error instanceof Error ? error.message : "Failed to update task" };
   }
 };
-

@@ -14,7 +14,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Button } from "../ui/button";
-import { Task, TaskPriority, User, File } from "@prisma/client";
+import { Task, TaskPriority, User, File as PrismaFile } from "@prisma/client";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Calendar } from "@/components/ui/calendar";
 import { cn } from "@/lib/utils";
@@ -23,6 +23,9 @@ import { CalendarIcon,  EditIcon, } from "lucide-react";
 import { taskStats } from "@/utils";
 import { updateTaskDetails } from "@/app/actions/task";
 import { toast } from "sonner";
+import { FileUpload } from "../file-upload";
+import { useUploadThing } from "@/utils/uploadthing";
+import { uploadPendingAttachments } from "@/utils/upload-attachments";
 
 export type TaskFormValues = z.infer<typeof taskFormSchema>;
 
@@ -30,7 +33,7 @@ type Props = {
   task: Task & {
     assigneeTo: User;
     project: projectProps;
-    attachments: File[];
+    attachments: PrismaFile[];
   };
   project: projectProps;
 };
@@ -39,6 +42,8 @@ export const EditTaskDialog = ({ task, project }: Props) => {
   const router = useRouter();
   const [open, setOpen] = useState(false);
   const [pending, setPending] = useState(false);
+  const [pendingFiles, setPendingFiles] = useState<File[]>([]);
+  const { startUpload } = useUploadThing("attachmentUploader");
 
   const form = useForm<TaskFormValues>({
     resolver: zodResolver(taskFormSchema),
@@ -49,15 +54,26 @@ export const EditTaskDialog = ({ task, project }: Props) => {
       dueDate: task.dueDate ? new Date(task.dueDate) : new Date(),
       startDate: task.startDate ? new Date(task.startDate) : new Date(),
       priority: task.priority || "MEDIUM",
-      attachments: [],
-      assigneeId: task.assigneeId || ""
+      attachments: task.attachments?.map((file) => ({
+        name: file.name,
+        url: file.url,
+        type: file.type,
+      })) || [],
+      assigneeId: task.assigneeId || "",
     },
   });
 
   const handleOnSubmit = async (data: TaskFormValues) => {
     setPending(true);
     try {
-      const res = await updateTaskDetails(task.id, data);
+      const finalAttachments = await uploadPendingAttachments(
+        pendingFiles,
+        data.attachments || [],
+        startUpload,
+      );
+      setPendingFiles([]);
+
+      const res = await updateTaskDetails(task.id, { ...data, attachments: finalAttachments });
       if (res.error) {
         toast.error(res.error);
         return;
@@ -284,6 +300,23 @@ export const EditTaskDialog = ({ task, project }: Props) => {
                       ))}
                     </SelectContent>
                   </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="attachments"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Attachments</FormLabel>
+                  <FormControl>
+                   <FileUpload
+                    value={field.value}
+                    onChange={field.onChange}
+                    onPendingChange={setPendingFiles}
+                     />
+                  </FormControl>
                   <FormMessage />
                 </FormItem>
               )}

@@ -37,7 +37,7 @@ export const getTaskById = async (
       where: { id: taskId },
       include: {
         assigneeTo: { select: { id: true, name: true, image: true } },
-        attachments: { select: { id: true, name: true, url: true } },
+        attachments: { select: { id: true, name: true, url: true, type: true } },
         project: {
           include: {
             projectAccess: {
