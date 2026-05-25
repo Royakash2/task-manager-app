@@ -20,7 +20,7 @@ export const NavProject = ({
     const pathName = usePathname();
     return (
         <>
-            <SidebarGroup className="group-data-[collapsible=icon]:hidden">
+            <SidebarGroup>
                 <SidebarGroupLabel className="flex justify-between">
                     <span className="text-sm font-semibold text-muted-foreground uppercase">
                         Projects

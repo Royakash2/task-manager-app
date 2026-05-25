@@ -4,7 +4,7 @@ import { CommentProps } from "@/utils/types";
 
 export const CommentList = ({ comments }: { comments: CommentProps[] }) => {
   return (
-    <div className="space-y-6">
+    <div className="space-y-5">
       {comments?.map((comment) => (
         <div key={comment.id} className="flex items-start gap-3">
           <ProfileAvatar 

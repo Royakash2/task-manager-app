@@ -34,7 +34,7 @@ function AppSidebar(
     return (
         <>
             <Sidebar collapsible='icon' >
-                <SidebarHeader className='bg-background'>
+                <SidebarHeader className='bg-sidebar'>
                     <div className='px-2 py-2 group-data-[collapsible=icon]:hidden'>
                         <Logo linkHref="/" />
                     </div>

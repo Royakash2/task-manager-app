@@ -11,7 +11,7 @@ export const SidebarUserProfile = ({ user }: { user: User }) => {
     const { state } = useSidebar()
 
     return (
-        <SidebarFooter className="border-t bg-background p-3">
+        <SidebarFooter className="border-t bg-sidebar p-3">
             {state === 'expanded' ? (
                 <div className="flex items-center gap-3 py-2">
                     <ProfileAvatar

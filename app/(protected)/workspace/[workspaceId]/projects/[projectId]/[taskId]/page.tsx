@@ -19,7 +19,7 @@ const TaskDetailPage = async (props: TaskDetailPageProps) => {
   if (!task) redirect("not-found");
 
   return (
-    <div className='flex flex-col lg:flex-row gap-4  min-h-screen bg-background'>
+    <div className='flex flex-col lg:flex-row gap-4 min-h-screen bg-background'>
       <div className='flex-1'>
       {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
        <TaskDetails task={task as any} />
