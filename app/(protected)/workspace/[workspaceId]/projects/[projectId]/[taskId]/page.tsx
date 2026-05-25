@@ -24,7 +24,7 @@ const TaskDetailPage = async (props: TaskDetailPageProps) => {
       {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
        <TaskDetails task={task as any} />
       </div>
-     <div className='w-full lg:w-[400px]'>
+     <div className='w-full lg:w-100'>
       {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
       <TaskComments taskId={taskId}comments={comments as any}/>
      </div>

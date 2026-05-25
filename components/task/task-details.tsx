@@ -21,7 +21,7 @@ export interface TaskProps {
 
 const TaskDetails = ({ task }: TaskProps) => {
   return (
-    <Card className=' shadow-none'>
+    <Card className='shadow-none bg-sidebar'>
         <CardHeader className='flex flex-col gap-4'>
            <div className='flex flex-wrap justify-between w-full items-center gap-4'>
             <div className='flex items-center gap-2'>
