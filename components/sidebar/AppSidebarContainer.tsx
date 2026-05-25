@@ -1,17 +1,17 @@
 import { User } from '@prisma/client';
-// refresh
 import React from 'react'
-import { getWorkspaceProjectByWorkspaceId } from '@/app/data/project/user-workspace-project';
+
 import { getUserById } from '@/app/data/user/get-user-by-id';
 import AppSidebar from './AppSidebar';
 import { projectProps, workspaceMembersProps, workspaceProps } from '@/utils/types';
+import { getUserWorkspaceProjects } from '@/app/data/project/get-user-workspace-projects';
 
 export interface AppSidebarDataProps extends User {
     workspaces: workspaceProps[]
 }
 
 const AppSidebarContainer = async ({ data, workspaceId }: { data: AppSidebarDataProps, workspaceId: string }) => {
-    const {projects,workspaceMembers } = await getWorkspaceProjectByWorkspaceId(workspaceId);
+    const {projects,workspaceMembers } = await getUserWorkspaceProjects(workspaceId);
     const user = await getUserById();
     return <AppSidebar
         user={user as User}

@@ -33,8 +33,8 @@ export const getTaskById = async (
   }
 
   const [task, comments] = await Promise.all([
-    db.task.findUnique({
-      where: { id: taskId },
+    db.task.findFirst({
+      where: { id: taskId, deletedAt: null },
       include: {
         assigneeTo: { select: { id: true, name: true, image: true } },
         attachments: { select: { id: true, name: true, url: true, type: true } },

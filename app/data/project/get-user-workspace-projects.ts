@@ -4,7 +4,7 @@ import { userRequired } from "../user/get-user";
 import { Prisma } from "@prisma/client";
 import { $Enums } from "@prisma/client";
 
-export const getWorkspaceProjectByWorkspaceId = async (workspaceId: string) => {
+export const getUserWorkspaceProjects = async (workspaceId: string) => {
   try {
     const user = await userRequired();
     const isUserMember = await db.workspaceMembers.findUnique({

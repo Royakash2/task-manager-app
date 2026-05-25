@@ -7,7 +7,9 @@ import { ProfileAvatar } from '../profile-avatar'
 import { Badge } from '../ui/badge'
 import { format } from 'date-fns'
 import { Separator } from '../ui/separator'
+
 import { EditTaskDialog } from './edit-task-dialog'
+import { DeleteTaskDialog } from './delete-task-dialog'
 import { ImageLightboxPreview } from './image-lightbox-preview'
 export interface TaskProps {
   task:Task & {
@@ -48,11 +50,21 @@ const TaskDetails = ({ task }: TaskProps) => {
           <div>
             <div className='flex items-center justify-between mb-2'>
               <h4 className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Description</h4>
-              <EditTaskDialog
-                key={new Date().getTime()}
-                task={task}
-                project={task.project}
-              />
+              <div className="flex items-center gap-1">
+                <EditTaskDialog
+                  key={new Date().getTime()}
+                  task={task}
+                  project={task.project}
+                />
+                <DeleteTaskDialog
+                  taskId={task.id}
+                  projectId={task.project.id}
+                  workspaceId={task.project.workspaceId}
+                  taskTitle={task.title}
+                  variant="icon"
+                  redirectOnDelete
+                />
+              </div>
             </div>
             <p className={`text-sm text-muted-foreground `}>
               {task.description || "No description provided for this task."}

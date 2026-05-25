@@ -5,12 +5,14 @@ import { ColumnDef } from "@tanstack/react-table";
 import { Checkbox } from "../ui/checkbox";
 import Link from "next/link";
 import { Button } from "../ui/button";
-import { ArrowUpDown, EllipsisVertical, Paperclip } from "lucide-react";
+import { ArrowUpDown, EllipsisVertical, Paperclip,  } from "lucide-react";
 import { ProjectAvatar } from "./Project-avatar";
 import { Badge } from "../ui/badge";
 import { format } from "date-fns";
 import { ProfileAvatar } from "../profile-avatar";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "../ui/dropdown-menu";
+import { useState } from "react";
+import { DeleteTaskDialog } from "../task/delete-task-dialog";
 
 export type TaskTableItem = Task & {
   assigneeTo: {
@@ -166,31 +168,40 @@ export const columns: ColumnDef<TaskTableItem>[] = [
   {
     accessorKey: "actions",
     header: "Actions",
-    cell: ({ row }) => {
-      return (
-        <div>
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant={"ghost"} size={"icon"}>
-                <EllipsisVertical className="w-4 h-4" />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent>
-              <DropdownMenuItem>
-                <Link
-                  href={`/workspace/${row.original.project.workspaceId}/projects/${row.original.project.id}/${row.original.id}`}
-                >
-                  View Task
-                </Link>
-              </DropdownMenuItem>
-              <DropdownMenuItem asChild>
-                Delete Task
-                {/* <DeleteTask taskId={row.original.id} /> */}
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
-        </div>
-      );
-    },
+    cell: ({ row }) => <ActionsCell row={row} />,
   },
 ];
+
+const ActionsCell = ({ row }: { row: { original: TaskTableItem } }) => {
+  const [open, setOpen] = useState(false);
+
+  return (
+    <div>
+      <DropdownMenu open={open} onOpenChange={setOpen}>
+        <DropdownMenuTrigger asChild>
+          <Button variant={"ghost"} size={"icon"}>
+            <EllipsisVertical className="w-4 h-4" />
+          </Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent>
+          <DropdownMenuItem>
+            <Link
+              href={`/workspace/${row.original.project.workspaceId}/projects/${row.original.project.id}/${row.original.id}`}
+            >
+              View Task
+            </Link>
+          </DropdownMenuItem>
+          <DropdownMenuItem asChild onSelect={(e) => e.preventDefault()}>
+            <DeleteTaskDialog
+              taskId={row.original.id}
+              projectId={row.original.project.id}
+              workspaceId={row.original.project.workspaceId}
+              taskTitle={row.original.title}
+              onSuccess={() => setOpen(false)}
+            />
+          </DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
+    </div>
+  );
+};

@@ -62,6 +62,57 @@ export const createTask = async (
   }
 };
 
+export const softDeleteTask = async (
+  taskId: string,
+  workspaceId: string,
+  projectId: string,
+) => {
+  try {
+    const { user } = await userRequired();
+
+    await verifyProjectAccess(user.id, workspaceId, projectId);
+
+    const existingTask = await db.task.findUnique({
+      where: { id: taskId },
+      include: {
+        attachments: true,
+      },
+    });
+
+    if (!existingTask) {
+      return { success: false, error: "Task not found" };
+    }
+
+    // Clean up UploadThing files
+    if (existingTask.attachments.length > 0) {
+      await deleteAttachments(existingTask.attachments.map((f) => f.url));
+    }
+
+    // Soft delete — set deletedAt
+    await db.task.update({
+      where: { id: taskId },
+      data: { deletedAt: new Date() },
+    });
+
+    await db.activity.create({
+      data: {
+        type: "TASK_DELETED",
+        description: `deleted task "${existingTask.title}"`,
+        projectId,
+        userId: user.id,
+      },
+    });
+
+    revalidatePath(`/workspace/${workspaceId}/projects/${projectId}`);
+    revalidatePath(`/workspace/${workspaceId}/projects/${projectId}/${taskId}`);
+
+    return { success: true };
+  } catch (error) {
+    console.error("Failed to delete task:", error);
+    return { success: false, error: error instanceof Error ? error.message : "Failed to delete task" };
+  }
+};
+
 export const updateTaskPosition = async (
   taskId: string,
   newStatus: string,
@@ -98,6 +149,7 @@ export const updateTaskPosition = async (
       where: {
         status: newStatus as TaskStatus,
         projectId: currentTask.projectId,
+        deletedAt: null,
       },
       orderBy: { position: "asc" },
     });
@@ -139,8 +191,8 @@ export const updateTaskDetails = async (
     const { user } = await userRequired();
     const validatedData = taskFormSchema.parse(data);
 
-    const existingTask = await db.task.findUnique({
-      where: { id: taskId },
+    const existingTask = await db.task.findFirst({
+      where: { id: taskId, deletedAt: null },
       include: {
         project: {
           select: { workspaceId: true },

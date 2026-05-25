@@ -7,6 +7,7 @@ export const getProjectById = async (projectId: string) => {
     const tasks = await db.task.findMany({
         where: {
             projectId,
+            deletedAt: null,
         },
         include: {
             assigneeTo: {

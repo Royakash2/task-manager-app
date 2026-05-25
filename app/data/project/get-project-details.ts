@@ -46,6 +46,7 @@ export const getProjectDetails = async (workspaceId: string, projectId: string) 
                         }
                     },
                     tasks: {
+                        where: { deletedAt: null },
                         include: {
                             assigneeTo: {
                                 select: {
