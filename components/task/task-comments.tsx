@@ -56,7 +56,7 @@ const TaskComments = ({ taskId, comments }: TaskCommentProps) => {
     }
 
     return (
-        <Card className="shadow-none border-muted-foreground/10 bg-sidebar">
+        <Card className="shadow-none border-muted-foreground/10">
             <CardHeader className="pb-3">
                 <CardTitle className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Comments</CardTitle>
             </CardHeader>
@@ -64,7 +64,7 @@ const TaskComments = ({ taskId, comments }: TaskCommentProps) => {
                 <div className="space-y-3">
                     <Textarea
                         placeholder="Add a comment..."
-                        className="min-h-[100px] resize-none focus-visible:ring-primary/20"
+                        className="min-h-25 resize-none focus-visible:ring-primary/20"
                         value={newComment}
                         onChange={(e) => setNewComment(e.target.value)}
                         onKeyDown={handleKeyDown}
