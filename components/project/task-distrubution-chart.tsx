@@ -62,7 +62,7 @@ const TaskDistributionChart = ({ tasks }: TaskDistributionProps) => {
             <CardContent className="flex-1 pb-0 px-0">
                 <ChartContainer
                     config={chartConfig}
-                    className="mx-auto aspect-square max-h-[250px]"
+                    className="mx-auto aspect-square max-h-62.5"
                 >
                     <PieChart>
                         <ChartTooltip
