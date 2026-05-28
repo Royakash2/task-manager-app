@@ -19,12 +19,12 @@ const TaskDetailPage = async (props: TaskDetailPageProps) => {
   if (!task) redirect("not-found");
 
   return (
-    <div className='flex flex-col lg:flex-row gap-4 min-h-screen bg-background'>
-      <div className='flex-1'>
+    <div className='flex flex-col lg:flex-row gap-4 lg:h-screen lg:overflow-hidden bg-background'>
+      <div className='flex-1 lg:overflow-y-auto no-scrollbar'>
       {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
        <TaskDetails task={task as any} documentation={documentation} />
       </div>
-     <div className='w-full lg:w-100'>
+     <div className='w-full lg:w-100 lg:overflow-y-auto no-scrollbar'>
       {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
       <TaskComments taskId={taskId}comments={comments as any}/>
      </div>
