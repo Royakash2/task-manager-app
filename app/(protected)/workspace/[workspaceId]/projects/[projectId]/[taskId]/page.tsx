@@ -14,7 +14,7 @@ interface TaskDetailPageProps {
 
 const TaskDetailPage = async (props: TaskDetailPageProps) => {
   const { taskId, workspaceId, projectId } = await props.params;
-  const { task, comments } = await getTaskById(taskId, workspaceId, projectId);
+  const { task, comments, documentation } = await getTaskById(taskId, workspaceId, projectId);
 
   if (!task) redirect("not-found");
 
@@ -22,7 +22,7 @@ const TaskDetailPage = async (props: TaskDetailPageProps) => {
     <div className='flex flex-col lg:flex-row gap-4 min-h-screen bg-background'>
       <div className='flex-1'>
       {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
-       <TaskDetails task={task as any} />
+       <TaskDetails task={task as any} documentation={documentation} />
       </div>
      <div className='w-full lg:w-100'>
       {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}

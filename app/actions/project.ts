@@ -7,12 +7,6 @@ import { projectSchema } from "@/lib/schema";
 
 export const createProject = async (data: projectDataType) => {
   const { user } = await userRequired();
-  const workspace = await db.workspace.findUnique({
-    where: { id: data.workspaceId },
-    include: {
-      projects: { select: { id: true } },
-    },
-  });
   const validatedData = projectSchema.parse(data);
   await verifyAccess(user.id, data.workspaceId);
 

@@ -11,15 +11,17 @@ import { Separator } from '../ui/separator'
 import { EditTaskDialog } from './edit-task-dialog'
 import { DeleteTaskDialog } from './delete-task-dialog'
 import { ImageLightboxPreview } from './image-lightbox-preview'
+import DocumentationEditor from './documentation-editor'
 export interface TaskProps {
   task:Task & {
   assigneeTo: User,
   project: projectProps,
   attachments: File[]
-  }
+  },
+  documentation?: { content: string | null } | null,
 }
 
-const TaskDetails = ({ task }: TaskProps) => {
+const TaskDetails = ({ task, documentation }: TaskProps) => {
   return (
     <Card className='shadow-none'>
         <CardHeader className='flex flex-col gap-4'>
@@ -102,6 +104,12 @@ const TaskDetails = ({ task }: TaskProps) => {
             />
           </div>
         </CardContent>
+         <DocumentationEditor
+            initialContent={documentation?.content}
+            taskId={task.id}
+            projectId={task.project.id}
+            workspaceId={task.project.workspaceId}
+          />
     </Card>
 
   )
