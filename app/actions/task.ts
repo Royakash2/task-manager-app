@@ -6,7 +6,7 @@ import { taskFormSchema } from "@/lib/schema";
 import db from "@/lib/db";
 import { TaskStatus } from "@prisma/client";
 import { revalidatePath } from "next/cache";
-import { verifyProjectAccess } from "@/lib/permissions";
+import { verifyAccess } from "@/lib/permissions";
 import { syncTaskAttachments, deleteAttachments } from "@/utils/file-attachments";
 
 export const createTask = async (
@@ -18,7 +18,7 @@ export const createTask = async (
     const { user } = await userRequired();
     const validatedData = taskFormSchema.parse(data);
 
-    await verifyProjectAccess(user.id, workspaceId, projectId);
+    await verifyAccess(user.id, workspaceId, projectId);
 
     const lastTask = await db.task.findFirst({
       where: { projectId, status: data.status },
@@ -70,7 +70,7 @@ export const softDeleteTask = async (
   try {
     const { user } = await userRequired();
 
-    await verifyProjectAccess(user.id, workspaceId, projectId);
+    await verifyAccess(user.id, workspaceId, projectId);
 
     const existingTask = await db.task.findUnique({
       where: { id: taskId },
@@ -135,7 +135,7 @@ export const updateTaskPosition = async (
 
     if (!currentTask) return { success: false, error: "Task not found" };
 
-    await verifyProjectAccess(user.id, currentTask.project.workspaceId, currentTask.projectId);
+    await verifyAccess(user.id, currentTask.project.workspaceId, currentTask.projectId);
 
     await db.task.update({
       where: { id: taskId },
@@ -205,7 +205,7 @@ export const updateTaskDetails = async (
       return { success: false, error: "Task not found" };
     }
 
-    await verifyProjectAccess(user.id, existingTask.project.workspaceId, existingTask.projectId);
+    await verifyAccess(user.id, existingTask.project.workspaceId, existingTask.projectId);
 
     const incomingUrls = new Set(validatedData.attachments?.map((file) => file.url) || []);
 

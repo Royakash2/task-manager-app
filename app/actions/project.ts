@@ -1,6 +1,7 @@
 "use server";
 import { projectDataType } from "@/components/project/create-project-form";
 import { userRequired } from "../data/user/get-user";
+import { verifyAccess } from "@/lib/permissions";
 import db from "@/lib/db";
 import { projectSchema } from "@/lib/schema";
 
@@ -13,17 +14,14 @@ export const createProject = async (data: projectDataType) => {
     },
   });
   const validatedData = projectSchema.parse(data);
+  await verifyAccess(user.id, data.workspaceId);
+
   const workspaceMembers = await db.workspaceMembers.findMany({
     where: {
       workspaceId: data.workspaceId,
     },
   });
-  const isUserMember = workspaceMembers.some(
-    (member) => member.userId === user.id,
-  );
-  if (!isUserMember) {
-    throw new Error("You are not a member of this workspace");
-  }
+
   if (validatedData.membersAccess?.length === 0) {
     validatedData.membersAccess = [user.id];
   } else if (!validatedData.membersAccess?.includes(user.id)) {

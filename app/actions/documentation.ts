@@ -5,7 +5,7 @@ import { userRequired } from "../data/user/get-user";
 import { verifyAccess } from "@/lib/permissions";
 import { revalidatePath } from "next/cache";
 
-export const createComment = async (
+export const saveDocumentation = async (
   content: string,
   taskId: string,
   projectId: string,
@@ -16,24 +16,21 @@ export const createComment = async (
 
     await verifyAccess(user.id, workspaceId, projectId);
 
-    if (!content || content.trim() === "") {
-      throw new Error("Comment content cannot be empty");
-    }
-
-    const comment = await db.comment.create({
-      data: {
-        content,
+    const doc = await db.documentation.upsert({
+      where: { taskId },
+      update: { content },
+      create: {
         taskId,
+        content,
         projectId,
-        userId: user.id,
       },
     });
 
     revalidatePath(`/workspace/${workspaceId}/projects/${projectId}/${taskId}`);
 
-    return { success: true, data: comment };
+    return { success: true, data: doc };
   } catch (error) {
-    console.error("[CREATE_COMMENT_ERROR]:", error);
+    console.error("[SAVE_DOCUMENTATION_ERROR]:", error);
     return {
       success: false,
       error:
