@@ -56,7 +56,7 @@ export const deleteProject = async (
     const { user } = await userRequired();
     await verifyAccess(user.id, workspaceId, projectId);
 
-    // Fetch project name + all task attachment URLs for UploadThing cleanup
+    
     const project = await db.project.findUnique({
       where: { id: projectId },
       select: {
@@ -83,11 +83,7 @@ export const deleteProject = async (
       await deleteAttachments(allFileUrls);
     }
 
-    // Hard delete — Prisma cascade removes tasks, comments, activities,
-    // projectAccess, documentation, and files automatically
     await db.project.delete({ where: { id: projectId } });
-
-    // Log activity (no projectId since the project is being deleted)
     await db.activity.create({
       data: {
         type: "PROJECT_DELETED",

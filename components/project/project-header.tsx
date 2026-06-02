@@ -1,8 +1,17 @@
+"use client";
+
 import { projectProps } from "@/utils/types";
 import { ProjectAvatar } from "./Project-avatar";
 import { CreateTaskDialog } from "../task/create-task-dialog";
+import { DeleteProjectDialog } from "./delete-project-dialog";
+import { Button } from "../ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
-import { Users } from "lucide-react";
+import { Users, Ellipsis } from "lucide-react";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 export const ProjectHeader = ({ project }: { project: projectProps }) => {
     return (
@@ -53,6 +62,27 @@ export const ProjectHeader = ({ project }: { project: projectProps }) => {
                     </div>
 
                     <CreateTaskDialog project={project} />
+
+                    {/* Project actions menu */}
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          className="h-8 w-8 rounded-md cursor-pointer text-muted-foreground hover:bg-muted"
+                        >
+                          <Ellipsis className="h-4 w-4" />
+                        </Button>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent align="end" className="w-44 p-1">
+                          <DeleteProjectDialog
+                            projectId={project.id}
+                            projectName={project.name}
+                            workspaceId={project.workspaceId}
+                            redirectOnDelete
+                          />
+                      </DropdownMenuContent>
+                    </DropdownMenu>
                 </div>
             </div>
             <div className="border-b border-border" />
