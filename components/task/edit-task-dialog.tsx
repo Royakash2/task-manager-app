@@ -38,8 +38,8 @@ export const EditTaskDialog = ({ task, project }: Props) => {
       title: task.title || "",
       description: task.description || "",
       status: task.status || "TODO",
-      dueDate: task.dueDate ? new Date(task.dueDate) : new Date(),
-      startDate: task.startDate ? new Date(task.startDate) : new Date(),
+      dueDate: task.dueDate ? new Date(task.dueDate) : undefined,
+      startDate: task.startDate ? new Date(task.startDate) : undefined,
       priority: task.priority || "MEDIUM",
       attachments: task.attachments?.map((file) => ({
         name: file.name,

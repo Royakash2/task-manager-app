@@ -42,8 +42,8 @@ export const taskFormSchema = z.object({
     "BACKLOG",
     "IN_REVIEW",
   ]),
-  dueDate: z.date(),
-  startDate: z.date(),
+  dueDate: z.date().optional(),
+  startDate: z.date().optional(),
   priority: z.enum(["LOW", "MEDIUM", "HIGH", "CRITICAL"]),
   attachments: z
     .array(

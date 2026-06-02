@@ -168,7 +168,6 @@ export const TaskFormFields = ({
                     selected={field.value}
                     onSelect={field.onChange}
                     disabled={(date) =>
-                      date < field.value ||
                       date < new Date(new Date().setHours(0, 0, 0, 0))
                     }
                     initialFocus
