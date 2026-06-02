@@ -1,6 +1,6 @@
 "use server";
 
-import { TaskFormValues } from "@/components/task/create-task-dialog";
+import { TaskFormValues } from "@/components/task/task-form-fields";
 import { userRequired } from "../data/user/get-user";
 import { taskFormSchema } from "@/lib/schema";
 import db from "@/lib/db";

@@ -56,7 +56,6 @@ export const ConfirmDeleteDialog = ({
       setOpen(false);
       onSuccessCallback?.();
       toast.success(`${entityName.charAt(0).toUpperCase() + entityName.slice(1)} deleted successfully`);
-      router.refresh();
       if (redirectUrl) {
         router.push(redirectUrl);
       }
