@@ -73,7 +73,7 @@ export const CreateWorkspaceForm = () => {
                                 name='description'
                                 render={({ field }) => (
                                     <FormItem>
-                                        <FormLabel>Bio</FormLabel>
+                                        <FormLabel>Description</FormLabel>
                                         <FormControl>
                                             <Textarea
                                                 placeholder='What is this workspace for?'

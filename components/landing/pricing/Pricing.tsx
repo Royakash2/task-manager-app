@@ -1,4 +1,4 @@
-import { SectionHeader } from "../ui/section-header";
+import { SectionHeader } from "../../ui/section-header";
 import { tiers } from "./pricing.data";
 import { PricingCard } from "./PricingCard";
 

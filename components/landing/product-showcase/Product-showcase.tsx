@@ -3,7 +3,7 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { showcaseTabs } from "./product-showcase.data";
 import { ShowcaseTabContent } from "./ShowcaseTabContent";
-import { SectionHeader } from "../ui/section-header";
+import { SectionHeader } from "../../ui/section-header";
 
 export const ProductShowcase = () => {
   return (

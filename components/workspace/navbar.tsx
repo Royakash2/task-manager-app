@@ -1,4 +1,4 @@
-import { ThemeToggle } from "../theme-toggole";
+import { ThemeToggle } from "../theme-toggle";
 import { Button } from "../ui/button";
 import { Bell } from "lucide-react";
 
