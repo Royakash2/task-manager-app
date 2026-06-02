@@ -5,7 +5,7 @@ import { ColumnDef } from "@tanstack/react-table";
 import { Checkbox } from "../ui/checkbox";
 import Link from "next/link";
 import { Button } from "../ui/button";
-import { ArrowUpDown, EllipsisVertical, Paperclip,  } from "lucide-react";
+import { ArrowUpDown, Ellipsis, Eye, Paperclip,  } from "lucide-react";
 import { ProjectAvatar } from "./Project-avatar";
 import { Badge } from "../ui/badge";
 import { format } from "date-fns";
@@ -180,7 +180,7 @@ const ActionsCell = ({ row }: { row: { original: TaskTableItem } }) => {
       <DropdownMenu open={open} onOpenChange={setOpen}>
         <DropdownMenuTrigger asChild>
           <Button variant={"ghost"} size={"icon"}>
-            <EllipsisVertical className="w-4 h-4" />
+            <Ellipsis className="w-4 h-4" />
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent>
@@ -188,7 +188,7 @@ const ActionsCell = ({ row }: { row: { original: TaskTableItem } }) => {
             <Link
               href={`/workspace/${row.original.project.workspaceId}/projects/${row.original.project.id}/${row.original.id}`}
             >
-              View Task
+             <span className="flex items-center gap-2"><Eye className="w-4 h-4" /> View</span>
             </Link>
           </DropdownMenuItem>
           <DropdownMenuItem asChild onSelect={(e) => e.preventDefault()}>

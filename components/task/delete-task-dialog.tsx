@@ -25,7 +25,7 @@ export const DeleteTaskDialog = ({
   return (
     <ConfirmDeleteDialog
       onDelete={() => softDeleteTask(taskId, workspaceId, projectId)}
-      title="Delete Task"
+      title="Delete"
       description={
         <>
           Are you sure you want to delete <strong>&ldquo;{taskTitle}&rdquo;</strong>? This action cannot be undone.
