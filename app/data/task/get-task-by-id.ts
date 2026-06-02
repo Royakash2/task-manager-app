@@ -51,6 +51,7 @@ export const getTaskById = async (
       task: null,
       comments: [],
       documentation: null,
+      currentUserId: user.id,
     };
   }
 
@@ -63,5 +64,6 @@ export const getTaskById = async (
     task: { ...task, project },
     comments,
     documentation,
+    currentUserId: user.id,
   };
 };

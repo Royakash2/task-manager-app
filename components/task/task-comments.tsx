@@ -13,9 +13,10 @@ import { toast } from 'sonner';
 interface TaskCommentProps {
     taskId: string
     comments: CommentProps[]
+    currentUserId: string
 }
 
-const TaskComments = ({ taskId, comments }: TaskCommentProps) => {
+const TaskComments = ({ taskId, comments, currentUserId }: TaskCommentProps) => {
     const workspaceId = useWorkSpaceId();
     const projectId = useProjectId();
     const [newComment, setNewComment] = useState("")
@@ -82,7 +83,13 @@ const TaskComments = ({ taskId, comments }: TaskCommentProps) => {
                     </div>
                 </div>
                 <div className="pt-2">
-                    <CommentList comments={comments} />
+                    <CommentList
+                      comments={comments}
+                      currentUserId={currentUserId}
+                      workspaceId={workspaceId}
+                      projectId={projectId}
+                      taskId={taskId}
+                    />
                 </div>
             </CardContent>
         </Card>

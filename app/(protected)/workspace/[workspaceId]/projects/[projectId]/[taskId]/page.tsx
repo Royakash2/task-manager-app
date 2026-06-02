@@ -14,7 +14,7 @@ interface TaskDetailPageProps {
 
 const TaskDetailPage = async (props: TaskDetailPageProps) => {
   const { taskId, workspaceId, projectId } = await props.params;
-  const { task, comments, documentation } = await getTaskById(taskId, workspaceId, projectId);
+  const { task, comments, documentation, currentUserId } = await getTaskById(taskId, workspaceId, projectId);
 
   if (!task) redirect("not-found");
 
@@ -26,7 +26,7 @@ const TaskDetailPage = async (props: TaskDetailPageProps) => {
       </div>
      <div className='w-full lg:w-100 lg:overflow-y-auto no-scrollbar'>
       {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
-      <TaskComments taskId={taskId}comments={comments as any}/>
+      <TaskComments taskId={taskId} comments={comments as any} currentUserId={currentUserId} />
      </div>
     </div>
   );

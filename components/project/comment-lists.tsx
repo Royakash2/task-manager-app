@@ -1,34 +1,116 @@
-import { formatDistanceToNow } from "date-fns";
-import { ProfileAvatar } from "../profile-avatar";
-import { CommentProps } from "@/utils/types";
+"use client";
 
-export const CommentList = ({ comments }: { comments: CommentProps[] }) => {
+import { useState } from "react";
+import { toast } from "sonner";
+
+import { CommentProps } from "@/utils/types";
+import { updateComment } from "@/app/actions/comment";
+import { CommentItem } from "./comment-item";
+import { CommentEditForm } from "./comment-edit-form";
+
+interface CommentListProps {
+  comments: CommentProps[];
+  currentUserId?: string;
+  workspaceId?: string;
+  projectId?: string;
+  taskId?: string;
+}
+
+export const CommentList = ({
+  comments,
+  currentUserId,
+  workspaceId,
+  projectId,
+  taskId,
+}: CommentListProps) => {
+  const [editingCommentId, setEditingCommentId] = useState<string | null>(null);
+  const [editContent, setEditContent] = useState("");
+  const [isSaving, setIsSaving] = useState(false);
+
+  const startEditing = (comment: CommentProps) => {
+    setEditingCommentId(comment.id);
+    setEditContent(comment.content);
+  };
+
+  const cancelEditing = () => {
+    setEditingCommentId(null);
+    setEditContent("");
+  };
+
+  const handleSave = async (commentId: string) => {
+    const trimmed = editContent.trim();
+    if (!trimmed || isSaving) return;
+    if (!taskId || !projectId || !workspaceId) return;
+
+    setIsSaving(true);
+    try {
+      const res = await updateComment(
+        commentId,
+        trimmed,
+        taskId,
+        projectId,
+        workspaceId,
+      );
+
+      if (res.success) {
+        setEditingCommentId(null);
+        setEditContent("");
+        toast.success("Comment updated");
+      } else {
+        toast.error(res.error || "Failed to update comment");
+      }
+    } catch {
+      toast.error("Something went wrong. Please try again.");
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent, commentId: string) => {
+    if (e.key === "Enter" && (e.metaKey || e.ctrlKey)) {
+      e.preventDefault();
+      handleSave(commentId);
+    }
+    if (e.key === "Escape") {
+      e.preventDefault();
+      cancelEditing();
+    }
+  };
+
   return (
     <div className="space-y-5">
-      {comments?.map((comment) => (
-        <div key={comment.id} className="flex items-start gap-3">
-          <ProfileAvatar 
-            url={comment.user.image || undefined}
-            name={comment.user.name}
-            numOfChars={2}
-            size="md"
-          />
-        
-          <div className="flex flex-1 flex-col gap-0.5 mt-0.5">
-            <div className="flex items-center gap-2">
-               <span className="font-medium text-sm text-foreground">{comment.user.name}</span>
-               <span className="text-xs text-muted-foreground">
-                 {formatDistanceToNow(new Date(comment.createdAt), {
-                   addSuffix: true,
-                 })}
-               </span>
-            </div>
-            <div>
-               <p className="text-sm text-foreground/90 whitespace-pre-wrap">{comment.content}</p>
-            </div>
+      {comments?.map((comment) => {
+        const isEditing = editingCommentId === comment.id;
+        const isAuthor =
+          !!currentUserId && comment.user.id === currentUserId;
+
+        return (
+          <div key={comment.id}>
+            {isEditing ? (
+              <CommentItem
+                comment={comment}
+                isAuthor={isAuthor}
+                isEditing
+              >
+                <CommentEditForm
+                  initialContent={editContent}
+                  isSaving={isSaving}
+                  onChange={setEditContent}
+                  onSave={() => handleSave(comment.id)}
+                  onCancel={cancelEditing}
+                  onKeyDown={(e) => handleKeyDown(e, comment.id)}
+                />
+              </CommentItem>
+            ) : (
+              <CommentItem
+                comment={comment}
+                isAuthor={isAuthor}
+                onStartEdit={() => startEditing(comment)}
+              />
+            )}
           </div>
-        </div>
-      ))}
+        );
+      })}
     </div>
   );
 };
