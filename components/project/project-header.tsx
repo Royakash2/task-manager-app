@@ -74,7 +74,7 @@ export const ProjectHeader = ({ project }: { project: projectProps }) => {
                           <Ellipsis className="h-4 w-4" />
                         </Button>
                       </DropdownMenuTrigger>
-                      <DropdownMenuContent align="end" className="w-44 p-1">
+                      <DropdownMenuContent align="end" sideOffset={10} className="w-44 p-1">
                           <DeleteProjectDialog
                             projectId={project.id}
                             projectName={project.name}
