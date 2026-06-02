@@ -87,7 +87,7 @@ export const CreateWorkspaceForm = () => {
                             />
 
                             <div className='flex items-center gap-3 w-full'>
-                                <Button type='button' variant="outline" className='flex-1' disabled={pending}>
+                                <Button type='button' variant="outline" className='flex-1' disabled={pending} onClick={() => router.back()}>
                                     cancel
                                 </Button>
                                 <Button type='submit' disabled={pending} className='flex-1'>

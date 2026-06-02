@@ -27,6 +27,7 @@ export const CreateProjectForm = ({
 }: Props) => {
     const workspaceId = useWorkSpaceId();
     const [pending, setPending] = useState(false);
+    const [dialogOpen, setDialogOpen] = useState(false);
     const form = useForm<projectDataType>({
         resolver: zodResolver(projectSchema),
         defaultValues: {
@@ -41,7 +42,8 @@ export const CreateProjectForm = ({
             setPending(true);
             await createProject(data);
             form.reset();
-            toast.success("Project created successfully")
+            toast.success("Project created successfully");
+            setDialogOpen(false);
         }catch(error){
             console.log(error);
             toast.error("Failed to create project")
@@ -51,7 +53,7 @@ export const CreateProjectForm = ({
     }
     return (
         <>
-            <Dialog>
+            <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
                 <Tooltip>
                     <TooltipTrigger asChild>
                         <DialogTrigger asChild>
@@ -141,7 +143,7 @@ export const CreateProjectForm = ({
                                 </div>
 
                                 <div className='flex items-center gap-3 w-full'>
-                                    <Button type='button' variant="outline" className='flex-1 cursor-pointer' disabled={pending}>
+                                    <Button type='button' variant="outline" className='flex-1 cursor-pointer' disabled={pending} onClick={() => setDialogOpen(false)}>
                                         cancel
                                     </Button>
                                     <Button type='submit' disabled={pending} className='flex-1 cursor-pointer'>
