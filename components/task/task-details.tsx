@@ -7,19 +7,23 @@ import { ProfileAvatar } from '../profile-avatar'
 import { Badge } from '../ui/badge'
 import { format } from 'date-fns'
 import { Separator } from '../ui/separator'
-import Image from 'next/image'
+
 import { EditTaskDialog } from './edit-task-dialog'
+import { DeleteTaskDialog } from './delete-task-dialog'
+import { ImageLightboxPreview } from './image-lightbox-preview'
+import DocumentationEditor from './documentation-editor'
 export interface TaskProps {
   task:Task & {
   assigneeTo: User,
   project: projectProps,
   attachments: File[]
-  }
+  },
+  documentation?: { content: string | null } | null,
 }
 
-const TaskDetails = ({ task }: TaskProps) => {
+const TaskDetails = ({ task, documentation }: TaskProps) => {
   return (
-    <Card className=' shadow-none'>
+    <Card className='shadow-none'>
         <CardHeader className='flex flex-col gap-4'>
            <div className='flex flex-wrap justify-between w-full items-center gap-4'>
             <div className='flex items-center gap-2'>
@@ -48,13 +52,23 @@ const TaskDetails = ({ task }: TaskProps) => {
           <div>
             <div className='flex items-center justify-between mb-2'>
               <h4 className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Description</h4>
-              <EditTaskDialog
-                key={new Date().getTime()}
-                task={task}
-                project={task.project}
-              />
+              <div className="flex items-center gap-1">
+                <EditTaskDialog
+                  key={new Date().getTime()}
+                  task={task}
+                  project={task.project}
+                />
+                <DeleteTaskDialog
+                  taskId={task.id}
+                  projectId={task.project.id}
+                  workspaceId={task.project.workspaceId}
+                  taskTitle={task.title}
+                  variant="icon"
+                  redirectOnDelete
+                />
+              </div>
             </div>
-            <p className={`text-sm text-muted-foreground `}>
+            <p className={`text-sm text-muted-foreground/70 `}>
               {task.description || "No description provided for this task."}
             </p>
           </div>
@@ -80,30 +94,22 @@ const TaskDetails = ({ task }: TaskProps) => {
           </div>
           <div>
             <h4 className='text-xs font-semibold uppercase tracking-wide text-muted-foreground mb-4'>Attachments</h4>
-            <div className='grid grid-cols-2 md:grid-cols-3 gap-4'>
-              {task.attachments.map((file: File) => (
-                <div key={file.id} className="relative group cursor-pointer ">
-                  <Image 
-                  src={file.type === "IMAGE" ? file.url : "/pdf.png"}
-                  width={100}
-                  height={100}
-                  alt={file.name}
-                  className='w-full h-32 object-cover rounded-lg '/>
-                  <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity rounded-lg flex items-center justify-center">
-                    <a href={file.url} target="_blank" rel="noopener noreferrer">
-                      <span className="text-white text-sm">View</span>
-                    </a>
-                  </div>
-                </div> 
-              ))}
-            </div>
-            {task.attachments.length === 0 && (
-              <div className="flex items-center h-20">
-                <p className="text-sm italic text-muted-foreground">No attachments found</p>
-              </div>
-            )}
+            <ImageLightboxPreview 
+              images={task.attachments.map((file) => ({
+                id: file.id,
+                name: file.name,
+                url: file.url,
+                type: file.type,
+              }))}
+            />
           </div>
         </CardContent>
+         <DocumentationEditor
+            initialContent={documentation?.content}
+            taskId={task.id}
+            projectId={task.project.id}
+            workspaceId={task.project.workspaceId}
+          />
     </Card>
 
   )

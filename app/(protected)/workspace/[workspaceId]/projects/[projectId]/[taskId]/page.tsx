@@ -14,19 +14,19 @@ interface TaskDetailPageProps {
 
 const TaskDetailPage = async (props: TaskDetailPageProps) => {
   const { taskId, workspaceId, projectId } = await props.params;
-  const { task, comments } = await getTaskById(taskId, workspaceId, projectId);
+  const { task, comments, documentation, currentUserId } = await getTaskById(taskId, workspaceId, projectId);
 
   if (!task) redirect("not-found");
 
   return (
-    <div className='flex flex-col lg:flex-row gap-4  min-h-screen bg-background'>
-      <div className='flex-1'>
+    <div className='flex flex-col lg:flex-row gap-4 lg:h-screen lg:overflow-hidden bg-background'>
+      <div className='flex-1 lg:overflow-y-auto no-scrollbar'>
       {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
-       <TaskDetails task={task as any} />
+       <TaskDetails task={task as any} documentation={documentation} />
       </div>
-     <div className='w-full lg:w-[400px]'>
+     <div className='w-full lg:w-100 lg:overflow-y-auto no-scrollbar'>
       {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
-      <TaskComments taskId={taskId}comments={comments as any}/>
+      <TaskComments taskId={taskId} comments={comments as any} currentUserId={currentUserId} />
      </div>
     </div>
   );

@@ -70,7 +70,7 @@ export default function KanbanBoardContainer({ initialTasks }: { initialTasks: P
 
     return (
         <DragDropContext onDragEnd={onDragEnd}>
-            <div className="flex overflow-x-auto w-full min-h-[calc(100vh-220px)] bg-muted/50 dark:bg-muted/15 border border-border/40 rounded-lg [&::-webkit-scrollbar]:h-2 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:bg-border hover:[&::-webkit-scrollbar-thumb]:bg-muted-foreground/30">
+            <div className="flex overflow-x-auto w-full min-h-[calc(100vh-220px)] dark:bg-muted/15 border border-border/40 rounded-lg [&::-webkit-scrollbar]:h-2 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:bg-border hover:[&::-webkit-scrollbar-thumb]:bg-muted-foreground/30">
                 {columns.map((column) => (
                     <KanbanColumn key={column.id} column={column} />
                 ))}

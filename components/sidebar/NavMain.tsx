@@ -43,9 +43,6 @@ export const NavMain = () => {
 
         <>
         <SidebarGroup>
-            <SidebarGroupLabel>
-                Menu
-            </SidebarGroupLabel>
             <SidebarMenu>
                 {
                     items.map((item) => {

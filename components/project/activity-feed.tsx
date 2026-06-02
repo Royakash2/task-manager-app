@@ -19,11 +19,11 @@ export const ActivityFeed = ({ activities }: ActivityFeedProps) => {
                     />
 
                     <div className="flex flex-col gap-0.5">
-                        <p className="text-xs 2xl:text-sm text-foreground/90 leading-tight">
+                        <p className="text-sm text-foreground/90 leading-tight">
                             <span className="font-semibold text-foreground">{activity.user.name}</span> {""}
                             {activity.description.slice(0, 35)}{activity.description.length > 35 ? ".." : ""}
                         </p>
-                        <span className="text-[10px] sm:text-xs text-muted-foreground font-medium">
+                        <span className="text-sm text-muted-foreground font-medium">
                             {formatDistanceToNow(new Date(activity.createdAt), {
                                 addSuffix: true,
                             })}

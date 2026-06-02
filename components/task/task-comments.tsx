@@ -13,9 +13,10 @@ import { toast } from 'sonner';
 interface TaskCommentProps {
     taskId: string
     comments: CommentProps[]
+    currentUserId: string
 }
 
-const TaskComments = ({ taskId, comments }: TaskCommentProps) => {
+const TaskComments = ({ taskId, comments, currentUserId }: TaskCommentProps) => {
     const workspaceId = useWorkSpaceId();
     const projectId = useProjectId();
     const [newComment, setNewComment] = useState("")
@@ -64,7 +65,7 @@ const TaskComments = ({ taskId, comments }: TaskCommentProps) => {
                 <div className="space-y-3">
                     <Textarea
                         placeholder="Add a comment..."
-                        className="min-h-[100px] resize-none focus-visible:ring-primary/20"
+                        className="min-h-25 resize-none focus-visible:ring-primary/20"
                         value={newComment}
                         onChange={(e) => setNewComment(e.target.value)}
                         onKeyDown={handleKeyDown}
@@ -82,7 +83,13 @@ const TaskComments = ({ taskId, comments }: TaskCommentProps) => {
                     </div>
                 </div>
                 <div className="pt-2">
-                    <CommentList comments={comments} />
+                    <CommentList
+                      comments={comments}
+                      currentUserId={currentUserId}
+                      workspaceId={workspaceId}
+                      projectId={projectId}
+                      taskId={taskId}
+                    />
                 </div>
             </CardContent>
         </Card>

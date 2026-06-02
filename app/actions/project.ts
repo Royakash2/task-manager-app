@@ -1,29 +1,23 @@
 "use server";
 import { projectDataType } from "@/components/project/create-project-form";
 import { userRequired } from "../data/user/get-user";
+import { verifyAccess } from "@/lib/permissions";
 import db from "@/lib/db";
 import { projectSchema } from "@/lib/schema";
+import { revalidatePath } from "next/cache";
+import { deleteAttachments } from "@/utils/file-attachments";
 
 export const createProject = async (data: projectDataType) => {
   const { user } = await userRequired();
-  const workspace = await db.workspace.findUnique({
-    where: { id: data.workspaceId },
-    include: {
-      projects: { select: { id: true } },
-    },
-  });
   const validatedData = projectSchema.parse(data);
+  await verifyAccess(user.id, data.workspaceId);
+
   const workspaceMembers = await db.workspaceMembers.findMany({
     where: {
       workspaceId: data.workspaceId,
     },
   });
-  const isUserMember = workspaceMembers.some(
-    (member) => member.userId === user.id,
-  );
-  if (!isUserMember) {
-    throw new Error("You are not a member of this workspace");
-  }
+
   if (validatedData.membersAccess?.length === 0) {
     validatedData.membersAccess = [user.id];
   } else if (!validatedData.membersAccess?.includes(user.id)) {
@@ -52,4 +46,61 @@ export const createProject = async (data: projectDataType) => {
     },
   });
   return { success: true };
+};
+
+export const deleteProject = async (
+  workspaceId: string,
+  projectId: string,
+) => {
+  try {
+    const { user } = await userRequired();
+    await verifyAccess(user.id, workspaceId, projectId);
+
+    
+    const project = await db.project.findUnique({
+      where: { id: projectId },
+      select: {
+        name: true,
+        tasks: {
+          select: {
+            attachments: {
+              select: { url: true },
+            },
+          },
+        },
+      },
+    });
+
+    if (!project) {
+      return { success: false, error: "Project not found" };
+    }
+
+    // Clean up UploadThing files across all tasks before cascade delete
+    const allFileUrls = project.tasks.flatMap((t) =>
+      t.attachments.map((a) => a.url),
+    );
+    if (allFileUrls.length > 0) {
+      await deleteAttachments(allFileUrls);
+    }
+
+    await db.project.delete({ where: { id: projectId } });
+    await db.activity.create({
+      data: {
+        type: "PROJECT_DELETED",
+        description: `deleted project "${project.name}"`,
+        userId: user.id,
+      },
+    });
+
+    revalidatePath(`/workspace/${workspaceId}`);
+
+    return { success: true };
+  } catch (error) {
+    console.error("Failed to delete project:", error);
+    return {
+      success: false,
+      error:
+        error instanceof Error ? error.message : "Failed to delete project",
+    };
+  }
 };

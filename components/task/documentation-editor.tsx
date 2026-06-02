@@ -1,0 +1,95 @@
+"use client";
+
+import { useState } from "react";
+import { CardContent, CardHeader, CardTitle, CardDescription } from "../ui/card";
+import { Button } from "../ui/button";
+import { saveDocumentation } from "@/app/actions/documentation";
+import { toast } from "sonner";
+import { Loader2, Save } from "lucide-react";
+import Tiptap from "../ui/Tiptap";
+
+interface DocumentationEditorProps {
+  initialContent?: string | null;
+  taskId: string;
+  projectId: string;
+  workspaceId: string;
+}
+
+const DocumentationEditor = ({
+  initialContent = "",
+  taskId,
+  projectId,
+  workspaceId,
+}: DocumentationEditorProps) => {
+  const [content, setContent] = useState(initialContent || "");
+  const [isSaving, setIsSaving] = useState(false);
+  const [hasChanges, setHasChanges] = useState(false);
+
+  const handleChange = (html: string) => {
+    setContent(html);
+    if (!hasChanges) setHasChanges(true);
+  };
+
+  const handleSave = async () => {
+    setIsSaving(true);
+    try {
+      const response = await saveDocumentation(
+        content,
+        taskId,
+        projectId,
+        workspaceId,
+      );
+
+      if (response.success) {
+        setHasChanges(false);
+        toast.success("Documentation saved");
+      } else {
+        toast.error(response.error || "Failed to save documentation");
+      }
+    } catch (error) {
+      toast.error("Something went wrong. Please try again.");
+      console.error(error);
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
+  return (
+    <div className="shadow-none border-muted-foreground/10 pt-10">
+      <CardHeader className="pb-3">
+        <div className="flex items-center justify-between">
+          <div>
+            <CardTitle className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+              Documentation
+            </CardTitle>
+            <CardDescription className="text-xs text-muted-foreground/60 mt-0.5">
+              Write detailed notes and documentation for this task
+            </CardDescription>
+          </div>
+          <Button
+            disabled={isSaving || !hasChanges}
+            onClick={handleSave}
+            size="sm"
+            className="cursor-pointer gap-1.5 text-xs"
+          >
+            {isSaving ? (
+              <Loader2 className="size-3.5 animate-spin" />
+            ) : (
+              <Save className="size-3.5" />
+            )}
+            {isSaving ? "Saving..." : "Save Changes"}
+          </Button>
+        </div>
+      </CardHeader>
+      <CardContent>
+        <Tiptap
+          content={initialContent || undefined}
+          onChange={handleChange}
+          placeholder="Add documentation, notes, or guidelines for this task..."
+        />
+      </CardContent>
+    </div>
+  );
+};
+
+export default DocumentationEditor;

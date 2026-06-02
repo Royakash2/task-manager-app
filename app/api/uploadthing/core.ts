@@ -2,71 +2,54 @@ import { userRequired } from "@/app/data/user/get-user";
 import { createUploadthing, type FileRouter } from "uploadthing/next";
 import { UploadThingError } from "uploadthing/server";
 
+import db from "@/lib/db";
+
 const f = createUploadthing();
 
-// FileRouter for your app, can contain multiple FileRoutes
+// Shared auth middleware — used by all upload routes
+const authMiddleware = async () => {
+  const user = await userRequired();
+  if (!user) throw new UploadThingError("Unauthorized");
+  return { userId: user.user.id };
+};
+
+// Shared handler that pre-registers the uploaded file in the database
+const handleUploadComplete = async ({
+  metadata,
+  file,
+}: {
+  metadata: { userId: string };
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  file: any;
+}) => {
+  console.log("Upload complete for userId:", metadata.userId);
+  const url = file.ufsUrl || file.url;
+  console.log("file url", url);
+
+  try {
+    await db.file.create({
+      data: {
+        name: file.name,
+        url,
+        type: file.name.toLowerCase().endsWith(".pdf") ? "PDF" : "IMAGE",
+      },
+    });
+  } catch (error) {
+    console.error("Failed to pre-register file in database:", error);
+  }
+
+  return { uploadedBy: metadata.userId };
+};
+
 export const ourFileRouter = {
-  // Define as many FileRoutes as you like, each with a unique routeSlug
-  imageUploader: f({
-    image: {
-      /**
-       * For full list of options and defaults, see the File Route API reference
-       * @see https://docs.uploadthing.com/file-routes#route-config
-       */
+  attachmentUploader: f({
+    blob: {
       maxFileSize: "8MB",
       maxFileCount: 3,
     },
   })
-    // Set permissions and file types for this FileRoute
-    .middleware(async ({ req }) => {
-      // This code runs on your server before upload
-      const user = await userRequired();
-
-      // If you throw, the user will not be able to upload
-      if (!user) throw new UploadThingError("Unauthorized");
-
-      // Whatever is returned here is accessible in onUploadComplete as `metadata`
-      return { userId: user.user.id };
-    })
-    .onUploadComplete(async ({ metadata, file }) => {
-      // This code RUNS ON YOUR SERVER after upload
-      console.log("Upload complete for userId:", metadata.userId);
-
-      console.log("file url", file.ufsUrl);
-
-      // !!! Whatever is returned here is sent to the clientside `onClientUploadComplete` callback
-      return { uploadedBy: metadata.userId };
-    }),
-    documentsUploader: f({
-    "application/pdf": {
-      /**
-       * For full list of options and defaults, see the File Route API reference
-       * @see https://docs.uploadthing.com/file-routes#route-config
-       */
-      maxFileSize: "1MB",
-      maxFileCount: 3,
-    },
-  })
-    // Set permissions and file types for this FileRoute
-    .middleware(async ({ req }) => {
-      // This code runs on your server before upload
-      const user = await userRequired();
-
-      // If you throw, the user will not be able to upload
-      if (!user) throw new UploadThingError("Unauthorized");
-
-      // Whatever is returned here is accessible in onUploadComplete as `metadata`
-      return { userId: user.user.id };
-    })
-    .onUploadComplete(async ({ metadata, file }) => {
-      // This code RUNS ON YOUR SERVER after upload
-      console.log("Upload complete for userId:", metadata.userId);
-
-      console.log("file url", file.ufsUrl);
-
-      // !!! Whatever is returned here is sent to the clientside `onClientUploadComplete` callback
-      return { uploadedBy: metadata.userId };
-    }),
+    .middleware(authMiddleware)
+    .onUploadComplete(handleUploadComplete),
 } satisfies FileRouter;
 
 export type OurFileRouter = typeof ourFileRouter;

@@ -1,5 +1,6 @@
 import db from "@/lib/db";
 import { userRequired } from "../user/get-user";
+import { verifyAccess } from "@/lib/permissions";
 
 export const getTaskById = async (
   taskId: string,
@@ -8,36 +9,14 @@ export const getTaskById = async (
 ) => {
   const { user } = await userRequired();
 
-  const isUserMember = await db.workspaceMembers.findUnique({
-    where: {
-      userId_workspaceId: {
-        userId: user.id,
-        workspaceId,
-      },
-    },
-  });
+  await verifyAccess(user.id, workspaceId, projectId);
 
-  if (!isUserMember) throw new Error("You are not a member of this workspace");
-
-  const projectAccess = await db.projectAccess.findUnique({
-    where: {
-      workspaceMemberId_projectId: {
-        workspaceMemberId: isUserMember.id,
-        projectId,
-      },
-    },
-  });
-
-  if (!projectAccess) {
-    throw new Error("You are not allowed to view this project");
-  }
-
-  const [task, comments] = await Promise.all([
-    db.task.findUnique({
-      where: { id: taskId },
+  const [task, comments, documentation] = await Promise.all([
+    db.task.findFirst({
+      where: { id: taskId, deletedAt: null },
       include: {
         assigneeTo: { select: { id: true, name: true, image: true } },
-        attachments: { select: { id: true, name: true, url: true } },
+        attachments: { select: { id: true, name: true, url: true, type: true } },
         project: {
           include: {
             projectAccess: {
@@ -61,12 +40,18 @@ export const getTaskById = async (
       include: { user: { select: { id: true, name: true, image: true } } },
       orderBy: { createdAt: "desc" },
     }),
+
+    db.documentation.findUnique({
+      where: { taskId },
+    }),
   ]);
 
   if (!task) {
     return {
       task: null,
       comments: [],
+      documentation: null,
+      currentUserId: user.id,
     };
   }
 
@@ -78,5 +63,7 @@ export const getTaskById = async (
   return {
     task: { ...task, project },
     comments,
+    documentation,
+    currentUserId: user.id,
   };
 };

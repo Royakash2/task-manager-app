@@ -1,28 +1,19 @@
 import db from "@/lib/db";
 import { userRequired } from "../user/get-user";
+import { verifyAccess } from "@/lib/permissions";
 import { TaskStatus } from "@prisma/client";
 
 export const getProjectDetails = async (workspaceId: string, projectId: string) => {
     try {
         const { user } = await userRequired()
-        const [isUserMember, totalWorkspaceMembers] = await Promise.all([
-            db.workspaceMembers.findUnique({
-                where: {
-                    userId_workspaceId: {
-                        userId: user.id,
-                        workspaceId
-                    }
-                }
-            }),
-            db.workspaceMembers.count({
-                where: {
-                    workspaceId
-                }
-            })
-        ])
-        if (!isUserMember) {
-            throw new Error("You are not a member of this workspace")
-        }
+
+        await verifyAccess(user.id, workspaceId, projectId);
+
+        const totalWorkspaceMembers = await db.workspaceMembers.count({
+            where: {
+                workspaceId
+            }
+        })
 
         const [project, comments] = await Promise.all([
             db.project.findUnique({
@@ -46,6 +37,7 @@ export const getProjectDetails = async (workspaceId: string, projectId: string) 
                         }
                     },
                     tasks: {
+                        where: { deletedAt: null },
                         include: {
                             assigneeTo: {
                                 select: {

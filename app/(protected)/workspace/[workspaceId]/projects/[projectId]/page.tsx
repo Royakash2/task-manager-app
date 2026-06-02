@@ -1,5 +1,6 @@
 import { getProjectDetails } from '@/app/data/project/get-project-details';
 import KanbanBoardContainer from '@/components/project/kanban-board-container';
+import { ProjectHeader } from '@/components/project/project-header';
 import ProjectDashboard from '@/components/project/project-dashboard';
 import { ProjectTableContainer } from '@/components/project/project-table-container';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -17,9 +18,10 @@ const ProjectPage = async (props: ProjectPageProps) => {
     const { project, tasks, activities, totalWorkspaceMembers, comments } = await getProjectDetails(workspaceId, projectId)
     return (
         <div className='flex flex-col pb-3 px-3'>
+            <ProjectHeader project={project as projectProps} />
             <Tabs defaultValue={(searchParams.view as string) || 'Dashboard'}
             className='w-full'>
-                <TabsList>
+                <TabsList className='mt-4'>
                     <Link href={`?view=Dashboard`}>
                       <TabsTrigger className='px-1.5 md:px-3' value='Dashboard'>Dashboard</TabsTrigger>
                     </Link>

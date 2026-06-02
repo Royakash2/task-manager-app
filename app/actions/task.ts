@@ -1,12 +1,13 @@
 "use server";
 
-import { TaskFormValues } from "@/components/task/create-task-dialog";
+import { TaskFormValues } from "@/components/task/task-form-fields";
 import { userRequired } from "../data/user/get-user";
 import { taskFormSchema } from "@/lib/schema";
 import db from "@/lib/db";
 import { TaskStatus } from "@prisma/client";
 import { revalidatePath } from "next/cache";
-import { verifyProjectAccess } from "@/lib/permissions";
+import { verifyAccess } from "@/lib/permissions";
+import { syncTaskAttachments, deleteAttachments } from "@/utils/file-attachments";
 
 export const createTask = async (
   data: TaskFormValues,
@@ -17,7 +18,7 @@ export const createTask = async (
     const { user } = await userRequired();
     const validatedData = taskFormSchema.parse(data);
 
-    await verifyProjectAccess(user.id, workspaceId, projectId);
+    await verifyAccess(user.id, workspaceId, projectId);
 
     const lastTask = await db.task.findFirst({
       where: { projectId, status: data.status },
@@ -26,7 +27,7 @@ export const createTask = async (
 
     const position = lastTask ? lastTask.position + 1000 : 1000;
 
-    await db.task.create({
+    const newTask = await db.task.create({
       data: {
         title: validatedData.title,
         description: validatedData.description,
@@ -38,10 +39,10 @@ export const createTask = async (
         priority: validatedData.priority,
         position,
       },
-      include: {
-        project: true,
-      },
     });
+
+    // Link pre-registered Uploadthing files or create fallbacks
+    await syncTaskAttachments(newTask.id, projectId, validatedData.attachments || []);
 
     await db.activity.create({
       data: {
@@ -58,6 +59,57 @@ export const createTask = async (
   } catch (error) {
     console.error("Failed to create task:", error);
     return { success: false, error: error instanceof Error ? error.message : "Failed to create task" };
+  }
+};
+
+export const softDeleteTask = async (
+  taskId: string,
+  workspaceId: string,
+  projectId: string,
+) => {
+  try {
+    const { user } = await userRequired();
+
+    await verifyAccess(user.id, workspaceId, projectId);
+
+    const existingTask = await db.task.findUnique({
+      where: { id: taskId },
+      include: {
+        attachments: true,
+      },
+    });
+
+    if (!existingTask) {
+      return { success: false, error: "Task not found" };
+    }
+
+    // Clean up UploadThing files
+    if (existingTask.attachments.length > 0) {
+      await deleteAttachments(existingTask.attachments.map((f) => f.url));
+    }
+
+    // Soft delete — set deletedAt
+    await db.task.update({
+      where: { id: taskId },
+      data: { deletedAt: new Date() },
+    });
+
+    await db.activity.create({
+      data: {
+        type: "TASK_DELETED",
+        description: `deleted task "${existingTask.title}"`,
+        projectId,
+        userId: user.id,
+      },
+    });
+
+    revalidatePath(`/workspace/${workspaceId}/projects/${projectId}`);
+    revalidatePath(`/workspace/${workspaceId}/projects/${projectId}/${taskId}`);
+
+    return { success: true };
+  } catch (error) {
+    console.error("Failed to delete task:", error);
+    return { success: false, error: error instanceof Error ? error.message : "Failed to delete task" };
   }
 };
 
@@ -83,7 +135,7 @@ export const updateTaskPosition = async (
 
     if (!currentTask) return { success: false, error: "Task not found" };
 
-    await verifyProjectAccess(user.id, currentTask.project.workspaceId, currentTask.projectId);
+    await verifyAccess(user.id, currentTask.project.workspaceId, currentTask.projectId);
 
     await db.task.update({
       where: { id: taskId },
@@ -97,6 +149,7 @@ export const updateTaskPosition = async (
       where: {
         status: newStatus as TaskStatus,
         projectId: currentTask.projectId,
+        deletedAt: null,
       },
       orderBy: { position: "asc" },
     });
@@ -138,12 +191,13 @@ export const updateTaskDetails = async (
     const { user } = await userRequired();
     const validatedData = taskFormSchema.parse(data);
 
-    const existingTask = await db.task.findUnique({
-      where: { id: taskId },
+    const existingTask = await db.task.findFirst({
+      where: { id: taskId, deletedAt: null },
       include: {
         project: {
           select: { workspaceId: true },
         },
+        attachments: true,
       },
     });
 
@@ -151,8 +205,19 @@ export const updateTaskDetails = async (
       return { success: false, error: "Task not found" };
     }
 
-    await verifyProjectAccess(user.id, existingTask.project.workspaceId, existingTask.projectId);
+    await verifyAccess(user.id, existingTask.project.workspaceId, existingTask.projectId);
 
+    const incomingUrls = new Set(validatedData.attachments?.map((file) => file.url) || []);
+
+    const filesToDelete = existingTask.attachments.filter((file) => !incomingUrls.has(file.url));
+    const filesToKeepOrUpdate = (validatedData.attachments || []);
+
+    // 1. Delete files that were removed by the user
+    if (filesToDelete.length > 0) {
+      await deleteAttachments(filesToDelete.map((f) => f.url));
+    }
+
+    // 2. Update core task properties
     await db.task.update({
       where: { id: taskId },
       data: {
@@ -165,6 +230,9 @@ export const updateTaskDetails = async (
         priority: validatedData.priority,
       },
     });
+
+    // 3. Sync remaining/new attachments
+    await syncTaskAttachments(taskId, existingTask.projectId, filesToKeepOrUpdate);
 
     await db.activity.create({
       data: {
@@ -183,4 +251,3 @@ export const updateTaskDetails = async (
     return { success: false, error: error instanceof Error ? error.message : "Failed to update task" };
   }
 };
-

@@ -32,3 +32,18 @@ While building this application for production deployment on Vercel, several com
 ### 4. Prisma Build Output & Kinde Callback Routing
 **Challenge:** Vercel's build instances lacked the generated Prisma Client, and initial Kinde configuration referenced localhost, resulting in `404 NOT_FOUND` errors upon post-login redirects.
 **Solution:** Configured `postinstall: "prisma generate"` within the absolute build stream to dynamically generate SDK typings on Vercel's serverless edge. Synchronized Vercel environment variables securely with strict Kinde Auth callback definitions targeting the exact assigned production domain.
+
+### 5. Orphaned Uploads on Dialog Cancel
+**Challenge:** When a user selected a file in the task creation/editing dialog, UploadThing automatically uploaded it to the cloud immediately. If the user closed the dialog without submitting, the file stayed on the server — orphaned and wasting storage. This also happened when removing an existing attachment in the edit dialog — the file remained on UploadThing's servers.
+**Solution:** Moved uploads from "on file select" to "on form submit":
+
+1. **Custom drag-drop zone** — Replaced `UploadDropzone` (which auto-uploads on selection) with a native `<input type="file">` + drag-drop handler. Files stay local as `URL.createObjectURL()` previews until submission.
+
+2. **Custom hook (`useFileUpload`)** — Extracted all file validation, preview management, and drag state into a reusable hook, keeping the component purely focused on rendering.
+
+3. **Shared utility (`uploadPendingAttachments`)** — Centralized the "upload pending files and merge with existing attachments" logic, removing duplication between create and edit dialogs.
+
+4. **Server-side cleanup** — When a user removes an existing attachment during editing, the corresponding file is also deleted from UploadThing's servers via `UTApi.deleteFiles()`.
+
+**Before:** Files uploaded to cloud on selection → orphaned on cancel.
+**After:** Files stay local as previews → uploaded only on submit → no orphans.
