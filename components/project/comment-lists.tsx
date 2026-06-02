@@ -4,7 +4,7 @@ import { useState } from "react";
 import { toast } from "sonner";
 
 import { CommentProps } from "@/utils/types";
-import { updateComment } from "@/app/actions/comment";
+import { updateComment, deleteComment } from "@/app/actions/comment";
 import { CommentItem } from "./comment-item";
 import { CommentEditForm } from "./comment-edit-form";
 
@@ -66,6 +66,13 @@ export const CommentList = ({
     }
   };
 
+  const handleDelete = async (commentId: string) => {
+    if (!taskId || !projectId || !workspaceId) {
+      return { success: false, error: "Missing route parameters" };
+    }
+    return deleteComment(commentId, taskId, projectId, workspaceId);
+  };
+
   const handleKeyDown = (e: React.KeyboardEvent, commentId: string) => {
     if (e.key === "Enter" && (e.metaKey || e.ctrlKey)) {
       e.preventDefault();
@@ -106,6 +113,7 @@ export const CommentList = ({
                 comment={comment}
                 isAuthor={isAuthor}
                 onStartEdit={() => startEditing(comment)}
+                onDelete={() => handleDelete(comment.id)}
               />
             )}
           </div>

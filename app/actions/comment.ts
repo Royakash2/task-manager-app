@@ -103,3 +103,59 @@ export const updateComment = async (
     };
   }
 };
+
+export const deleteComment = async (
+  commentId: string,
+  taskId: string,
+  projectId: string,
+  workspaceId: string,
+) => {
+  try {
+    const { user } = await userRequired();
+
+    await verifyAccess(user.id, workspaceId, projectId);
+
+    const existingComment = await db.comment.findUnique({
+      where: { id: commentId },
+      select: { userId: true, content: true },
+    });
+
+    if (!existingComment) {
+      throw new Error("Comment not found");
+    }
+
+    if (existingComment.userId !== user.id) {
+      throw new Error("You can only delete your own comments");
+    }
+
+    const [task] = await Promise.all([
+      db.task.findUnique({
+        where: { id: taskId },
+        select: { title: true },
+      }),
+      db.comment.delete({
+        where: { id: commentId },
+      }),
+    ]);
+
+    await db.activity.create({
+      data: {
+        type: "COMMENT_DELETED",
+        description: `deleted a comment on task "${task?.title || "untitled"}"`,
+        projectId,
+        userId: user.id,
+      },
+    });
+
+    revalidatePath(`/workspace/${workspaceId}/projects/${projectId}/${taskId}`);
+
+    return { success: true };
+  } catch (error) {
+    console.error("[DELETE_COMMENT_ERROR]:", error);
+    return {
+      success: false,
+      error:
+        error instanceof Error ? error.message : "An unexpected error occurred",
+    };
+  }
+};

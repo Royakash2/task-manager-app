@@ -38,7 +38,7 @@ export function FilePreviewCard({
         )}
         <div className="flex flex-col min-w-0">
           <span className="text-xs font-medium text-slate-700 dark:text-slate-300 truncate">{name}</span>
-          {isPending && <span className="text-[10px] text-amber-500 font-medium">Pending upload</span>}
+          {/* {isPending && <span className="text-[10px] text-amber-500 font-medium">Pending upload</span>} */}
         </div>
       </div>
       <button

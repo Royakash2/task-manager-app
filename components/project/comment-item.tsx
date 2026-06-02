@@ -4,12 +4,14 @@ import { Pencil } from "lucide-react";
 import { ProfileAvatar } from "../profile-avatar";
 import { CommentProps } from "@/utils/types";
 import { Button } from "../ui/button";
+import { ConfirmDeleteDialog } from "../ui/confirm-delete-dialog";
 
 interface CommentItemProps {
   comment: CommentProps;
   isAuthor: boolean;
   isEditing?: boolean;
   onStartEdit?: () => void;
+  onDelete?: () => Promise<{ success: boolean; error?: string }>;
   children?: React.ReactNode;
 }
 
@@ -18,6 +20,7 @@ export const CommentItem = ({
   isAuthor,
   isEditing = false,
   onStartEdit,
+  onDelete,
   children,
 }: CommentItemProps) => {
   const isEdited =
@@ -50,16 +53,32 @@ export const CommentItem = ({
             </span>
           )}
 
-          {isAuthor && !isEditing && onStartEdit && (
-            <Button
-              variant="ghost"
-              size="icon"
-              className="h-6 w-6 rounded-md opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer text-muted-foreground hover:text-foreground"
-              onClick={onStartEdit}
-              aria-label="Edit comment"
-            >
-              <Pencil className="h-3 w-3" />
-            </Button>
+          {isAuthor && !isEditing && onStartEdit && onDelete && (
+            <>
+              <Button
+                variant="ghost"
+                size="icon"
+                className="h-6 w-6 rounded-md opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer text-muted-foreground hover:text-foreground"
+                onClick={onStartEdit}
+                aria-label="Edit comment"
+              >
+                <Pencil className="h-3 w-3" />
+              </Button>
+
+              <span className="opacity-0 group-hover:opacity-100 transition-opacity">
+                <ConfirmDeleteDialog
+                  onDelete={onDelete}
+                  title="Delete Comment"
+                  description={
+                    <>
+                      Are you sure you want to delete this comment? This action cannot be undone.
+                    </>
+                  }
+                  entityName="comment"
+                  variant="icon"
+                />
+              </span>
+            </>
           )}
         </div>
 
