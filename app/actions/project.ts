@@ -8,44 +8,53 @@ import { revalidatePath } from "next/cache";
 import { deleteAttachments } from "@/utils/file-attachments";
 
 export const createProject = async (data: projectDataType) => {
-  const { user } = await userRequired();
-  const validatedData = projectSchema.parse(data);
-  await verifyAccess(user.id, data.workspaceId);
+  try {
+    const { user } = await userRequired();
+    const validatedData = projectSchema.parse(data);
+    await verifyAccess(user.id, data.workspaceId);
 
-  const workspaceMembers = await db.workspaceMembers.findMany({
-    where: {
-      workspaceId: data.workspaceId,
-    },
-  });
-
-  if (validatedData.membersAccess?.length === 0) {
-    validatedData.membersAccess = [user.id];
-  } else if (!validatedData.membersAccess?.includes(user.id)) {
-    validatedData.membersAccess?.push(user.id);
-  }
-  await db.project.create({
-    data: {
-      name: validatedData.name,
-      description: validatedData.description,
-      workspaceId: validatedData.workspaceId,
-      projectAccess: {
-        create: validatedData.membersAccess?.map((memberId) => ({
-          workspaceMemberId: workspaceMembers.find(
-            (member) => member.userId === memberId,
-          )!.id,
-          hasAccess: true,
-        })),
+    const workspaceMembers = await db.workspaceMembers.findMany({
+      where: {
+        workspaceId: data.workspaceId,
       },
-      activities: {
-        create: {
-          type: "project_created",
-          description: `created Project ${validatedData.name} `,
-          userId: user.id,
+    });
+
+    if (validatedData.membersAccess?.length === 0) {
+      validatedData.membersAccess = [user.id];
+    } else if (!validatedData.membersAccess?.includes(user.id)) {
+      validatedData.membersAccess?.push(user.id);
+    }
+    await db.project.create({
+      data: {
+        name: validatedData.name,
+        description: validatedData.description,
+        workspaceId: validatedData.workspaceId,
+        projectAccess: {
+          create: validatedData.membersAccess?.map((memberId) => ({
+            workspaceMemberId: workspaceMembers.find(
+              (member) => member.userId === memberId,
+            )!.id,
+            hasAccess: true,
+          })),
+        },
+        activities: {
+          create: {
+            type: "project_created",
+            description: `created Project ${validatedData.name} `,
+            userId: user.id,
+          },
         },
       },
-    },
-  });
-  return { success: true };
+    });
+    return { success: true };
+  } catch (error) {
+    console.error("[CREATE_PROJECT_ERROR]:", error);
+    return {
+      success: false,
+      error:
+        error instanceof Error ? error.message : "Failed to create project",
+    };
+  }
 };
 
 export const deleteProject = async (

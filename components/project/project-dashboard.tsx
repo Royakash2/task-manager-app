@@ -2,10 +2,10 @@ import { projectProps, Activity, CommentProps } from '@/utils/types';
 import { Task } from '@prisma/client';
 import React from 'react'
 import { Card } from '../ui/card';
-import TaskDistributionChart from './task-distrubution-chart';
+import TaskDistributionChart from './task-distribution-chart';
 import { ActivityFeed } from './activity-feed';
 import { CommentList } from './comment-lists';
-import { CircleProgress } from './circel-progress';
+import { CircleProgress } from './circle-progress';
 import { History, MessageSquare } from "lucide-react";
 
 

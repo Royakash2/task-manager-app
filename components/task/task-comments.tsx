@@ -57,7 +57,7 @@ const TaskComments = ({ taskId, comments, currentUserId }: TaskCommentProps) => 
     }
 
     return (
-        <Card className="shadow-none border-muted-foreground/10">
+        <Card className="shadow-none">
             <CardHeader className="pb-3">
                 <CardTitle className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Comments</CardTitle>
             </CardHeader>

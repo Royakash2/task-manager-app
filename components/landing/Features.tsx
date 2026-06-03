@@ -3,7 +3,7 @@
 import * as React from "react";
 import { motion, Variants } from "framer-motion";
 import { LayoutDashboard, Users, BarChart3, Shield } from "lucide-react";
-import { SectionHeader } from "./ui/section-header";
+import { SectionHeader } from "../ui/section-header";
 
 
 // Animation variants for the container and items

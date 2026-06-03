@@ -20,10 +20,25 @@ export const createComment = async (
       throw new Error("Comment content cannot be empty");
     }
 
-    const comment = await db.comment.create({
+    const [comment, task] = await Promise.all([
+      db.comment.create({
+        data: {
+          content,
+          taskId,
+          projectId,
+          userId: user.id,
+        },
+      }),
+      db.task.findUnique({
+        where: { id: taskId },
+        select: { title: true },
+      }),
+    ]);
+
+    await db.activity.create({
       data: {
-        content,
-        taskId,
+        type: "COMMENT_CREATED",
+        description: `commented on task "${task?.title || "untitled"}"`,
         projectId,
         userId: user.id,
       },

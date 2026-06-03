@@ -15,10 +15,10 @@ interface ProjectPageProps {
 const ProjectPage = async (props: ProjectPageProps) => {
     const { workspaceId, projectId } = await props.params;
     const searchParams = await props.searchParams;
-    const { project, tasks, activities, totalWorkspaceMembers, comments } = await getProjectDetails(workspaceId, projectId)
+    const result = await getProjectDetails(workspaceId, projectId)
     return (
         <div className='flex flex-col pb-3 px-3'>
-            <ProjectHeader project={project as projectProps} />
+            <ProjectHeader project={result.project as projectProps} />
             <Tabs defaultValue={(searchParams.view as string) || 'Dashboard'}
             className='w-full'>
                 <TabsList className='mt-4'>
@@ -34,12 +34,12 @@ const ProjectPage = async (props: ProjectPageProps) => {
                 </TabsList>
                 <TabsContent value='Dashboard'>
                   <ProjectDashboard
-                  project={project as projectProps}
+                  project={result.project as projectProps}
                  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                 tasks={tasks as any}
-                 activities={activities as Activity[]}
-                 totalWorkspaceMembers={totalWorkspaceMembers!}
-                 comments={comments as CommentProps[]}
+                 tasks={result.tasks as any}
+                 activities={result.activities as Activity[]}
+                 totalWorkspaceMembers={result.totalWorkspaceMembers!}
+                 comments={result.comments as CommentProps[]}
                   />
                 </TabsContent>
                 <TabsContent value='Table'>
@@ -48,7 +48,7 @@ const ProjectPage = async (props: ProjectPageProps) => {
                   />
                 </TabsContent>
                 <TabsContent value='Kanban'>
-                  <KanbanBoardContainer initialTasks={tasks?.items as unknown as ProjectTaskProps[]} />
+                  <KanbanBoardContainer initialTasks={result.tasks?.items as unknown as ProjectTaskProps[]} />
                 </TabsContent>
             </Tabs>
         </div>

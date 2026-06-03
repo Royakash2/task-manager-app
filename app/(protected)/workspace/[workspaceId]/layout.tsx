@@ -15,7 +15,7 @@ const workspaceLayout = async ({ children, params }: Props) => {
   const { workspaceId } = await params;
 
 
-  if (data?.onboardingCompleted && !data?.workspaces) {
+  if (data?.onboardingCompleted && data?.workspaces?.length === 0) {
     redirect("/create-workspace");
   } else if (!data?.onboardingCompleted) {
     redirect("/onboarding");

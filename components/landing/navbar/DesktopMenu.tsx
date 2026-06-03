@@ -1,8 +1,8 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { RegisterLink, LoginLink, LogoutLink } from "@kinde-oss/kinde-auth-nextjs/components";
-import { ThemeToggle } from "../theme-toggole";
-import { Logo } from "../Logo";
+import { ThemeToggle } from "../../theme-toggle";
+import { Logo } from "../../Logo";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   DropdownMenu,

@@ -35,8 +35,8 @@ export const CreateTaskDialog = ({ project }: Props) => {
       title: "",
       description: "",
       status: "TODO",
-      dueDate: new Date(),
-      startDate: new Date(),
+      dueDate: undefined,
+      startDate: undefined,
       priority: "MEDIUM",
       attachments: [],
       assigneeId:""

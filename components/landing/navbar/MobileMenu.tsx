@@ -3,7 +3,7 @@ import { Menu, LogOut, User } from "lucide-react";
 import { Sheet, SheetContent, SheetTrigger, SheetTitle } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
 import { RegisterLink, LoginLink, LogoutLink } from "@kinde-oss/kinde-auth-nextjs/components";
-import { Logo } from "../Logo";
+import { Logo } from "../../Logo";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 import { AuthUser } from "./DesktopMenu";

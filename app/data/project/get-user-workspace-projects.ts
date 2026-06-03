@@ -6,11 +6,11 @@ import { $Enums } from "@prisma/client";
 
 export const getUserWorkspaceProjects = async (workspaceId: string) => {
   try {
-    const user = await userRequired();
+    const { user: kindeUser } = await userRequired();
     const isUserMember = await db.workspaceMembers.findUnique({
       where: {
         userId_workspaceId: {
-          userId: user.user?.id as string,
+          userId: kindeUser.id as string,
           workspaceId,
         },
       },
@@ -25,7 +25,7 @@ export const getUserWorkspaceProjects = async (workspaceId: string) => {
             projectAccess: {
               some: {
                 hasAccess: true,
-                workspaceMember: { userId: user?.user?.id, workspaceId },
+                workspaceMember: { userId: kindeUser.id as string, workspaceId },
               },
             },
           };

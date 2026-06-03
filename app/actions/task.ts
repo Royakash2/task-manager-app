@@ -31,8 +31,8 @@ export const createTask = async (
       data: {
         title: validatedData.title,
         description: validatedData.description,
-        startDate: new Date(validatedData.startDate),
-        dueDate: new Date(validatedData.dueDate),
+        startDate: validatedData.startDate ? new Date(validatedData.startDate) : undefined,
+        dueDate: validatedData.dueDate ? new Date(validatedData.dueDate) : undefined,
         projectId,
         assigneeId: validatedData.assigneeId,
         status: validatedData.status,
@@ -223,8 +223,8 @@ export const updateTaskDetails = async (
       data: {
         title: validatedData.title,
         description: validatedData.description,
-        startDate: new Date(validatedData.startDate),
-        dueDate: new Date(validatedData.dueDate),
+        startDate: validatedData.startDate ? new Date(validatedData.startDate) : undefined,
+        dueDate: validatedData.dueDate ? new Date(validatedData.dueDate) : undefined,
         assigneeId: validatedData.assigneeId,
         status: validatedData.status,
         priority: validatedData.priority,

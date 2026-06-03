@@ -2,20 +2,11 @@ import db from "@/lib/db";
 import { userRequired } from "./get-user";
 
 export const getUserById = async () => {
-  try {
-    const { user } = await userRequired();
-    const data = await db.user.findUnique({
-      where: {
-        id: user?.id,
-      },
-    });
-    return data;
-  } catch (error) {
-    console.log(error);
-    return {
-      success: false,
-      error: true,
-      message: "Failed to get user by id",
-    };
-  }
+  const { user } = await userRequired();
+  const data = await db.user.findUnique({
+    where: {
+      id: user?.id,
+    },
+  });
+  return data;
 };

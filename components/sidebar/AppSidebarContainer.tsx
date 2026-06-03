@@ -13,6 +13,9 @@ export interface AppSidebarDataProps extends User {
 const AppSidebarContainer = async ({ data, workspaceId }: { data: AppSidebarDataProps, workspaceId: string }) => {
     const {projects,workspaceMembers } = await getUserWorkspaceProjects(workspaceId);
     const user = await getUserById();
+    if (!user) {
+      return <div>User not found</div>;
+    }
     return <AppSidebar
         user={user as User}
          data={data}
