@@ -16,22 +16,22 @@ import {
 export const ProjectHeader = ({ project }: { project: projectProps }) => {
     return (
         <div className="flex flex-col">
-            <div className="flex items-start justify-between gap-6 py-4">
+            <div className="flex flex-col sm:flex-row items-start justify-between gap-3 sm:gap-6 py-4">
                 {/* Left: Avatar + Info */}
-                <div className="flex items-center gap-5 min-w-0">
+                <div className="flex items-center gap-4 min-w-0 w-full sm:w-auto">
                     <ProjectAvatar 
                         name={project.name} 
-                        className="size-14 2xl:size-16 rounded-xl shadow-sm shrink-0"
-                        fallbackClassName="text-2xl 2xl:text-3xl font-bold"
+                        className="size-10 sm:size-14 2xl:size-16 rounded-xl shadow-sm shrink-0"
+                        fallbackClassName="text-lg sm:text-2xl 2xl:text-3xl font-bold"
                     />
                     
                     {/* Info */}
                     <div className="min-w-0 flex-1">
-                        <h1 className="text-2xl 2xl:text-3xl font-bold tracking-tight text-foreground leading-tight">
+                        <h1 className="text-xl sm:text-2xl 2xl:text-3xl font-bold tracking-tight text-foreground leading-tight">
                             {project?.name}
                         </h1>
                         {project?.description && (
-                            <p className="text-sm 2xl:text-base text-muted-foreground mt-1.5 max-w-2xl line-clamp-2">
+                            <p className="text-xs sm:text-sm 2xl:text-base text-muted-foreground mt-1 max-w-2xl line-clamp-2">
                                 {project?.description}
                             </p>
                         )}
@@ -39,10 +39,10 @@ export const ProjectHeader = ({ project }: { project: projectProps }) => {
                 </div>
 
                 {/* Right: Members + Action */}
-                <div className="flex items-center gap-5 shrink-0 pt-1">
+                <div className="flex items-center gap-3 sm:gap-5 shrink-0 w-full sm:w-auto">
                     {/* Members */}
-                    <div className="flex items-center gap-3">
-                        <div className="flex -space-x-2">
+                    <div className="flex items-center gap-2 sm:gap-3">
+                        <div className="hidden sm:flex -space-x-2">
                             {project?.members?.slice(0, 5).map((member) => (
                                 <Avatar
                                     key={member.id}
@@ -61,28 +61,30 @@ export const ProjectHeader = ({ project }: { project: projectProps }) => {
                         </div>
                     </div>
 
-                    <CreateTaskDialog project={project} />
+                    <div className="flex items-center gap-3 sm:gap-5 ml-auto">
+                      <CreateTaskDialog project={project} />
 
-                    {/* Project actions menu */}
-                    <DropdownMenu>
-                      <DropdownMenuTrigger asChild>
-                        <Button
-                          variant="ghost"
-                          size="icon"
-                          className="h-8 w-8 rounded-md cursor-pointer text-muted-foreground hover:bg-muted"
-                        >
-                          <Ellipsis className="h-4 w-4" />
-                        </Button>
-                      </DropdownMenuTrigger>
-                      <DropdownMenuContent align="end" sideOffset={10} className="w-44 p-1">
-                          <DeleteProjectDialog
-                            projectId={project.id}
-                            projectName={project.name}
-                            workspaceId={project.workspaceId}
-                            redirectOnDelete
-                          />
-                      </DropdownMenuContent>
-                    </DropdownMenu>
+                      {/* Project actions menu */}
+                      <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            className="h-8 w-8 rounded-md cursor-pointer text-muted-foreground hover:bg-muted"
+                          >
+                            <Ellipsis className="h-4 w-4" />
+                          </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="end" sideOffset={10} className="w-44 p-1">
+                            <DeleteProjectDialog
+                              projectId={project.id}
+                              projectName={project.name}
+                              workspaceId={project.workspaceId}
+                              redirectOnDelete
+                            />
+                        </DropdownMenuContent>
+                      </DropdownMenu>
+                    </div>
                 </div>
             </div>
             <div className="border-b border-border" />

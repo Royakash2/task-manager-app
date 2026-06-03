@@ -58,14 +58,14 @@ export const CommentItem = ({
               <Button
                 variant="ghost"
                 size="icon"
-                className="h-6 w-6 rounded-md opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer text-muted-foreground hover:text-foreground"
+                className="h-6 w-6 rounded-md md:opacity-0 md:group-hover:opacity-100 transition-opacity cursor-pointer text-muted-foreground hover:text-foreground"
                 onClick={onStartEdit}
                 aria-label="Edit comment"
               >
                 <Pencil className="h-3 w-3" />
               </Button>
 
-              <span className="opacity-0 group-hover:opacity-100 transition-opacity">
+              <span className="md:opacity-0 md:group-hover:opacity-100 transition-opacity">
                 <ConfirmDeleteDialog
                   onDelete={onDelete}
                   title="Delete Comment"
