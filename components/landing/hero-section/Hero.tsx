@@ -4,7 +4,6 @@ import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
 import Link from "next/link";
 import Image from "next/image";
 import { ArrowRight } from "lucide-react";
-import { AnimatedBackground } from "@/components/ui/animated-background";
 
 export const Hero = async () => {
   const { isAuthenticated } = getKindeServerSession();
@@ -16,7 +15,7 @@ export const Hero = async () => {
 
       <div className="w-full max-w-7xl mx-auto relative z-10 px-4 md:px-6">
         {/* Animated Particle Network Background */}
-        <AnimatedBackground />
+        {/* <AnimatedBackground /> */}
 
         <div className="text-center">
 
