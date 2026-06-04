@@ -39,6 +39,7 @@ model Workspace {
   ownerId     String
   members     WorkspaceMembers[]
   projects    Project[]
+  activities  Activity[]
   inviteCode  String             @unique
   createdAt   DateTime           @default(now())
   updatedAt   DateTime           @updatedAt
@@ -137,12 +138,15 @@ model Activity {
   description String?
   projectId   String?
   project     Project? @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  workspaceId String?
+  workspace   Workspace? @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
   userId      String
   user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
   @@index([projectId])
+  @@index([workspaceId])
   @@index([userId])
 }
 
