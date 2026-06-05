@@ -4,6 +4,7 @@ import db from "@/lib/db";
 import { userRequired } from "../data/user/get-user";
 import { verifyAccess } from "@/lib/permissions";
 import { revalidatePath } from "next/cache";
+import { actionError } from "@/utils/actions";
 
 export const saveDocumentation = async (
   content: string,
@@ -31,10 +32,6 @@ export const saveDocumentation = async (
     return { success: true, data: doc };
   } catch (error) {
     console.error("[SAVE_DOCUMENTATION_ERROR]:", error);
-    return {
-      success: false,
-      error:
-        error instanceof Error ? error.message : "An unexpected error occurred",
-    };
+    return actionError(error, "An unexpected error occurred");
   }
 };

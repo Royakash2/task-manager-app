@@ -8,6 +8,7 @@ import { TaskStatus } from "@prisma/client";
 import { revalidatePath } from "next/cache";
 import { verifyAccess } from "@/lib/permissions";
 import { syncTaskAttachments, deleteAttachments } from "@/utils/file-attachments";
+import { actionError, logActivity } from "@/utils/actions";
 
 export const createTask = async (
   data: TaskFormValues,
@@ -44,21 +45,19 @@ export const createTask = async (
     // Link pre-registered Uploadthing files or create fallbacks
     await syncTaskAttachments(newTask.id, projectId, validatedData.attachments || []);
 
-    await db.activity.create({
-      data: {
-        type: "TASK_CREATED",
-        description: `created task "${validatedData.title}"`,
-        projectId,
-        userId: user.id,
-      },
-    });
+    await logActivity(
+      "TASK_CREATED",
+      `created task "${validatedData.title}"`,
+      user.id,
+      projectId,
+    );
 
     revalidatePath(`/workspace/${workspaceId}/projects/${projectId}`);
 
     return { success: true };
   } catch (error) {
     console.error("Failed to create task:", error);
-    return { success: false, error: error instanceof Error ? error.message : "Failed to create task" };
+    return actionError(error, "Failed to create task");
   }
 };
 
@@ -94,14 +93,12 @@ export const softDeleteTask = async (
       data: { deletedAt: new Date() },
     });
 
-    await db.activity.create({
-      data: {
-        type: "TASK_DELETED",
-        description: `deleted task "${existingTask.title}"`,
-        projectId,
-        userId: user.id,
-      },
-    });
+    await logActivity(
+      "TASK_DELETED",
+      `deleted task "${existingTask.title}"`,
+      user.id,
+      projectId,
+    );
 
     revalidatePath(`/workspace/${workspaceId}/projects/${projectId}`);
     revalidatePath(`/workspace/${workspaceId}/projects/${projectId}/${taskId}`);
@@ -109,7 +106,7 @@ export const softDeleteTask = async (
     return { success: true };
   } catch (error) {
     console.error("Failed to delete task:", error);
-    return { success: false, error: error instanceof Error ? error.message : "Failed to delete task" };
+    return actionError(error, "Failed to delete task");
   }
 };
 
@@ -164,14 +161,12 @@ export const updateTaskPosition = async (
     await db.$transaction(updates);
 
     if (currentTask.status !== newStatus) {
-      await db.activity.create({
-        data: {
-          type: "TASK_UPDATED",
-          description: `moved task "${currentTask.title}" to ${newStatus.replace("_", " ")}`,
-          projectId: currentTask.projectId,
-          userId: user.id,
-        },
-      });
+      await logActivity(
+        "TASK_UPDATED",
+        `moved task "${currentTask.title}" to ${newStatus.replace("_", " ")}`,
+        user.id,
+        currentTask.projectId,
+      );
     }
 
     revalidatePath(`/workspace/${currentTask.project.workspaceId}/projects/${currentTask.projectId}`);
@@ -179,7 +174,7 @@ export const updateTaskPosition = async (
     return { success: true };
   } catch (error) {
     console.error("Failed to update task position:", error);
-    return { success: false, error: error instanceof Error ? error.message : "Failed to update task position" };
+    return actionError(error, "Failed to update task position");
   }
 };
 
@@ -234,20 +229,18 @@ export const updateTaskDetails = async (
     // 3. Sync remaining/new attachments
     await syncTaskAttachments(taskId, existingTask.projectId, filesToKeepOrUpdate);
 
-    await db.activity.create({
-      data: {
-        type: "TASK_UPDATED",
-        description: `updated task "${validatedData.title}"`,
-        projectId: existingTask.projectId,
-        userId: user.id,
-      },
-    });
+    await logActivity(
+      "TASK_UPDATED",
+      `updated task "${validatedData.title}"`,
+      user.id,
+      existingTask.projectId,
+    );
 
     revalidatePath(`/workspace/${existingTask.project.workspaceId}/projects/${existingTask.projectId}`);
 
     return { success: true };
   } catch (error) {
     console.error("Failed to update task:", error);
-    return { success: false, error: error instanceof Error ? error.message : "Failed to update task" };
+    return actionError(error, "Failed to update task");
   }
 };

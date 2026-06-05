@@ -6,6 +6,7 @@ import db from "@/lib/db";
 import { projectSchema } from "@/lib/schema";
 import { revalidatePath } from "next/cache";
 import { deleteAttachments } from "@/utils/file-attachments";
+import { actionError, logActivity } from "@/utils/actions";
 
 export const createProject = async (data: projectDataType) => {
   try {
@@ -49,11 +50,7 @@ export const createProject = async (data: projectDataType) => {
     return { success: true };
   } catch (error) {
     console.error("[CREATE_PROJECT_ERROR]:", error);
-    return {
-      success: false,
-      error:
-        error instanceof Error ? error.message : "Failed to create project",
-    };
+    return actionError(error, "Failed to create project");
   }
 };
 
@@ -93,23 +90,17 @@ export const deleteProject = async (
     }
 
     await db.project.delete({ where: { id: projectId } });
-    await db.activity.create({
-      data: {
-        type: "PROJECT_DELETED",
-        description: `deleted project "${project.name}"`,
-        userId: user.id,
-      },
-    });
+    await logActivity(
+      "PROJECT_DELETED",
+      `deleted project "${project.name}"`,
+      user.id,
+    );
 
     revalidatePath(`/workspace/${workspaceId}`);
 
     return { success: true };
   } catch (error) {
     console.error("Failed to delete project:", error);
-    return {
-      success: false,
-      error:
-        error instanceof Error ? error.message : "Failed to delete project",
-    };
+    return actionError(error, "Failed to delete project");
   }
 };
