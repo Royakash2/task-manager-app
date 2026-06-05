@@ -52,13 +52,13 @@ export const CommentList = ({
         workspaceId,
       );
 
-      if (res.success) {
-        setEditingCommentId(null);
-        setEditContent("");
-        toast.success("Comment updated");
-      } else {
+      if ("error" in res) {
         toast.error(res.error || "Failed to update comment");
+        return;
       }
+      setEditingCommentId(null);
+      setEditContent("");
+      toast.success("Comment updated");
     } catch {
       toast.error("Something went wrong. Please try again.");
     } finally {

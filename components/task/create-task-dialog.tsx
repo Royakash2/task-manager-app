@@ -39,7 +39,7 @@ export const CreateTaskDialog = ({ project }: Props) => {
       startDate: undefined,
       priority: "MEDIUM",
       attachments: [],
-      assigneeId:""
+      assigneeId: ""
     },
   });
 
@@ -53,7 +53,7 @@ export const CreateTaskDialog = ({ project }: Props) => {
       );
       setPendingFiles([]);
       const res = await createTask({ ...data, attachments: finalAttachments }, project.id, workspaceId);
-      if (res.error) {
+      if ("error" in res) {
         toast.error(res.error);
         return;
       }

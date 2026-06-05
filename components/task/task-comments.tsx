@@ -35,12 +35,12 @@ const TaskComments = ({ taskId, comments, currentUserId }: TaskCommentProps) => 
                 workspaceId
             );
 
-            if (response.success) {
-                setNewComment("");
-                toast.success("Comment posted!");
-            } else {
+            if ("error" in response) {
                 toast.error(response.error || "Failed to post comment");
+                return;
             }
+            setNewComment("");
+            toast.success("Comment posted!");
         } catch (error) {
             toast.error("Something went wrong. Please try again.");
             console.error(error);
@@ -84,11 +84,11 @@ const TaskComments = ({ taskId, comments, currentUserId }: TaskCommentProps) => 
                 </div>
                 <div className="pt-2">
                     <CommentList
-                      comments={comments}
-                      currentUserId={currentUserId}
-                      workspaceId={workspaceId}
-                      projectId={projectId}
-                      taskId={taskId}
+                        comments={comments}
+                        currentUserId={currentUserId}
+                        workspaceId={workspaceId}
+                        projectId={projectId}
+                        taskId={taskId}
                     />
                 </div>
             </CardContent>

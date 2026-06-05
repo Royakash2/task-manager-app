@@ -38,16 +38,20 @@ export const CreateProjectForm = ({
         }
     })
     const handleSubmit = async (data: projectDataType) => {
-        try{
+        try {
             setPending(true);
-            await createProject(data);
+            const result = await createProject(data);
+            if ("error" in result) {
+                toast.error(result.error || "Failed to create project");
+                return;
+            }
             form.reset();
             toast.success("Project created successfully");
             setDialogOpen(false);
-        }catch(error){
+        } catch (error) {
             console.log(error);
             toast.error("Failed to create project")
-        }finally{
+        } finally {
             setPending(false);
         }
     }
@@ -67,91 +71,91 @@ export const CreateProjectForm = ({
                     </TooltipContent>
                 </Tooltip>
                 <DialogContent>
-                        <DialogHeader>
-                            <DialogTitle className='text-2xl font-bold'>Create new Project</DialogTitle>
-                            <DialogDescription>Fill in the details to create a new project and manage member access.</DialogDescription>
-                        </DialogHeader>
+                    <DialogHeader>
+                        <DialogTitle className='text-2xl font-bold'>Create new Project</DialogTitle>
+                        <DialogDescription>Fill in the details to create a new project and manage member access.</DialogDescription>
+                    </DialogHeader>
 
-                        <Form {...form}>
-                            <form onSubmit={form.handleSubmit(handleSubmit)} className='w-full max-w-md space-y-5'>
+                    <Form {...form}>
+                        <form onSubmit={form.handleSubmit(handleSubmit)} className='w-full max-w-md space-y-5'>
+                            <FormField
+                                control={form.control}
+                                name='name'
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>Project Name</FormLabel>
+                                        <FormControl>
+                                            <Input placeholder='Enter project name' {...field} />
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+
+                            <FormField
+                                control={form.control}
+                                name='description'
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>Description</FormLabel>
+                                        <FormControl>
+                                            <Textarea
+                                                placeholder='What is this project for?'
+                                                className='resize-none'
+                                                {...field}
+                                            />
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+                            <div>
                                 <FormField
                                     control={form.control}
-                                    name='name'
+                                    name='membersAccess'
                                     render={({ field }) => (
                                         <FormItem>
-                                            <FormLabel>Project Name</FormLabel>
-                                            <FormControl>
-                                                <Input placeholder='Enter project name' {...field} />
-                                            </FormControl>
-                                            <FormMessage />
-                                        </FormItem>
-                                    )}
-                                />
-
-                                <FormField
-                                    control={form.control}
-                                    name='description'
-                                    render={({ field }) => (
-                                        <FormItem>
-                                            <FormLabel>Description</FormLabel>
-                                            <FormControl>
-                                                <Textarea
-                                                    placeholder='What is this project for?'
-                                                    className='resize-none'
-                                                    {...field}
-                                                />
-                                            </FormControl>
-                                            <FormMessage />
-                                        </FormItem>
-                                    )}
-                                />
-                                <div>
-                                    <FormField
-                                        control={form.control}
-                                        name='membersAccess'
-                                        render={({ field }) => (
-                                            <FormItem>
-                                                <FormLabel>Members Access</FormLabel>
-                                                <div>
-                                                    {workspaceMembers.map((member) => (
-                                                        <div key={member.id} className="flex items-center space-x-2" >
-                                                            <Checkbox
-                                                                id={member.userId}
-                                                                checked={field.value?.includes(member.userId)}
-                                                                onCheckedChange={(checked) => {
-                                                                    const currentValue = field.value || [];
-                                                                    if (checked) {
-                                                                        field.onChange([...currentValue, member.userId]);
-                                                                    } else {
-                                                                        field.onChange(currentValue.filter((id) => id !== member.userId));
-                                                                    }
-                                                                }}
-                                                            />
-                                                            <label className="font-medium text-sm leading-none peer-disabled:cursor-not-allowed
+                                            <FormLabel>Members Access</FormLabel>
+                                            <div>
+                                                {workspaceMembers.map((member) => (
+                                                    <div key={member.id} className="flex items-center space-x-2" >
+                                                        <Checkbox
+                                                            id={member.userId}
+                                                            checked={field.value?.includes(member.userId)}
+                                                            onCheckedChange={(checked) => {
+                                                                const currentValue = field.value || [];
+                                                                if (checked) {
+                                                                    field.onChange([...currentValue, member.userId]);
+                                                                } else {
+                                                                    field.onChange(currentValue.filter((id) => id !== member.userId));
+                                                                }
+                                                            }}
+                                                        />
+                                                        <label className="font-medium text-sm leading-none peer-disabled:cursor-not-allowed
                                                              cursor-pointer capitalize" htmlFor={member.userId}>
-                                                                {member.user.name} ({member.accessLevel.toLowerCase()})</label>
-                                                        </div>
-                                                    ))}
+                                                            {member.user.name} ({member.accessLevel.toLowerCase()})</label>
+                                                    </div>
+                                                ))}
 
-                                                </div>
-                                                <FormMessage />
-                                            </FormItem>
+                                            </div>
+                                            <FormMessage />
+                                        </FormItem>
 
-                                        )}
+                                    )}
 
-                                    />
-                                </div>
+                                />
+                            </div>
 
-                                <div className='flex items-center gap-3 w-full'>
-                                    <Button type='button' variant="outline" className='flex-1 cursor-pointer' disabled={pending} onClick={() => setDialogOpen(false)}>
-                                        cancel
-                                    </Button>
-                                    <Button type='submit' disabled={pending} className='flex-1 cursor-pointer'>
-                                        {pending ? "Creating..." : "Create Project"}
-                                    </Button>
-                                </div>
-                            </form>
-                        </Form>
+                            <div className='flex items-center gap-3 w-full'>
+                                <Button type='button' variant="outline" className='flex-1 cursor-pointer' disabled={pending} onClick={() => setDialogOpen(false)}>
+                                    cancel
+                                </Button>
+                                <Button type='submit' disabled={pending} className='flex-1 cursor-pointer'>
+                                    {pending ? "Creating..." : "Create Project"}
+                                </Button>
+                            </div>
+                        </form>
+                    </Form>
 
                 </DialogContent>
             </Dialog>

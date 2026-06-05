@@ -47,6 +47,8 @@ export const createProject = async (data: projectDataType) => {
         },
       },
     });
+
+    revalidatePath(`/workspace/${data.workspaceId}`);
     return { success: true };
   } catch (error) {
     console.error("[CREATE_PROJECT_ERROR]:", error);
@@ -54,15 +56,11 @@ export const createProject = async (data: projectDataType) => {
   }
 };
 
-export const deleteProject = async (
-  workspaceId: string,
-  projectId: string,
-) => {
+export const deleteProject = async (workspaceId: string, projectId: string) => {
   try {
     const { user } = await userRequired();
     await verifyAccess(user.id, workspaceId, projectId);
 
-    
     const project = await db.project.findUnique({
       where: { id: projectId },
       select: {
