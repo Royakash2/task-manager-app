@@ -41,7 +41,7 @@ export const createWorkspace = async (data: WorkspaceData) => {
       },
     });
 
-    return { data: res };
+    return { success: true, data: res };
   } catch (error) {
     console.log(error);
 

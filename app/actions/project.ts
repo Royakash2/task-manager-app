@@ -38,15 +38,16 @@ export const createProject = async (data: projectDataType) => {
             hasAccess: true,
           })),
         },
-        activities: {
-          create: {
-            type: "project_created",
-            description: `created Project ${validatedData.name} `,
-            userId: user.id,
-          },
-        },
       },
     });
+
+    await logActivity(
+      "project_created",
+      `created Project ${validatedData.name}`,
+      user.id,
+      undefined,
+      validatedData.workspaceId,
+    );
 
     revalidatePath(`/workspace/${data.workspaceId}`);
     return { success: true };

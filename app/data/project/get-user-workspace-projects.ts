@@ -59,9 +59,8 @@ export const getUserWorkspaceProjects = async (workspaceId: string) => {
   } catch (error) {
     console.log(error);
     return {
-      success: false,
-      error: true,  
-      message: "Failed to get workspace project",
+      projects: [],
+      workspaceMembers: [],
     };
   }
 };
