@@ -14,9 +14,10 @@ interface TaskCommentProps {
     taskId: string
     comments: CommentProps[]
     currentUserId: string
+    currentUserRole?: string | null
 }
 
-const TaskComments = ({ taskId, comments, currentUserId }: TaskCommentProps) => {
+const TaskComments = ({ taskId, comments, currentUserId, currentUserRole }: TaskCommentProps) => {
     const workspaceId = useWorkSpaceId();
     const projectId = useProjectId();
     const [newComment, setNewComment] = useState("")
@@ -86,6 +87,7 @@ const TaskComments = ({ taskId, comments, currentUserId }: TaskCommentProps) => 
                     <CommentList
                         comments={comments}
                         currentUserId={currentUserId}
+                        currentUserRole={currentUserRole}
                         workspaceId={workspaceId}
                         projectId={projectId}
                         taskId={taskId}

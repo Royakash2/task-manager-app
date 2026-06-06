@@ -11,11 +11,13 @@ import { ChevronDown, FolderKanban } from "lucide-react"
 
 export const NavProject = ({
     projects,
-    workspaceMembers
+    workspaceMembers,
+    currentUserRole
 }: {
     projects: projectProps[]
     ,
-    workspaceMembers: workspaceMembersProps[]
+    workspaceMembers: workspaceMembersProps[],
+    currentUserRole: string | null
 }) => {
     const { isMobile, setOpenMobile } = useSidebar();
     const pathName = usePathname();
@@ -30,7 +32,9 @@ export const NavProject = ({
                                 <ChevronDown className="size-3.5 transition-transform duration-200 group-data-[state=closed]/collapsible:-rotate-90" />
                                 Projects
                             </span>
-                            <CreateProjectForm workspaceMembers={workspaceMembers} />
+                            {currentUserRole !== "MEMBER" && (
+                              <CreateProjectForm workspaceMembers={workspaceMembers} />
+                            )}
                         </SidebarGroupLabel>
                     </CollapsibleTrigger>
                     <CollapsibleContent>

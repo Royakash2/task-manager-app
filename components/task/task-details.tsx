@@ -19,9 +19,10 @@ export interface TaskProps {
   attachments: File[]
   },
   documentation?: { content: string | null } | null,
+  currentUserRole?: string | null,
 }
 
-const TaskDetails = ({ task, documentation }: TaskProps) => {
+const TaskDetails = ({ task, documentation, currentUserRole }: TaskProps) => {
   return (
     <Card className='shadow-none'>
         <CardHeader className='flex flex-col gap-4'>
@@ -58,6 +59,7 @@ const TaskDetails = ({ task, documentation }: TaskProps) => {
                   task={task}
                   project={task.project}
                 />
+                {currentUserRole !== "MEMBER" && (
                 <DeleteTaskDialog
                   taskId={task.id}
                   projectId={task.project.id}
@@ -66,6 +68,7 @@ const TaskDetails = ({ task, documentation }: TaskProps) => {
                   variant="icon"
                   redirectOnDelete
                 />
+                )}
               </div>
             </div>
             <p className={`text-sm text-muted-foreground/70 `}>

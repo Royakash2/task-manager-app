@@ -12,6 +12,7 @@ interface CommentItemProps {
   isEditing?: boolean;
   onStartEdit?: () => void;
   onDelete?: () => Promise<{ success: boolean; error?: string }>;
+  currentUserRole?: string | null;
   children?: React.ReactNode;
 }
 
@@ -21,6 +22,7 @@ export const CommentItem = ({
   isEditing = false,
   onStartEdit,
   onDelete,
+  currentUserRole,
   children,
 }: CommentItemProps) => {
   const isEdited =
@@ -53,8 +55,9 @@ export const CommentItem = ({
             </span>
           )}
 
-          {isAuthor && !isEditing && onStartEdit && onDelete && (
+          {((isAuthor || currentUserRole === "OWNER" || currentUserRole === "ADMIN") && !isEditing && onDelete) && (
             <>
+              {isAuthor && onStartEdit && (
               <Button
                 variant="ghost"
                 size="icon"
@@ -64,6 +67,7 @@ export const CommentItem = ({
               >
                 <Pencil className="h-3 w-3" />
               </Button>
+              )}
 
               <span className="md:opacity-0 md:group-hover:opacity-100 transition-opacity">
                 <ConfirmDeleteDialog

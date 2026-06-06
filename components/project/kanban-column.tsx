@@ -7,18 +7,10 @@ import { cn } from "@/lib/utils"
 
 interface KanbanColumnProps {
     column: Column;
+    isViewer?: boolean;
 }
 
-// const statusColors: Record<string, string> = {
-//     TODO: "bg-[#94a3b8]",
-//     IN_PROGRESS: "bg-[#a3a3a3]",
-//     IN_REVIEW: "bg-[#9ca3af]",
-//     BACKLOG: "bg-[#b0b0b0]",
-//     COMPLETED: "bg-[#86a89a]",
-//     BLOCKED: "bg-[#bfa0a0]",
-// }
-
-export default function KanbanColumn({ column }: KanbanColumnProps) {
+export default function KanbanColumn({ column, isViewer }: KanbanColumnProps) {
     return (
         <div className={cn(
             "flex-1 min-w-[200px]",
@@ -52,6 +44,7 @@ export default function KanbanColumn({ column }: KanbanColumnProps) {
                                 key={task.id}
                                 task={task}
                                 index={index}
+                                isDragDisabled={isViewer}
                             />
                         ))}
                         {provided.placeholder}

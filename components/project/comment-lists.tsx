@@ -11,6 +11,7 @@ import { CommentEditForm } from "./comment-edit-form";
 interface CommentListProps {
   comments: CommentProps[];
   currentUserId?: string;
+  currentUserRole?: string | null;
   workspaceId?: string;
   projectId?: string;
   taskId?: string;
@@ -19,6 +20,7 @@ interface CommentListProps {
 export const CommentList = ({
   comments,
   currentUserId,
+  currentUserRole,
   workspaceId,
   projectId,
   taskId,
@@ -97,6 +99,7 @@ export const CommentList = ({
               <CommentItem
                 comment={comment}
                 isAuthor={isAuthor}
+                currentUserRole={currentUserRole}
                 isEditing
               >
                 <CommentEditForm
@@ -112,6 +115,7 @@ export const CommentList = ({
               <CommentItem
                 comment={comment}
                 isAuthor={isAuthor}
+                currentUserRole={currentUserRole}
                 onStartEdit={() => startEditing(comment)}
                 onDelete={() => handleDelete(comment.id)}
               />
