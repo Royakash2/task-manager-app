@@ -25,7 +25,7 @@ export const InviteMemberDialog = ({ isOwner }: InviteMemberDialogProps) => {
   const workspaceId = useWorkSpaceId();
   const [open, setOpen] = useState(false);
   const [email, setEmail] = useState("");
-  const [role, setRole] = useState<"MEMBER" | "VIEWER">("VIEWER");
+  const [role, setRole] = useState<"ADMIN" | "MEMBER">("MEMBER");
   const [pending, setPending] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -42,7 +42,7 @@ export const InviteMemberDialog = ({ isOwner }: InviteMemberDialogProps) => {
       if (result.success) {
         toast.success(`${result.data?.name} has been invited as ${role.toLowerCase()}`);
         setEmail("");
-        setRole("VIEWER");
+        setRole("MEMBER");
         setOpen(false);
       } else {
         toast.error(result.error || "Failed to invite member");
@@ -109,15 +109,15 @@ export const InviteMemberDialog = ({ isOwner }: InviteMemberDialogProps) => {
                 <input
                   type="radio"
                   name="role"
-                  value="VIEWER"
-                  checked={role === "VIEWER"}
-                  onChange={() => setRole("VIEWER")}
+                  value="ADMIN"
+                  checked={role === "ADMIN"}
+                  onChange={() => setRole("ADMIN")}
                   className="size-4 accent-primary"
                 />
                 <div className="flex flex-col">
-                  <span className="text-sm font-medium">Viewer</span>
+                  <span className="text-sm font-medium">Admin</span>
                   <span className="text-xs text-muted-foreground">
-                    Can view projects and tasks (read-only)
+                    Manage workspace, projects & members
                   </span>
                 </div>
               </label>

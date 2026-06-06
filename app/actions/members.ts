@@ -3,20 +3,25 @@
 import db from "@/lib/db";
 import { userRequired } from "../data/user/get-user";
 import { inviteMemberSchema, updateMemberRoleSchema } from "@/lib/schema";
-import { requireOwner } from "@/lib/permissions";
+import { getUserRole, requireOwner, requireRole } from "@/lib/permissions";
 import { getMemberWithUser } from "../data/members/get-member-with-user";
 import { revalidatePath } from "next/cache";
 import { actionError, logActivity } from "@/utils/actions";
 
 export const inviteMember = async (
   workspaceId: string,
-  data: { email: string; role: "MEMBER" | "VIEWER" },
+  data: { email: string; role: "ADMIN" | "MEMBER" },
 ) => {
   try {
     const { user } = await userRequired();
-    await requireOwner(user.id, workspaceId);
+    await requireRole(user.id, workspaceId, "OWNER", "ADMIN");
 
     const validated = inviteMemberSchema.parse(data);
+
+    // ADMIN can only invite as MEMBER, not ADMIN
+    if (validated.role === "ADMIN") {
+      await requireOwner(user.id, workspaceId);
+    }
 
     const invitedUser = await db.user.findUnique({
       where: { email: validated.email },
@@ -83,7 +88,7 @@ export const inviteMember = async (
 export const updateMemberRole = async (
   workspaceId: string,
   memberId: string,
-  newRole: "MEMBER" | "VIEWER",
+  newRole: "ADMIN" | "MEMBER",
 ) => {
   try {
     const { user } = await userRequired();
@@ -139,7 +144,7 @@ export const updateMemberRole = async (
 export const removeMember = async (workspaceId: string, memberId: string) => {
   try {
     const { user } = await userRequired();
-    await requireOwner(user.id, workspaceId);
+    await requireRole(user.id, workspaceId, "OWNER", "ADMIN");
 
     const member = await getMemberWithUser(memberId);
 
@@ -161,6 +166,17 @@ export const removeMember = async (workspaceId: string, memberId: string) => {
         success: false,
         error: "Cannot remove a workspace owner.",
       };
+    }
+
+    // ADMIN can only remove MEMBERs, not other ADMINs
+    if (member.accessLevel === "ADMIN") {
+      const actorRole = await getUserRole(user.id, workspaceId);
+      if (actorRole !== "OWNER") {
+        return {
+          success: false,
+          error: "Only workspace owners can remove admins.",
+        };
+      }
     }
 
     await db.$transaction([

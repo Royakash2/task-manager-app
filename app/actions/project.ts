@@ -1,7 +1,7 @@
 "use server";
 import { projectDataType } from "@/components/project/create-project-form";
 import { userRequired } from "../data/user/get-user";
-import { verifyAccess } from "@/lib/permissions";
+import { requireRole } from "@/lib/permissions";
 import db from "@/lib/db";
 import { projectSchema } from "@/lib/schema";
 import { revalidatePath } from "next/cache";
@@ -12,7 +12,7 @@ export const createProject = async (data: projectDataType) => {
   try {
     const { user } = await userRequired();
     const validatedData = projectSchema.parse(data);
-    await verifyAccess(user.id, data.workspaceId);
+    await requireRole(user.id, data.workspaceId, "OWNER", "ADMIN");
 
     const workspaceMembers = await db.workspaceMembers.findMany({
       where: {
@@ -60,7 +60,7 @@ export const createProject = async (data: projectDataType) => {
 export const deleteProject = async (workspaceId: string, projectId: string) => {
   try {
     const { user } = await userRequired();
-    await verifyAccess(user.id, workspaceId, projectId);
+    await requireRole(user.id, workspaceId, "OWNER", "ADMIN");
 
     const project = await db.project.findUnique({
       where: { id: projectId },

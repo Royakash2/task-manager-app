@@ -73,6 +73,34 @@ export const requireRole = async (
   }
 };
 
+/** Checks if a MEMBER can access a task (must be creator or assignee). OWNER/ADMIN always pass. */
+export const requireTaskAccess = async (
+  userId: string,
+  taskId: string,
+  workspaceId: string,
+) => {
+  const role = await getUserRole(userId, workspaceId);
+
+  if (!role) throw new Error("You are not a member of this workspace.");
+
+  // OWNER and ADMIN can access any task
+  if (role === "OWNER" || role === "ADMIN") return;
+
+  // MEMBER must be the creator or assignee
+  const task = await db.task.findUnique({
+    where: { id: taskId },
+    select: { createdById: true, assigneeId: true },
+  });
+
+  if (!task) throw new Error("Task not found.");
+
+  if (task.createdById !== userId && task.assigneeId !== userId) {
+    throw new Error(
+      "You can only access tasks you created or are assigned to.",
+    );
+  }
+};
+
 /** Ensures the user is a workspace OWNER. */
 export const requireOwner = async (userId: string, workspaceId: string) => {
   const membership = await db.workspaceMembers.findUnique({
@@ -89,3 +117,16 @@ export const requireOwner = async (userId: string, workspaceId: string) => {
 
   return membership;
 };
+
+/** MEMBER can only assign tasks to themselves or leave unassigned. */
+export async function enforceAssigneeRestriction(
+  userId: string,
+  workspaceId: string,
+  submittedAssigneeId: string | null | undefined,
+): Promise<string | null | undefined> {
+  if (!submittedAssigneeId || submittedAssigneeId === userId) return submittedAssigneeId;
+
+  const role = await getUserRole(userId, workspaceId);
+
+  return role === "MEMBER" ? undefined : submittedAssigneeId;
+}

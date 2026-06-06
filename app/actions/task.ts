@@ -6,7 +6,7 @@ import { taskFormSchema } from "@/lib/schema";
 import db from "@/lib/db";
 import { TaskStatus } from "@prisma/client";
 import { revalidatePath } from "next/cache";
-import { verifyAccess } from "@/lib/permissions";
+import { requireRole, requireTaskAccess, verifyAccess, enforceAssigneeRestriction } from "@/lib/permissions";
 import { syncTaskAttachments, deleteAttachments } from "@/utils/file-attachments";
 import { actionError, logActivity } from "@/utils/actions";
 
@@ -28,6 +28,10 @@ export const createTask = async (
 
     const position = lastTask ? lastTask.position + 1000 : 1000;
 
+    const assigneeId = await enforceAssigneeRestriction(
+      user.id, workspaceId, validatedData.assigneeId,
+    );
+
     const newTask = await db.task.create({
       data: {
         title: validatedData.title,
@@ -35,10 +39,11 @@ export const createTask = async (
         startDate: validatedData.startDate ? new Date(validatedData.startDate) : undefined,
         dueDate: validatedData.dueDate ? new Date(validatedData.dueDate) : undefined,
         projectId,
-        assigneeId: validatedData.assigneeId,
+        assigneeId,
         status: validatedData.status,
         priority: validatedData.priority,
         position,
+        createdById: user.id,
       },
     });
 
@@ -69,6 +74,7 @@ export const softDeleteTask = async (
   try {
     const { user } = await userRequired();
 
+    await requireRole(user.id, workspaceId, "OWNER", "ADMIN");
     await verifyAccess(user.id, workspaceId, projectId);
 
     const existingTask = await db.task.findUnique({
@@ -133,6 +139,8 @@ export const updateTaskPosition = async (
     if (!currentTask) return { success: false, error: "Task not found" };
 
     await verifyAccess(user.id, currentTask.project.workspaceId, currentTask.projectId);
+
+    await requireTaskAccess(user.id, taskId, currentTask.project.workspaceId);
 
     await db.task.update({
       where: { id: taskId },
@@ -200,7 +208,7 @@ export const updateTaskDetails = async (
       return { success: false, error: "Task not found" };
     }
 
-    await verifyAccess(user.id, existingTask.project.workspaceId, existingTask.projectId);
+    await requireTaskAccess(user.id, taskId, existingTask.project.workspaceId);
 
     const incomingUrls = new Set(validatedData.attachments?.map((file) => file.url) || []);
 
@@ -212,6 +220,10 @@ export const updateTaskDetails = async (
       await deleteAttachments(filesToDelete.map((f) => f.url));
     }
 
+    const assigneeId = await enforceAssigneeRestriction(
+      user.id, existingTask.project.workspaceId, validatedData.assigneeId,
+    );
+
     // 2. Update core task properties
     await db.task.update({
       where: { id: taskId },
@@ -220,7 +232,7 @@ export const updateTaskDetails = async (
         description: validatedData.description,
         startDate: validatedData.startDate ? new Date(validatedData.startDate) : undefined,
         dueDate: validatedData.dueDate ? new Date(validatedData.dueDate) : undefined,
-        assigneeId: validatedData.assigneeId,
+        assigneeId,
         status: validatedData.status,
         priority: validatedData.priority,
       },

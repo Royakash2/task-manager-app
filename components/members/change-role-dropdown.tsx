@@ -42,7 +42,7 @@ export const ChangeRoleDropdown = ({
       const result = await updateMemberRole(
         workspaceId,
         memberId,
-        newRole as "MEMBER" | "VIEWER",
+        newRole as "ADMIN" | "MEMBER",
       );
       if (!result.success) {
         setRole(role); // revert
@@ -83,11 +83,11 @@ export const ChangeRoleDropdown = ({
               </span>
             </div>
           </DropdownMenuRadioItem>
-          <DropdownMenuRadioItem value="VIEWER" className="cursor-pointer">
+          <DropdownMenuRadioItem value="ADMIN" className="cursor-pointer">
             <div className="flex flex-col">
-              <span className="text-sm">Viewer</span>
+              <span className="text-sm">Admin</span>
               <span className="text-xs text-muted-foreground">
-                Read-only
+                Manage workspace & projects
               </span>
             </div>
           </DropdownMenuRadioItem>
