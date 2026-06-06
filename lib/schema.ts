@@ -58,11 +58,11 @@ export const taskFormSchema = z.object({
 
 export const inviteMemberSchema = z.object({
   email: z.string().email("Invalid email address"),
-  role: z.enum(["MEMBER", "VIEWER"]),
+  role: z.enum(["ADMIN", "MEMBER"]),
 });
 
 export const updateMemberRoleSchema = z.object({
   memberId: z.string().min(1),
-  newRole: z.enum(["MEMBER", "VIEWER"]),
+  newRole: z.enum(["ADMIN", "MEMBER"]),
 });
 

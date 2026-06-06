@@ -23,7 +23,8 @@ model User {
   country             String
   workspaces          WorkspaceMembers[]
   image               String?
-  tasks               Task[]
+  tasks               Task[]             @relation("TaskAssignee")
+  createdTasks        Task[]             @relation("TaskCreator")
   activities          Activity[]
   comments            Comment[]
   subscription        Subscription?
@@ -47,8 +48,8 @@ model Workspace {
 
 enum AccessLevel {
   OWNER
+  ADMIN
   MEMBER
-  VIEWER
 }
 
 model WorkspaceMembers {
@@ -123,7 +124,9 @@ model Task {
   projectId   String
   project     Project      @relation(fields: [projectId], references: [id], onDelete: Cascade)
   assigneeId  String?
-  assigneeTo  User?        @relation(fields: [assigneeId], references: [id], onDelete: SetNull)
+  assigneeTo  User?        @relation("TaskAssignee", fields: [assigneeId], references: [id], onDelete: SetNull)
+  createdById String?
+  createdBy   User?        @relation("TaskCreator", fields: [createdById], references: [id], onDelete: SetNull)
   attachments File[]
   documentation Documentation?
   comments    Comment[]
