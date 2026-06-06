@@ -18,10 +18,10 @@ import { inviteMember } from "@/app/actions/members";
 import { useWorkSpaceId } from "@/hooks/UseWorkspaceId";
 
 interface InviteMemberDialogProps {
-  isOwner: boolean;
+  currentUserRole: string | null;
 }
 
-export const InviteMemberDialog = ({ isOwner }: InviteMemberDialogProps) => {
+export const InviteMemberDialog = ({ currentUserRole }: InviteMemberDialogProps) => {
   const workspaceId = useWorkSpaceId();
   const [open, setOpen] = useState(false);
   const [email, setEmail] = useState("");
@@ -55,7 +55,10 @@ export const InviteMemberDialog = ({ isOwner }: InviteMemberDialogProps) => {
     }
   };
 
-  if (!isOwner) return null;
+  const canManage = currentUserRole === "OWNER" || currentUserRole === "ADMIN";
+  const isOwner = currentUserRole === "OWNER";
+
+  if (!canManage) return null;
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -105,6 +108,7 @@ export const InviteMemberDialog = ({ isOwner }: InviteMemberDialogProps) => {
                   </span>
                 </div>
               </label>
+              {isOwner && (
               <label className="flex items-center gap-3 p-3 rounded-md border border-border hover:bg-accent/50 cursor-pointer transition-colors">
                 <input
                   type="radio"
@@ -121,6 +125,7 @@ export const InviteMemberDialog = ({ isOwner }: InviteMemberDialogProps) => {
                   </span>
                 </div>
               </label>
+              )}
             </div>
           </div>
 

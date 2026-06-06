@@ -17,6 +17,7 @@ interface MemberRowProps {
   member: WorkspaceMemberProps;
   currentUserId: string;
   currentUserRole: string | null;
+  isOwner: boolean;
   onRemoveOpen: (member: WorkspaceMemberProps) => void;
 }
 
@@ -24,11 +25,16 @@ export const MemberRow = ({
   member,
   currentUserId,
   currentUserRole,
+  isOwner,
   onRemoveOpen,
 }: MemberRowProps) => {
-  const isOwner = currentUserRole === "OWNER";
+  const canManage = currentUserRole === "OWNER" || currentUserRole === "ADMIN";
   const isCurrentUser = member.userId === currentUserId;
   const isOwnerMember = member.accessLevel === "OWNER";
+  const isAdminMember = member.accessLevel === "ADMIN";
+
+  // ADMIN can remove MEMBERs; OWNER can remove ADMINs and MEMBERs
+  const canRemove = canManage && !isCurrentUser && !isOwnerMember && (!isAdminMember || isOwner);
 
   const joinedDate = new Date(member.createdAt).toLocaleDateString("en-US", {
     month: "short",
@@ -58,7 +64,7 @@ export const MemberRow = ({
             )}
           </span>
           <Badge
-            variant={member.accessLevel as "OWNER" | "MEMBER" | "VIEWER"}
+            variant={member.accessLevel as "OWNER" | "ADMIN" | "MEMBER"}
             className="text-[10px] px-1.5 py-0 h-4"
           >
             {member.accessLevel}
@@ -74,14 +80,17 @@ export const MemberRow = ({
         Joined {joinedDate}
       </span>
 
-      {/* Actions — only for non-OWNER, non-self members viewed by an OWNER */}
-      {!isOwnerMember && isOwner && !isCurrentUser && (
+      {/* Actions */}
+      {canRemove && (
         <div className="flex items-center gap-1 shrink-0">
-          <ChangeRoleDropdown
-            memberId={member.id}
-            currentRole={member.accessLevel}
-            isOwner={isOwner}
-          />
+          {/* Only OWNER can change roles */}
+          {isOwner && !isOwnerMember && (
+            <ChangeRoleDropdown
+              memberId={member.id}
+              currentRole={member.accessLevel}
+              isOwner={isOwner}
+            />
+          )}
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button

@@ -28,6 +28,7 @@ export const MembersPageClient = ({
   const workspaceId = useWorkSpaceId();
 
   const isOwner = currentUserRole === "OWNER";
+  const canManage = currentUserRole === "OWNER" || currentUserRole === "ADMIN";
 
   const filtered = members.filter((m) => {
     const q = search.toLowerCase();
@@ -75,7 +76,7 @@ export const MembersPageClient = ({
             Manage and invite workspace members
           </p>
         </div>
-        <InviteMemberDialog isOwner={isOwner} />
+        <InviteMemberDialog currentUserRole={currentUserRole} />
       </div>
 
       {/* Search */}
@@ -99,6 +100,7 @@ export const MembersPageClient = ({
                 member={member}
                 currentUserId={currentUserId}
                 currentUserRole={currentUserRole}
+                isOwner={isOwner}
                 onRemoveOpen={setRemoveTarget}
               />
             ))}
