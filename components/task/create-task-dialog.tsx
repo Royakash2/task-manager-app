@@ -9,7 +9,7 @@ import { projectProps } from "@/utils/types";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Form } from "@/components/ui/form";
 import { Button } from "../ui/button";
-import { useWorkSpaceId } from "@/hooks/UseWorkspaceId";
+import { useWorkspaceId } from "@/hooks/use-workspace-id";
 import { Plus } from "lucide-react";
 import { createTask } from "@/app/actions/task";
 import { toast } from "sonner";
@@ -23,7 +23,7 @@ type Props = {
 
 export const CreateTaskDialog = ({ project }: Props) => {
   const [open, setOpen] = useState(false);
-  const workspaceId = useWorkSpaceId();
+  const workspaceId = useWorkspaceId();
   const [pending, setPending] = useState(false);
 
   const [pendingFiles, setPendingFiles] = useState<File[]>([]);

@@ -42,7 +42,7 @@ export const createProject = async (data: projectDataType) => {
     });
 
     await logActivity(
-      "project_created",
+      "PROJECT_CREATED",
       `created Project ${validatedData.name}`,
       user.id,
       undefined,

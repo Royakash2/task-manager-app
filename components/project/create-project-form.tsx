@@ -1,6 +1,6 @@
 'use client'
 
-import { useWorkSpaceId } from "@/hooks/UseWorkspaceId"
+import { useWorkspaceId } from "@/hooks/use-workspace-id"
 import { projectSchema } from "@/lib/schema"
 import { workspaceMembersProps } from "@/utils/types"
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -25,7 +25,7 @@ export type projectDataType = z.infer<typeof projectSchema>
 export const CreateProjectForm = ({
     workspaceMembers
 }: Props) => {
-    const workspaceId = useWorkSpaceId();
+    const workspaceId = useWorkspaceId();
     const [pending, setPending] = useState(false);
     const [dialogOpen, setDialogOpen] = useState(false);
     const form = useForm<projectDataType>({

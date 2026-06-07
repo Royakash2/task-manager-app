@@ -7,9 +7,6 @@ import db from "@/lib/db";
 
 export const createUser = async (data: userDatatype) => {
   const { user } = await userRequired();
-  if (!user) {
-    throw new Error("Unauthorized: User not found");
-  }
   const validateData = userSchema.safeParse(data);
 
   if (!validateData.success) {

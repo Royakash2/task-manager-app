@@ -12,9 +12,6 @@ type WorkspaceData = z.infer<typeof workspaceSchema>;
 export const createWorkspace = async (data: WorkspaceData) => {
   try {
     const { user } = await userRequired();
-    if (!user) {
-      throw new Error("Unauthorized");
-    }
 
     const validateData = workspaceSchema.safeParse(data);
     if (!validateData.success) {
@@ -43,7 +40,7 @@ export const createWorkspace = async (data: WorkspaceData) => {
 
     return { success: true, data: res };
   } catch (error) {
-    console.log(error);
+    console.error(error);
 
     return actionError(error, "Failed to create workspace");
   }

@@ -1,13 +1,13 @@
 'use client'
 
-import { useWorkSpaceId } from "@/hooks/UseWorkspaceId"
-import { SidebarGroup, SidebarGroupLabel, SidebarMenu, SidebarMenuButton, SidebarMenuItem, useSidebar } from "../ui/sidebar"
+import { useWorkspaceId } from "@/hooks/use-workspace-id"
+import { SidebarGroup,  SidebarMenu, SidebarMenuButton, SidebarMenuItem, useSidebar } from "../ui/sidebar"
 import { CheckSquare, LayoutDashboard, Settings, Users } from "lucide-react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 
 export const NavMain = () => {
-    const workspaceId = useWorkSpaceId();
+    const workspaceId = useWorkspaceId();
     const { setOpenMobile } = useSidebar();
 
     const items = [

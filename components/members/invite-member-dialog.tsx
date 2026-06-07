@@ -15,14 +15,14 @@ import {
 import { UserPlus } from "lucide-react";
 import { toast } from "sonner";
 import { inviteMember } from "@/app/actions/members";
-import { useWorkSpaceId } from "@/hooks/UseWorkspaceId";
+import { useWorkspaceId } from "@/hooks/use-workspace-id";
 
 interface InviteMemberDialogProps {
   currentUserRole: string | null;
 }
 
 export const InviteMemberDialog = ({ currentUserRole }: InviteMemberDialogProps) => {
-  const workspaceId = useWorkSpaceId();
+  const workspaceId = useWorkspaceId();
   const [open, setOpen] = useState(false);
   const [email, setEmail] = useState("");
   const [role, setRole] = useState<"ADMIN" | "MEMBER">("MEMBER");

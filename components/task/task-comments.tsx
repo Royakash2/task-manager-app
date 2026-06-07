@@ -2,8 +2,8 @@
 import { CommentProps } from '@/utils/types';
 import React, { useState } from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/card';
-import { useWorkSpaceId } from '@/hooks/UseWorkspaceId';
-import { useProjectId } from '@/hooks/UseProjectId';
+import { useWorkspaceId } from '@/hooks/use-workspace-id';
+import { useProjectId } from '@/hooks/use-project-id';
 import { Textarea } from '../ui/textarea';
 import { Button } from '../ui/button';
 import { CommentList } from '../project/comment-lists';
@@ -18,7 +18,7 @@ interface TaskCommentProps {
 }
 
 const TaskComments = ({ taskId, comments, currentUserId, currentUserRole }: TaskCommentProps) => {
-    const workspaceId = useWorkSpaceId();
+    const workspaceId = useWorkspaceId();
     const projectId = useProjectId();
     const [newComment, setNewComment] = useState("")
     const [isSubmitting, setIsSubmitting] = useState(false)

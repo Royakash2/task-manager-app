@@ -4,7 +4,6 @@ import { userRequired } from "../user/get-user";
 export const getUserWorkspaces = async () => {
   try {
     const { user } = await userRequired();
-    if (!user) return { data: null };
 
     const workspace = await db.user.findUnique({
       where: {
@@ -25,7 +24,7 @@ export const getUserWorkspaces = async () => {
     });
     return { data: workspace };
   } catch (error) {
-    console.log(error);
+    console.error(error);
     return {
         data: null,
       success: false,

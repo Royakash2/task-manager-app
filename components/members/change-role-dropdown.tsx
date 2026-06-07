@@ -14,7 +14,7 @@ import { Button } from "@/components/ui/button";
 import { ChevronDown } from "lucide-react";
 import { toast } from "sonner";
 import { updateMemberRole } from "@/app/actions/members";
-import { useWorkSpaceId } from "@/hooks/UseWorkspaceId";
+import { useWorkspaceId } from "@/hooks/use-workspace-id";
 
 interface ChangeRoleDropdownProps {
   memberId: string;
@@ -27,7 +27,7 @@ export const ChangeRoleDropdown = ({
   currentRole,
   isOwner,
 }: ChangeRoleDropdownProps) => {
-  const workspaceId = useWorkSpaceId();
+  const workspaceId = useWorkspaceId();
   const [role, setRole] = useState(currentRole);
   const [pending, setPending] = useState(false);
 

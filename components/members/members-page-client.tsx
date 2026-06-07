@@ -8,7 +8,7 @@ import { InviteMemberDialog } from "./invite-member-dialog";
 import { RemoveMemberDialog } from "./remove-member-dialog";
 import { Search, Users, AlertCircle } from "lucide-react";
 import type { WorkspaceMemberProps } from "@/utils/types";
-import { useWorkSpaceId } from "@/hooks/UseWorkspaceId";
+import { useWorkspaceId } from "@/hooks/use-workspace-id";
 
 interface MembersPageClientProps {
   members: WorkspaceMemberProps[];
@@ -25,10 +25,10 @@ export const MembersPageClient = ({
 }: MembersPageClientProps) => {
   const [search, setSearch] = useState("");
   const [removeTarget, setRemoveTarget] = useState<WorkspaceMemberProps | null>(null);
-  const workspaceId = useWorkSpaceId();
+  const workspaceId = useWorkspaceId();
 
   const isOwner = currentUserRole === "OWNER";
-  const canManage = currentUserRole === "OWNER" || currentUserRole === "ADMIN";
+  // const canManage = currentUserRole === "OWNER" || currentUserRole === "ADMIN";
 
   const filtered = members.filter((m) => {
     const q = search.toLowerCase();
