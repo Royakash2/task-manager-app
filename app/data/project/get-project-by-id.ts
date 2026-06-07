@@ -1,8 +1,10 @@
 import db from "@/lib/db";
 import { userRequired } from "../user/get-user";
+import { verifyAccess } from "@/lib/permissions";
 
-export const getProjectById = async (projectId: string) => {
-    await userRequired();
+export const getProjectById = async (workspaceId: string, projectId: string) => {
+    const { user } = await userRequired();
+    await verifyAccess(user.id, workspaceId, projectId);
 
     const tasks = await db.task.findMany({
         where: {

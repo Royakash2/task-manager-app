@@ -49,6 +49,7 @@ const ProjectPage = async (props: ProjectPageProps) => {
                 <TabsContent value='Table'>
                   <ProjectTableContainer
                   projectId={projectId}
+                  workspaceId={workspaceId}
                   currentUserRole={currentUserRole}
                   />
                 </TabsContent>

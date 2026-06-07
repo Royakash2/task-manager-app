@@ -75,7 +75,6 @@ export const softDeleteTask = async (
     const { user } = await userRequired();
 
     await requireRole(user.id, workspaceId, "OWNER", "ADMIN");
-    await verifyAccess(user.id, workspaceId, projectId);
 
     const existingTask = await db.task.findUnique({
       where: { id: taskId },
@@ -208,6 +207,7 @@ export const updateTaskDetails = async (
       return { success: false, error: "Task not found" };
     }
 
+    await verifyAccess(user.id, existingTask.project.workspaceId, existingTask.projectId);
     await requireTaskAccess(user.id, taskId, existingTask.project.workspaceId);
 
     const incomingUrls = new Set(validatedData.attachments?.map((file) => file.url) || []);

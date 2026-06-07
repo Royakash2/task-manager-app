@@ -2,7 +2,7 @@
 
 import db from "@/lib/db";
 import { userRequired } from "../data/user/get-user";
-import { requireTaskAccess, verifyAccess } from "@/lib/permissions";
+import { verifyAccess, getUserRole } from "@/lib/permissions";
 import { revalidatePath } from "next/cache";
 import { actionError, logActivity } from "@/utils/actions";
 
@@ -16,7 +16,6 @@ export const createComment = async (
     const { user } = await userRequired();
 
     await verifyAccess(user.id, workspaceId, projectId);
-    await requireTaskAccess(user.id, taskId, workspaceId);
 
     if (!content || content.trim() === "") {
       throw new Error("Comment content cannot be empty");
@@ -64,7 +63,6 @@ export const updateComment = async (
     const { user } = await userRequired();
 
     await verifyAccess(user.id, workspaceId, projectId);
-    await requireTaskAccess(user.id, taskId, workspaceId);
 
     if (!content || content.trim() === "") {
       throw new Error("Comment content cannot be empty");
@@ -120,7 +118,6 @@ export const deleteComment = async (
     const { user } = await userRequired();
 
     await verifyAccess(user.id, workspaceId, projectId);
-    await requireTaskAccess(user.id, taskId, workspaceId);
 
     const existingComment = await db.comment.findUnique({
       where: { id: commentId },
@@ -132,13 +129,10 @@ export const deleteComment = async (
     }
 
     // OWNER and ADMIN can delete any comment; MEMBER can only delete own
-    const role = await db.workspaceMembers.findUnique({
-      where: { userId_workspaceId: { userId: user.id, workspaceId } },
-      select: { accessLevel: true },
-    });
+    const role = await getUserRole(user.id, workspaceId);
 
     if (existingComment.userId !== user.id) {
-      if (!role || (role.accessLevel !== "OWNER" && role.accessLevel !== "ADMIN")) {
+      if (!role || (role !== "OWNER" && role !== "ADMIN")) {
         throw new Error("You can only delete your own comments");
       }
     }
