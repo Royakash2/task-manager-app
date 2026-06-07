@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { taskFormSchema } from "@/lib/schema";
+import { taskFormSchema, type TaskFormValues } from "@/lib/schema";
 import { projectProps } from "@/utils/types";
 
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
@@ -15,7 +15,7 @@ import { createTask } from "@/app/actions/task";
 import { toast } from "sonner";
 import { useUploadThing } from "@/utils/uploadthing";
 import { uploadPendingAttachments } from "@/utils/upload-attachments";
-import { TaskFormValues, TaskFormFields } from "./task-form-fields";
+import { TaskFormFields } from "./task-form-fields";
 
 type Props = {
   project: projectProps;

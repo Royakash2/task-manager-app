@@ -5,7 +5,7 @@ import { SidebarGroup, SidebarGroupLabel, SidebarMenu, SidebarMenuButton, Sideba
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "../ui/collapsible"
 import { usePathname } from "next/navigation"
 import Link from "next/link"
-import { CreateProjectForm } from "../project/create-project-form"
+import { CreateProjectForm } from "../project/create-project-dialog"
 import { ChevronDown, FolderKanban } from "lucide-react"
 
 
@@ -26,17 +26,19 @@ export const NavProject = ({
         <>
             <SidebarGroup>
                 <Collapsible defaultOpen={true} className="group/collapsible">
-                    <CollapsibleTrigger asChild>
-                        <SidebarGroupLabel className="flex justify-between cursor-pointer select-none">
-                            <span className="flex items-center gap-2 text-sm font-semibold text-muted-foreground uppercase">
-                                <ChevronDown className="size-3.5 transition-transform duration-200 group-data-[state=closed]/collapsible:-rotate-90" />
-                                Projects
-                            </span>
-                            {currentUserRole !== "MEMBER" && (
-                              <CreateProjectForm workspaceMembers={workspaceMembers} />
-                            )}
-                        </SidebarGroupLabel>
-                    </CollapsibleTrigger>
+                    <div className="flex items-center justify-between pr-3">
+                        <CollapsibleTrigger asChild>
+                            <SidebarGroupLabel className="cursor-pointer select-none">
+                                <span className="flex items-center gap-2 text-sm font-semibold text-muted-foreground uppercase">
+                                    <ChevronDown className="size-3.5 transition-transform duration-200 group-data-[state=closed]/collapsible:-rotate-90" />
+                                    Projects
+                                </span>
+                            </SidebarGroupLabel>
+                        </CollapsibleTrigger>
+                        {currentUserRole !== "MEMBER" && (
+                            <CreateProjectForm workspaceMembers={workspaceMembers} />
+                        )}
+                    </div>
                     <CollapsibleContent>
                         <SidebarMenu>
                             {
