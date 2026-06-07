@@ -33,6 +33,6 @@ export const saveDocumentation = async (
     return { success: true, data: doc };
   } catch (error) {
     console.error("[SAVE_DOCUMENTATION_ERROR]:", error);
-    return actionError(error, "An unexpected error occurred");
+    return actionError(error, "Failed to create documentation");
   }
 };

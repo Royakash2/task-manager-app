@@ -16,7 +16,7 @@ export const createComment = async (
     const { user } = await userRequired();
 
     await verifyAccess(user.id, workspaceId, projectId);
-    await requireTaskAccess(user.id, taskId, workspaceId);
+    await requireTaskAccess(user.id, taskId, workspaceId, "You can only comment on tasks you created or are assigned to.");
 
     if (!content || content.trim() === "") {
       throw new Error("Comment content cannot be empty");
@@ -49,7 +49,7 @@ export const createComment = async (
     return { success: true, data: comment };
   } catch (error) {
     console.error("[CREATE_COMMENT_ERROR]:", error);
-    return actionError(error, "An unexpected error occurred");
+    return actionError(error, "Failed to create comment");
   }
 };
 
@@ -64,7 +64,7 @@ export const updateComment = async (
     const { user } = await userRequired();
 
     await verifyAccess(user.id, workspaceId, projectId);
-    await requireTaskAccess(user.id, taskId, workspaceId);
+    await requireTaskAccess(user.id, taskId, workspaceId, "You can only comment on tasks you created or are assigned to.");
 
     if (!content || content.trim() === "") {
       throw new Error("Comment content cannot be empty");
@@ -106,7 +106,7 @@ export const updateComment = async (
     return { success: true, data: updatedComment };
   } catch (error) {
     console.error("[UPDATE_COMMENT_ERROR]:", error);
-    return actionError(error, "An unexpected error occurred");
+    return actionError(error, "Failed to update comment");
   }
 };
 
@@ -120,7 +120,7 @@ export const deleteComment = async (
     const { user } = await userRequired();
 
     await verifyAccess(user.id, workspaceId, projectId);
-    await requireTaskAccess(user.id, taskId, workspaceId);
+    await requireTaskAccess(user.id, taskId, workspaceId, "You can only delete comments on tasks you created or are assigned to.");
 
     const existingComment = await db.comment.findUnique({
       where: { id: commentId },
@@ -162,6 +162,6 @@ export const deleteComment = async (
     return { success: true };
   } catch (error) {
     console.error("[DELETE_COMMENT_ERROR]:", error);
-    return actionError(error, "An unexpected error occurred");
+    return actionError(error, "Failed to delete comment");
   }
 };

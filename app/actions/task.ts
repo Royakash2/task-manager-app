@@ -138,7 +138,7 @@ export const updateTaskPosition = async (
     if (!currentTask) return { success: false, error: "Task not found" };
 
     await verifyAccess(user.id, currentTask.project.workspaceId, currentTask.projectId);
-    await requireTaskAccess(user.id, taskId, currentTask.project.workspaceId);
+    await requireTaskAccess(user.id, taskId, currentTask.project.workspaceId, "You can only move tasks you created or are assigned to.");
 
     await db.task.update({
       where: { id: taskId },
@@ -207,7 +207,7 @@ export const updateTaskDetails = async (
     }
 
     await verifyAccess(user.id, existingTask.project.workspaceId, existingTask.projectId);
-    await requireTaskAccess(user.id, taskId, existingTask.project.workspaceId);
+    await requireTaskAccess(user.id, taskId, existingTask.project.workspaceId, "You can only edit tasks you created or are assigned to.");
 
     const incomingUrls = new Set(validatedData.attachments?.map((file) => file.url) || []);
 

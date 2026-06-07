@@ -60,7 +60,7 @@ export const requireRole = async (
   const role = await getUserRole(userId, workspaceId);
 
   if (!role) {
-    throw new Error("You are not a member of this workspace.");
+    throw new Error("You are not a member of this workspace");
   }
 
   if (!allowedRoles.includes(role)) {
@@ -78,10 +78,11 @@ export const requireTaskAccess = async (
   userId: string,
   taskId: string,
   workspaceId: string,
+  customErrorMessage?: string,
 ) => {
   const role = await getUserRole(userId, workspaceId);
 
-  if (!role) throw new Error("You are not a member of this workspace.");
+  if (!role) throw new Error("You are not a member of this workspace");
 
   // OWNER and ADMIN can access any task
   if (role === "OWNER" || role === "ADMIN") return;
@@ -92,11 +93,11 @@ export const requireTaskAccess = async (
     select: { createdById: true, assigneeId: true },
   });
 
-  if (!task) throw new Error("Task not found.");
+  if (!task) throw new Error("Task not found");
 
   if (task.createdById !== userId && task.assigneeId !== userId) {
     throw new Error(
-      "You can only access tasks you created or are assigned to.",
+      customErrorMessage || "You can only access tasks you created or are assigned to",
     );
   }
 };
