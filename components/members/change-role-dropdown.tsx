@@ -79,7 +79,7 @@ export const ChangeRoleDropdown = ({
             <div className="flex flex-col">
               <span className="text-sm">Member</span>
               <span className="text-xs text-muted-foreground">
-                Full access
+                Access assigned tasks only
               </span>
             </div>
           </DropdownMenuRadioItem>

@@ -88,8 +88,6 @@ export const deleteProject = async (workspaceId: string, projectId: string) => {
     if (allFileUrls.length > 0) {
       await deleteAttachments(allFileUrls);
     }
-
-    await db.project.delete({ where: { id: projectId } });
     await logActivity(
       "PROJECT_DELETED",
       `deleted project "${project.name}"`,
@@ -97,6 +95,7 @@ export const deleteProject = async (workspaceId: string, projectId: string) => {
       projectId,
       workspaceId,
     );
+    await db.project.delete({ where: { id: projectId } });
 
     revalidatePath(`/workspace/${workspaceId}`);
 
