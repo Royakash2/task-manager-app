@@ -1,5 +1,5 @@
 "use server";
-import { projectDataType } from "@/components/project/create-project-form";
+import { ProjectData } from "@/components/project/create-project-form";
 import { userRequired } from "../data/user/get-user";
 import { requireRole } from "@/lib/permissions";
 import db from "@/lib/db";
@@ -8,7 +8,7 @@ import { revalidatePath } from "next/cache";
 import { deleteAttachments } from "@/utils/file-attachments";
 import { actionError, logActivity } from "@/utils/actions";
 
-export const createProject = async (data: projectDataType) => {
+export const createProject = async (data: ProjectData) => {
   try {
     const { user } = await userRequired();
     const validatedData = projectSchema.parse(data);
@@ -20,18 +20,20 @@ export const createProject = async (data: projectDataType) => {
       },
     });
 
-    if (validatedData.membersAccess?.length === 0) {
-      validatedData.membersAccess = [user.id];
-    } else if (!validatedData.membersAccess?.includes(user.id)) {
-      validatedData.membersAccess?.push(user.id);
-    }
+    const membersAccess =
+      validatedData.membersAccess?.length === 0
+        ? [user.id]
+        : validatedData.membersAccess?.includes(user.id)
+          ? validatedData.membersAccess
+          : [...(validatedData.membersAccess || []), user.id];
+
     await db.project.create({
       data: {
         name: validatedData.name,
         description: validatedData.description,
         workspaceId: validatedData.workspaceId,
         projectAccess: {
-          create: validatedData.membersAccess?.map((memberId) => ({
+          create: membersAccess?.map((memberId) => ({
             workspaceMemberId: workspaceMembers.find(
               (member) => member.userId === memberId,
             )!.id,
@@ -93,6 +95,8 @@ export const deleteProject = async (workspaceId: string, projectId: string) => {
       "PROJECT_DELETED",
       `deleted project "${project.name}"`,
       user.id,
+      projectId,
+      workspaceId,
     );
 
     revalidatePath(`/workspace/${workspaceId}`);

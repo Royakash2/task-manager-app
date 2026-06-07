@@ -103,19 +103,7 @@ export const requireTaskAccess = async (
 
 /** Ensures the user is a workspace OWNER. */
 export const requireOwner = async (userId: string, workspaceId: string) => {
-  const membership = await db.workspaceMembers.findUnique({
-    where: { userId_workspaceId: { userId, workspaceId } },
-  });
-
-  if (!membership) {
-    throw new Error("You are not a member of this workspace.");
-  }
-
-  if (membership.accessLevel !== "OWNER") {
-    throw new Error("Only workspace owners can perform this action.");
-  }
-
-  return membership;
+  await requireRole(userId, workspaceId, "OWNER");
 };
 
 /** MEMBER can only assign tasks to themselves or leave unassigned. */

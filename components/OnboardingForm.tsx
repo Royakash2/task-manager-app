@@ -24,13 +24,13 @@ interface Props {
 
 }
 
-export type userDatatype = z.infer<typeof userSchema>
+export type UserData = z.infer<typeof userSchema>
 
 export const OnboardingForm = ({ name, email, image }: Props) => {
     const [pending, setPending] = useState(false);
     const router = useRouter();
 
-    const form = useForm<userDatatype>({
+    const form = useForm<UserData>({
         resolver: zodResolver(userSchema), defaultValues: {
             about: '',
             name: name || '',
@@ -41,7 +41,7 @@ export const OnboardingForm = ({ name, email, image }: Props) => {
         }
     })
 
-    const onSubmit = async (data: userDatatype) => {
+    const onSubmit = async (data: UserData) => {
         try {
             setPending(true);
             const response = await createUser(data);

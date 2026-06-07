@@ -1,49 +1,55 @@
 "use server";
 
-import { userDatatype } from "@/components/OnboardingForm";
+import { UserData } from "@/components/OnboardingForm";
 import { userRequired } from "../data/user/get-user";
 import { userSchema } from "@/lib/schema";
 import db from "@/lib/db";
+import { actionError } from "@/utils/actions";
 
-export const createUser = async (data: userDatatype) => {
-  const { user } = await userRequired();
-  const validateData = userSchema.safeParse(data);
+export const createUser = async (data: UserData) => {
+  try {
+    const { user } = await userRequired();
+    const validateData = userSchema.safeParse(data);
 
-  if (!validateData.success) {
-    throw new Error("Invalid data");
-  }
+    if (!validateData.success) {
+      throw new Error("Invalid data");
+    }
 
-  const userData = await db.user.create({
-    data: {
-      id: user.id,
-      email: data.email as string,
-      name: validateData.data.name,
-      about: validateData.data.about,
-      country: validateData.data.country,
-      indrustryType: validateData.data.industryType,
-      role: validateData.data.role,
-      onboardingCompleted: true,
-      image: data.image,
-      subscription: {
-        create: {
-          plan: "FREE",
-          status: "ACTIVE",
-          customerPeriodEnd: new Date(),
-          cancelAtPeriodEnd: false,
+    const userData = await db.user.create({
+      data: {
+        id: user.id,
+        email: data.email as string,
+        name: validateData.data.name,
+        about: validateData.data.about,
+        country: validateData.data.country,
+        indrustryType: validateData.data.industryType,
+        role: validateData.data.role,
+        onboardingCompleted: true,
+        image: data.image,
+        subscription: {
+          create: {
+            plan: "FREE",
+            status: "ACTIVE",
+            customerPeriodEnd: new Date(),
+            cancelAtPeriodEnd: false,
+          },
         },
       },
-    },
-    select:{
-        id:true,
-        name:true,
-        email:true,
-        workspaces:true,
-    }
-  });
+      select:{
+          id:true,
+          name:true,
+          email:true,
+          workspaces:true,
+      }
+    });
 
-  //  Todo send user welcome email
-  if (userData.workspaces.length === 0) {
-    return { success: true, redirectTo: "/create-workspace" } 
+    //  Todo send user welcome email
+    if (userData.workspaces.length === 0) {
+      return { success: true, redirectTo: "/create-workspace" } 
+    }
+    return { success: true, redirectTo: "/workspace" }
+  } catch (error) {
+    console.error("[CREATE_USER_ERROR]:", error);
+    return actionError(error, "Failed to create user");
   }
-  return { success: true, redirectTo: "/workspace" }
 };

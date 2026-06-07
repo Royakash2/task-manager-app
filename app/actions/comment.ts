@@ -2,7 +2,7 @@
 
 import db from "@/lib/db";
 import { userRequired } from "../data/user/get-user";
-import { verifyAccess, getUserRole } from "@/lib/permissions";
+import { verifyAccess, requireTaskAccess, getUserRole } from "@/lib/permissions";
 import { revalidatePath } from "next/cache";
 import { actionError, logActivity } from "@/utils/actions";
 
@@ -16,6 +16,7 @@ export const createComment = async (
     const { user } = await userRequired();
 
     await verifyAccess(user.id, workspaceId, projectId);
+    await requireTaskAccess(user.id, taskId, workspaceId);
 
     if (!content || content.trim() === "") {
       throw new Error("Comment content cannot be empty");
@@ -63,6 +64,7 @@ export const updateComment = async (
     const { user } = await userRequired();
 
     await verifyAccess(user.id, workspaceId, projectId);
+    await requireTaskAccess(user.id, taskId, workspaceId);
 
     if (!content || content.trim() === "") {
       throw new Error("Comment content cannot be empty");
@@ -118,6 +120,7 @@ export const deleteComment = async (
     const { user } = await userRequired();
 
     await verifyAccess(user.id, workspaceId, projectId);
+    await requireTaskAccess(user.id, taskId, workspaceId);
 
     const existingComment = await db.comment.findUnique({
       where: { id: commentId },

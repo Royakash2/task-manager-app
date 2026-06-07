@@ -138,7 +138,6 @@ export const updateTaskPosition = async (
     if (!currentTask) return { success: false, error: "Task not found" };
 
     await verifyAccess(user.id, currentTask.project.workspaceId, currentTask.projectId);
-
     await requireTaskAccess(user.id, taskId, currentTask.project.workspaceId);
 
     await db.task.update({

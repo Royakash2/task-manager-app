@@ -21,14 +21,14 @@ import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip"
 interface Props {
     workspaceMembers: workspaceMembersProps[]
 }
-export type projectDataType = z.infer<typeof projectSchema>
+export type ProjectData = z.infer<typeof projectSchema>
 export const CreateProjectForm = ({
     workspaceMembers
 }: Props) => {
     const workspaceId = useWorkspaceId();
     const [pending, setPending] = useState(false);
     const [dialogOpen, setDialogOpen] = useState(false);
-    const form = useForm<projectDataType>({
+    const form = useForm<ProjectData>({
         resolver: zodResolver(projectSchema),
         defaultValues: {
             name: "",
@@ -37,7 +37,7 @@ export const CreateProjectForm = ({
             membersAccess: []
         }
     })
-    const handleSubmit = async (data: projectDataType) => {
+    const handleSubmit = async (data: ProjectData) => {
         try {
             setPending(true);
             const result = await createProject(data);

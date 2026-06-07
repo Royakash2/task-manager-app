@@ -25,12 +25,6 @@ export const getUserWorkspaces = async () => {
     return { data: workspace };
   } catch (error) {
     console.error(error);
-    return {
-        data: null,
-      success: false,
-      error:true,
-      message: "Failed to fetch workspaces",
-      status: 500,
-    };
+    return { data: null };
   }
 };
