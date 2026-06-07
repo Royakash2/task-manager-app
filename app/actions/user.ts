@@ -1,8 +1,7 @@
 "use server";
 
-import { UserData } from "@/components/OnboardingForm";
 import { userRequired } from "../data/user/get-user";
-import { userSchema } from "@/lib/schema";
+import { userSchema, type UserData } from "@/lib/schema";
 import db from "@/lib/db";
 import { actionError } from "@/utils/actions";
 
@@ -35,19 +34,19 @@ export const createUser = async (data: UserData) => {
           },
         },
       },
-      select:{
-          id:true,
-          name:true,
-          email:true,
-          workspaces:true,
-      }
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        workspaces: true,
+      },
     });
 
     //  Todo send user welcome email
     if (userData.workspaces.length === 0) {
-      return { success: true, redirectTo: "/create-workspace" } 
+      return { success: true, redirectTo: "/create-workspace" };
     }
-    return { success: true, redirectTo: "/workspace" }
+    return { success: true, redirectTo: "/workspace" };
   } catch (error) {
     console.error("[CREATE_USER_ERROR]:", error);
     return actionError(error, "Failed to create user");

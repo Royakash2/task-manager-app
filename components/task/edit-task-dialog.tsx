@@ -1,12 +1,18 @@
-'use client'
+"use client";
 
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { taskFormSchema } from "@/lib/schema";
+import { taskFormSchema, TaskFormValues } from "@/lib/schema";
 import { projectProps } from "@/utils/types";
-
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import { Form } from "@/components/ui/form";
 import { Button } from "../ui/button";
 import { Task, User, File as PrismaFile } from "@prisma/client";
@@ -15,7 +21,7 @@ import { updateTaskDetails } from "@/app/actions/task";
 import { toast } from "sonner";
 import { useUploadThing } from "@/utils/uploadthing";
 import { uploadPendingAttachments } from "@/utils/upload-attachments";
-import { TaskFormValues, TaskFormFields } from "./task-form-fields";
+import { TaskFormFields } from "./task-form-fields";
 
 type Props = {
   task: Task & {
@@ -41,11 +47,12 @@ export const EditTaskDialog = ({ task, project }: Props) => {
       dueDate: task.dueDate ? new Date(task.dueDate) : undefined,
       startDate: task.startDate ? new Date(task.startDate) : undefined,
       priority: task.priority || "MEDIUM",
-      attachments: task.attachments?.map((file) => ({
-        name: file.name,
-        url: file.url,
-        type: file.type,
-      })) || [],
+      attachments:
+        task.attachments?.map((file) => ({
+          name: file.name,
+          url: file.url,
+          type: file.type,
+        })) || [],
       assigneeId: task.assigneeId || "",
     },
   });
@@ -60,7 +67,10 @@ export const EditTaskDialog = ({ task, project }: Props) => {
       );
       setPendingFiles([]);
 
-      const res = await updateTaskDetails(task.id, { ...data, attachments: finalAttachments });
+      const res = await updateTaskDetails(task.id, {
+        ...data,
+        attachments: finalAttachments,
+      });
       if (res.error) {
         toast.error(res.error);
         return;
@@ -78,14 +88,20 @@ export const EditTaskDialog = ({ task, project }: Props) => {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button variant={"ghost"} size="icon" className="h-7 w-7 rounded-md cursor-pointer">
+        <Button
+          variant={"ghost"}
+          size="icon"
+          className="h-7 w-7 rounded-md cursor-pointer"
+        >
           <EditIcon className="w-3.5 h-3.5" />
         </Button>
       </DialogTrigger>
       <DialogContent className="max-h-[95vh] overflow-y-auto no-scrollbar">
         <DialogHeader>
           <DialogTitle>Update Task</DialogTitle>
-          <DialogDescription>Fill in the details below to update the task.</DialogDescription>
+          <DialogDescription>
+            Fill in the details below to update the task.
+          </DialogDescription>
         </DialogHeader>
         <Form {...form}>
           <form
@@ -98,7 +114,11 @@ export const EditTaskDialog = ({ task, project }: Props) => {
               onPendingChange={setPendingFiles}
             />
             <div className="flex justify-end space-x-2">
-              <Button type="submit" disabled={pending} className="cursor-pointer">
+              <Button
+                type="submit"
+                disabled={pending}
+                className="cursor-pointer"
+              >
                 Update
               </Button>
             </div>

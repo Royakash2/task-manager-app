@@ -1,12 +1,18 @@
-'use client'
+"use client";
 
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { taskFormSchema, type TaskFormValues } from "@/lib/schema";
 import { projectProps } from "@/utils/types";
-
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import { Form } from "@/components/ui/form";
 import { Button } from "../ui/button";
 import { useWorkspaceId } from "@/hooks/use-workspace-id";
@@ -39,7 +45,7 @@ export const CreateTaskDialog = ({ project }: Props) => {
       startDate: undefined,
       priority: "MEDIUM",
       attachments: [],
-      assigneeId: ""
+      assigneeId: "",
     },
   });
 
@@ -52,7 +58,11 @@ export const CreateTaskDialog = ({ project }: Props) => {
         startUpload,
       );
       setPendingFiles([]);
-      const res = await createTask({ ...data, attachments: finalAttachments }, project.id, workspaceId);
+      const res = await createTask(
+        { ...data, attachments: finalAttachments },
+        project.id,
+        workspaceId,
+      );
       if ("error" in res) {
         toast.error(res.error);
         return;
@@ -79,7 +89,9 @@ export const CreateTaskDialog = ({ project }: Props) => {
       <DialogContent className="max-h-[95vh] overflow-y-auto no-scrollbar">
         <DialogHeader>
           <DialogTitle>Create Task</DialogTitle>
-          <DialogDescription>Fill in the details below to create a new task.</DialogDescription>
+          <DialogDescription>
+            Fill in the details below to create a new task.
+          </DialogDescription>
         </DialogHeader>
         <Form {...form}>
           <form
@@ -92,7 +104,11 @@ export const CreateTaskDialog = ({ project }: Props) => {
               onPendingChange={setPendingFiles}
             />
             <div className="flex justify-end space-x-2 ">
-              <Button type="submit" disabled={pending} className="cursor-pointer">
+              <Button
+                type="submit"
+                disabled={pending}
+                className="cursor-pointer"
+              >
                 Submit
               </Button>
             </div>

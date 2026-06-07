@@ -1,9 +1,8 @@
 "use server";
-import { ProjectData } from "@/components/project/create-project-form";
 import { userRequired } from "../data/user/get-user";
 import { requireRole } from "@/lib/permissions";
 import db from "@/lib/db";
-import { projectSchema } from "@/lib/schema";
+import { projectSchema, type ProjectData } from "@/lib/schema";
 import { revalidatePath } from "next/cache";
 import { deleteAttachments } from "@/utils/file-attachments";
 import { actionError, logActivity } from "@/utils/actions";

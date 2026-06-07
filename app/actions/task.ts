@@ -1,13 +1,20 @@
 "use server";
 
-import { TaskFormValues } from "@/components/task/task-form-fields";
 import { userRequired } from "../data/user/get-user";
-import { taskFormSchema } from "@/lib/schema";
+import { taskFormSchema, type TaskFormValues } from "@/lib/schema";
 import db from "@/lib/db";
 import { TaskStatus } from "@prisma/client";
 import { revalidatePath } from "next/cache";
-import { requireRole, requireTaskAccess, verifyAccess, enforceAssigneeRestriction } from "@/lib/permissions";
-import { syncTaskAttachments, deleteAttachments } from "@/utils/file-attachments";
+import {
+  requireRole,
+  requireTaskAccess,
+  verifyAccess,
+  enforceAssigneeRestriction,
+} from "@/lib/permissions";
+import {
+  syncTaskAttachments,
+  deleteAttachments,
+} from "@/utils/file-attachments";
 import { actionError, logActivity } from "@/utils/actions";
 
 export const createTask = async (
@@ -29,15 +36,21 @@ export const createTask = async (
     const position = lastTask ? lastTask.position + 1000 : 1000;
 
     const assigneeId = await enforceAssigneeRestriction(
-      user.id, workspaceId, validatedData.assigneeId,
+      user.id,
+      workspaceId,
+      validatedData.assigneeId,
     );
 
     const newTask = await db.task.create({
       data: {
         title: validatedData.title,
         description: validatedData.description,
-        startDate: validatedData.startDate ? new Date(validatedData.startDate) : undefined,
-        dueDate: validatedData.dueDate ? new Date(validatedData.dueDate) : undefined,
+        startDate: validatedData.startDate
+          ? new Date(validatedData.startDate)
+          : undefined,
+        dueDate: validatedData.dueDate
+          ? new Date(validatedData.dueDate)
+          : undefined,
         projectId,
         assigneeId,
         status: validatedData.status,
@@ -48,7 +61,11 @@ export const createTask = async (
     });
 
     // Link pre-registered Uploadthing files or create fallbacks
-    await syncTaskAttachments(newTask.id, projectId, validatedData.attachments || []);
+    await syncTaskAttachments(
+      newTask.id,
+      projectId,
+      validatedData.attachments || [],
+    );
 
     await logActivity(
       "TASK_CREATED",
@@ -125,20 +142,29 @@ export const updateTaskPosition = async (
 
     const currentTask = await db.task.findUnique({
       where: { id: taskId },
-      select: { 
-        projectId: true, 
-        status: true, 
+      select: {
+        projectId: true,
+        status: true,
         title: true,
         project: {
-          select: { workspaceId: true }
-        }
+          select: { workspaceId: true },
+        },
       },
     });
 
     if (!currentTask) return { success: false, error: "Task not found" };
 
-    await verifyAccess(user.id, currentTask.project.workspaceId, currentTask.projectId);
-    await requireTaskAccess(user.id, taskId, currentTask.project.workspaceId, "You can only move tasks you created or are assigned to.");
+    await verifyAccess(
+      user.id,
+      currentTask.project.workspaceId,
+      currentTask.projectId,
+    );
+    await requireTaskAccess(
+      user.id,
+      taskId,
+      currentTask.project.workspaceId,
+      "You can only move tasks you created or are assigned to.",
+    );
 
     await db.task.update({
       where: { id: taskId },
@@ -175,7 +201,9 @@ export const updateTaskPosition = async (
       );
     }
 
-    revalidatePath(`/workspace/${currentTask.project.workspaceId}/projects/${currentTask.projectId}`);
+    revalidatePath(
+      `/workspace/${currentTask.project.workspaceId}/projects/${currentTask.projectId}`,
+    );
 
     return { success: true };
   } catch (error) {
@@ -206,13 +234,26 @@ export const updateTaskDetails = async (
       return { success: false, error: "Task not found" };
     }
 
-    await verifyAccess(user.id, existingTask.project.workspaceId, existingTask.projectId);
-    await requireTaskAccess(user.id, taskId, existingTask.project.workspaceId, "You can only edit tasks you created or are assigned to.");
+    await verifyAccess(
+      user.id,
+      existingTask.project.workspaceId,
+      existingTask.projectId,
+    );
+    await requireTaskAccess(
+      user.id,
+      taskId,
+      existingTask.project.workspaceId,
+      "You can only edit tasks you created or are assigned to.",
+    );
 
-    const incomingUrls = new Set(validatedData.attachments?.map((file) => file.url) || []);
+    const incomingUrls = new Set(
+      validatedData.attachments?.map((file) => file.url) || [],
+    );
 
-    const filesToDelete = existingTask.attachments.filter((file) => !incomingUrls.has(file.url));
-    const filesToKeepOrUpdate = (validatedData.attachments || []);
+    const filesToDelete = existingTask.attachments.filter(
+      (file) => !incomingUrls.has(file.url),
+    );
+    const filesToKeepOrUpdate = validatedData.attachments || [];
 
     // 1. Delete files that were removed by the user
     if (filesToDelete.length > 0) {
@@ -220,7 +261,9 @@ export const updateTaskDetails = async (
     }
 
     const assigneeId = await enforceAssigneeRestriction(
-      user.id, existingTask.project.workspaceId, validatedData.assigneeId,
+      user.id,
+      existingTask.project.workspaceId,
+      validatedData.assigneeId,
     );
 
     // 2. Update core task properties
@@ -229,8 +272,12 @@ export const updateTaskDetails = async (
       data: {
         title: validatedData.title,
         description: validatedData.description,
-        startDate: validatedData.startDate ? new Date(validatedData.startDate) : undefined,
-        dueDate: validatedData.dueDate ? new Date(validatedData.dueDate) : undefined,
+        startDate: validatedData.startDate
+          ? new Date(validatedData.startDate)
+          : undefined,
+        dueDate: validatedData.dueDate
+          ? new Date(validatedData.dueDate)
+          : undefined,
         assigneeId,
         status: validatedData.status,
         priority: validatedData.priority,
@@ -238,7 +285,11 @@ export const updateTaskDetails = async (
     });
 
     // 3. Sync remaining/new attachments
-    await syncTaskAttachments(taskId, existingTask.projectId, filesToKeepOrUpdate);
+    await syncTaskAttachments(
+      taskId,
+      existingTask.projectId,
+      filesToKeepOrUpdate,
+    );
 
     await logActivity(
       "TASK_UPDATED",
@@ -247,7 +298,9 @@ export const updateTaskDetails = async (
       existingTask.projectId,
     );
 
-    revalidatePath(`/workspace/${existingTask.project.workspaceId}/projects/${existingTask.projectId}`);
+    revalidatePath(
+      `/workspace/${existingTask.project.workspaceId}/projects/${existingTask.projectId}`,
+    );
 
     return { success: true };
   } catch (error) {

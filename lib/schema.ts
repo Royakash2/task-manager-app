@@ -51,7 +51,7 @@ export const taskFormSchema = z.object({
         name: z.string(),
         url: z.string(),
         type: z.enum(["IMAGE", "PDF"]),
-      })
+      }),
     )
     .optional(),
 });
@@ -66,3 +66,7 @@ export const updateMemberRoleSchema = z.object({
   newRole: z.enum(["ADMIN", "MEMBER"]),
 });
 
+// Inferred types for use across both server actions and UI components
+export type UserData = z.infer<typeof userSchema>;
+export type ProjectData = z.infer<typeof projectSchema>;
+export type TaskFormValues = z.infer<typeof taskFormSchema>;
