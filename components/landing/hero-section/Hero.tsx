@@ -70,7 +70,7 @@ export const Hero = async () => {
             alt="VelloX Dashboard Preview"
             width={1200}
             height={400}
-            className="w-full h-auto max-h-[600px] object-cover object-top rounded-xl sm:rounded-2xl transform hover:scale-[1.01] transition-transform duration-700 ease-out"
+            className="w-full h-auto max-h-150 object-cover object-top rounded-xl sm:rounded-2xl transform hover:scale-[1.01] transition-transform duration-700 ease-out"
             priority
           />
         </div>
