@@ -79,3 +79,16 @@ export interface Column {
   title: string;
   tasks: ProjectTaskProps[];
 }
+
+export interface WorkspaceMemberProps {
+  id: string;
+  userId: string;
+  accessLevel: string;
+  createdAt: Date;
+  user: {
+    id: string;
+    name: string;
+    email: string;
+    image: string | null;
+  };
+}

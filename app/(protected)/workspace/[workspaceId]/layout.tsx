@@ -25,12 +25,12 @@ const workspaceLayout = async ({ children, params }: Props) => {
      <div className='flex w-full bg-sidebar h-screen'>
       {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
       <AppSidebarContainer data={data as any} workspaceId={workspaceId}/>
-      <main className='w-full overflow-y-auto min-h-screen'>
+      <main className='w-full overflow-y-auto min-h-screen bg-background'>
       <div className='sticky top-0 z-50  border-b flex items-center bg-background'>
         <SidebarTrigger className='px-4 cursor-pointer z-50 '/>
         <WorkspaceNavbar />
       </div>
-      <div className='p-0 md:p-4 pt-2 lg:p-4 bg-background'>
+      <div className='p-0 md:p-4 pt-2 lg:p-4'>
         {children}
         
       </div>

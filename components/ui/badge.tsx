@@ -19,7 +19,7 @@ const badgeVariants = cva(
           "text-foreground [a&]:hover:bg-accent [a&]:hover:text-accent-foreground",
         OWNER: "border-transparent bg-pink-600 text-white hover:bg-pink-600/80",
         MEMBER: "border-transparent bg-blue-600 text-white hover:bg-blue-600/80",
-        VIEWER: "border-transparent bg-gray-600 text-white hover:bg-gray-600/80",
+        ADMIN: "border-transparent bg-amber-600 text-white hover:bg-amber-600/80",
         TODO: "border-transparent bg-blue-600 text-white hover:bg-blue-600/80",
         IN_PROGRESS: "border-transparent bg-yellow-600 text-white hover:bg-yellow-600/80",
         BACKLOG: "border-transparent bg-pink-600 text-white hover:bg-pink-600/80",

@@ -5,15 +5,13 @@ import { userRequired } from "../data/user/get-user";
 import db from "@/lib/db";
 import { z } from "zod";
 import { generateInviteCode } from "@/utils/get-invite-code";
+import { actionError } from "@/utils/actions";
 
 type WorkspaceData = z.infer<typeof workspaceSchema>;
 
 export const createWorkspace = async (data: WorkspaceData) => {
   try {
     const { user } = await userRequired();
-    if (!user) {
-      throw new Error("Unauthorized");
-    }
 
     const validateData = workspaceSchema.safeParse(data);
     if (!validateData.success) {
@@ -40,14 +38,10 @@ export const createWorkspace = async (data: WorkspaceData) => {
       },
     });
 
-    return { data: res};
+    return { success: true, data: res };
   } catch (error) {
-    console.log(error);
+    console.error(error);
 
-    return {
-      status: 500,
-      message: "Failed to create workspace",
-    };
-    
+    return actionError(error, "Failed to create workspace");
   }
 };

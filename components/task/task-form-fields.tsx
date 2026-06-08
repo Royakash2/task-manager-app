@@ -1,12 +1,9 @@
 "use client";
 
-import { z } from "zod";
 import { UseFormReturn } from "react-hook-form";
-import { taskFormSchema } from "@/lib/schema";
 import { TaskPriority } from "@prisma/client";
 import { format } from "date-fns";
 import { CalendarIcon } from "lucide-react";
-
 import { projectProps } from "@/utils/types";
 import {
   FormControl,
@@ -24,14 +21,17 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 import { Calendar } from "@/components/ui/calendar";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { taskStats } from "@/utils";
 import { FileUpload } from "../file-upload";
-
-export type TaskFormValues = z.infer<typeof taskFormSchema>;
+import { TaskFormValues } from "@/lib/schema";
 
 interface TaskFormFieldsProps {
   form: UseFormReturn<TaskFormValues>;
@@ -85,10 +85,7 @@ export const TaskFormFields = ({
           render={({ field }) => (
             <FormItem>
               <FormLabel>Assignee</FormLabel>
-              <Select
-                onValueChange={field.onChange}
-                defaultValue={field.value}
-              >
+              <Select onValueChange={field.onChange} defaultValue={field.value}>
                 <FormControl>
                   <SelectTrigger className="w-full">
                     <SelectValue placeholder="Select assignee" />
@@ -113,10 +110,7 @@ export const TaskFormFields = ({
           render={({ field }) => (
             <FormItem>
               <FormLabel>Priority</FormLabel>
-              <Select
-                onValueChange={field.onChange}
-                defaultValue={field.value}
-              >
+              <Select onValueChange={field.onChange} defaultValue={field.value}>
                 <FormControl>
                   <SelectTrigger className="w-full">
                     <SelectValue placeholder="Select priority" />
@@ -228,10 +222,7 @@ export const TaskFormFields = ({
         render={({ field }) => (
           <FormItem>
             <FormLabel>Status</FormLabel>
-            <Select
-              onValueChange={field.onChange}
-              defaultValue={field.value}
-            >
+            <Select onValueChange={field.onChange} defaultValue={field.value}>
               <FormControl>
                 <SelectTrigger className="w-full">
                   <SelectValue placeholder="Select status" />

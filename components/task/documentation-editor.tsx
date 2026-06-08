@@ -40,12 +40,12 @@ const DocumentationEditor = ({
         workspaceId,
       );
 
-      if (response.success) {
-        setHasChanges(false);
-        toast.success("Documentation saved");
-      } else {
+      if ("error" in response) {
         toast.error(response.error || "Failed to save documentation");
+        return;
       }
+      setHasChanges(false);
+      toast.success("Documentation saved");
     } catch (error) {
       toast.error("Something went wrong. Please try again.");
       console.error(error);

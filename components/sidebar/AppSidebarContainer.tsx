@@ -2,6 +2,7 @@ import { User } from '@prisma/client';
 import React from 'react'
 
 import { getUserById } from '@/app/data/user/get-user-by-id';
+import { getUserRole } from '@/lib/permissions';
 import AppSidebar from './AppSidebar';
 import { projectProps, workspaceMembersProps, workspaceProps } from '@/utils/types';
 import { getUserWorkspaceProjects } from '@/app/data/project/get-user-workspace-projects';
@@ -16,11 +17,13 @@ const AppSidebarContainer = async ({ data, workspaceId }: { data: AppSidebarData
     if (!user) {
       return <div>User not found</div>;
     }
+    const currentUserRole = await getUserRole(user.id, workspaceId);
     return <AppSidebar
         user={user as User}
          data={data}
          workspaceMembers={workspaceMembers as unknown as workspaceMembersProps[]}
          project={projects as unknown as projectProps[]}
+         currentUserRole={currentUserRole}
           />
 }
 

@@ -1,13 +1,21 @@
 "use server";
 
-import { TaskFormValues } from "@/components/task/task-form-fields";
 import { userRequired } from "../data/user/get-user";
-import { taskFormSchema } from "@/lib/schema";
+import { taskFormSchema, type TaskFormValues } from "@/lib/schema";
 import db from "@/lib/db";
 import { TaskStatus } from "@prisma/client";
 import { revalidatePath } from "next/cache";
-import { verifyAccess } from "@/lib/permissions";
-import { syncTaskAttachments, deleteAttachments } from "@/utils/file-attachments";
+import {
+  requireRole,
+  requireTaskAccess,
+  verifyAccess,
+  enforceAssigneeRestriction,
+} from "@/lib/permissions";
+import {
+  syncTaskAttachments,
+  deleteAttachments,
+} from "@/utils/file-attachments";
+import { actionError, logActivity } from "@/utils/actions";
 
 export const createTask = async (
   data: TaskFormValues,
@@ -27,38 +35,51 @@ export const createTask = async (
 
     const position = lastTask ? lastTask.position + 1000 : 1000;
 
+    const assigneeId = await enforceAssigneeRestriction(
+      user.id,
+      workspaceId,
+      validatedData.assigneeId,
+    );
+
     const newTask = await db.task.create({
       data: {
         title: validatedData.title,
         description: validatedData.description,
-        startDate: validatedData.startDate ? new Date(validatedData.startDate) : undefined,
-        dueDate: validatedData.dueDate ? new Date(validatedData.dueDate) : undefined,
+        startDate: validatedData.startDate
+          ? new Date(validatedData.startDate)
+          : undefined,
+        dueDate: validatedData.dueDate
+          ? new Date(validatedData.dueDate)
+          : undefined,
         projectId,
-        assigneeId: validatedData.assigneeId,
+        assigneeId,
         status: validatedData.status,
         priority: validatedData.priority,
         position,
+        createdById: user.id,
       },
     });
 
     // Link pre-registered Uploadthing files or create fallbacks
-    await syncTaskAttachments(newTask.id, projectId, validatedData.attachments || []);
+    await syncTaskAttachments(
+      newTask.id,
+      projectId,
+      validatedData.attachments || [],
+    );
 
-    await db.activity.create({
-      data: {
-        type: "TASK_CREATED",
-        description: `created task "${validatedData.title}"`,
-        projectId,
-        userId: user.id,
-      },
-    });
+    await logActivity(
+      "TASK_CREATED",
+      `created task "${validatedData.title}"`,
+      user.id,
+      projectId,
+    );
 
     revalidatePath(`/workspace/${workspaceId}/projects/${projectId}`);
 
     return { success: true };
   } catch (error) {
     console.error("Failed to create task:", error);
-    return { success: false, error: error instanceof Error ? error.message : "Failed to create task" };
+    return actionError(error, "Failed to create task");
   }
 };
 
@@ -70,7 +91,7 @@ export const softDeleteTask = async (
   try {
     const { user } = await userRequired();
 
-    await verifyAccess(user.id, workspaceId, projectId);
+    await requireRole(user.id, workspaceId, "OWNER", "ADMIN");
 
     const existingTask = await db.task.findUnique({
       where: { id: taskId },
@@ -94,14 +115,12 @@ export const softDeleteTask = async (
       data: { deletedAt: new Date() },
     });
 
-    await db.activity.create({
-      data: {
-        type: "TASK_DELETED",
-        description: `deleted task "${existingTask.title}"`,
-        projectId,
-        userId: user.id,
-      },
-    });
+    await logActivity(
+      "TASK_DELETED",
+      `deleted task "${existingTask.title}"`,
+      user.id,
+      projectId,
+    );
 
     revalidatePath(`/workspace/${workspaceId}/projects/${projectId}`);
     revalidatePath(`/workspace/${workspaceId}/projects/${projectId}/${taskId}`);
@@ -109,7 +128,7 @@ export const softDeleteTask = async (
     return { success: true };
   } catch (error) {
     console.error("Failed to delete task:", error);
-    return { success: false, error: error instanceof Error ? error.message : "Failed to delete task" };
+    return actionError(error, "Failed to delete task");
   }
 };
 
@@ -123,19 +142,29 @@ export const updateTaskPosition = async (
 
     const currentTask = await db.task.findUnique({
       where: { id: taskId },
-      select: { 
-        projectId: true, 
-        status: true, 
+      select: {
+        projectId: true,
+        status: true,
         title: true,
         project: {
-          select: { workspaceId: true }
-        }
+          select: { workspaceId: true },
+        },
       },
     });
 
     if (!currentTask) return { success: false, error: "Task not found" };
 
-    await verifyAccess(user.id, currentTask.project.workspaceId, currentTask.projectId);
+    await verifyAccess(
+      user.id,
+      currentTask.project.workspaceId,
+      currentTask.projectId,
+    );
+    await requireTaskAccess(
+      user.id,
+      taskId,
+      currentTask.project.workspaceId,
+      "You can only move tasks you created or are assigned to.",
+    );
 
     await db.task.update({
       where: { id: taskId },
@@ -164,22 +193,22 @@ export const updateTaskPosition = async (
     await db.$transaction(updates);
 
     if (currentTask.status !== newStatus) {
-      await db.activity.create({
-        data: {
-          type: "TASK_UPDATED",
-          description: `moved task "${currentTask.title}" to ${newStatus.replace("_", " ")}`,
-          projectId: currentTask.projectId,
-          userId: user.id,
-        },
-      });
+      await logActivity(
+        "TASK_UPDATED",
+        `moved task "${currentTask.title}" to ${newStatus.replace("_", " ")}`,
+        user.id,
+        currentTask.projectId,
+      );
     }
 
-    revalidatePath(`/workspace/${currentTask.project.workspaceId}/projects/${currentTask.projectId}`);
+    revalidatePath(
+      `/workspace/${currentTask.project.workspaceId}/projects/${currentTask.projectId}`,
+    );
 
     return { success: true };
   } catch (error) {
     console.error("Failed to update task position:", error);
-    return { success: false, error: error instanceof Error ? error.message : "Failed to update task position" };
+    return actionError(error, "Failed to update task position");
   }
 };
 
@@ -205,17 +234,37 @@ export const updateTaskDetails = async (
       return { success: false, error: "Task not found" };
     }
 
-    await verifyAccess(user.id, existingTask.project.workspaceId, existingTask.projectId);
+    await verifyAccess(
+      user.id,
+      existingTask.project.workspaceId,
+      existingTask.projectId,
+    );
+    await requireTaskAccess(
+      user.id,
+      taskId,
+      existingTask.project.workspaceId,
+      "You can only edit tasks you created or are assigned to.",
+    );
 
-    const incomingUrls = new Set(validatedData.attachments?.map((file) => file.url) || []);
+    const incomingUrls = new Set(
+      validatedData.attachments?.map((file) => file.url) || [],
+    );
 
-    const filesToDelete = existingTask.attachments.filter((file) => !incomingUrls.has(file.url));
-    const filesToKeepOrUpdate = (validatedData.attachments || []);
+    const filesToDelete = existingTask.attachments.filter(
+      (file) => !incomingUrls.has(file.url),
+    );
+    const filesToKeepOrUpdate = validatedData.attachments || [];
 
     // 1. Delete files that were removed by the user
     if (filesToDelete.length > 0) {
       await deleteAttachments(filesToDelete.map((f) => f.url));
     }
+
+    const assigneeId = await enforceAssigneeRestriction(
+      user.id,
+      existingTask.project.workspaceId,
+      validatedData.assigneeId,
+    );
 
     // 2. Update core task properties
     await db.task.update({
@@ -223,31 +272,39 @@ export const updateTaskDetails = async (
       data: {
         title: validatedData.title,
         description: validatedData.description,
-        startDate: validatedData.startDate ? new Date(validatedData.startDate) : undefined,
-        dueDate: validatedData.dueDate ? new Date(validatedData.dueDate) : undefined,
-        assigneeId: validatedData.assigneeId,
+        startDate: validatedData.startDate
+          ? new Date(validatedData.startDate)
+          : undefined,
+        dueDate: validatedData.dueDate
+          ? new Date(validatedData.dueDate)
+          : undefined,
+        assigneeId,
         status: validatedData.status,
         priority: validatedData.priority,
       },
     });
 
     // 3. Sync remaining/new attachments
-    await syncTaskAttachments(taskId, existingTask.projectId, filesToKeepOrUpdate);
+    await syncTaskAttachments(
+      taskId,
+      existingTask.projectId,
+      filesToKeepOrUpdate,
+    );
 
-    await db.activity.create({
-      data: {
-        type: "TASK_UPDATED",
-        description: `updated task "${validatedData.title}"`,
-        projectId: existingTask.projectId,
-        userId: user.id,
-      },
-    });
+    await logActivity(
+      "TASK_UPDATED",
+      `updated task "${validatedData.title}"`,
+      user.id,
+      existingTask.projectId,
+    );
 
-    revalidatePath(`/workspace/${existingTask.project.workspaceId}/projects/${existingTask.projectId}`);
+    revalidatePath(
+      `/workspace/${existingTask.project.workspaceId}/projects/${existingTask.projectId}`,
+    );
 
     return { success: true };
   } catch (error) {
     console.error("Failed to update task:", error);
-    return { success: false, error: error instanceof Error ? error.message : "Failed to update task" };
+    return actionError(error, "Failed to update task");
   }
 };

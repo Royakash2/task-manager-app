@@ -5,6 +5,8 @@ import ProjectDashboard from '@/components/project/project-dashboard';
 import { ProjectTableContainer } from '@/components/project/project-table-container';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Activity, CommentProps, projectProps, ProjectTaskProps } from '@/utils/types';
+import { userRequired } from '@/app/data/user/get-user';
+import { getUserRole } from '@/lib/permissions';
 import Link from 'next/link';
 import React from 'react'
 interface ProjectPageProps {
@@ -15,10 +17,12 @@ interface ProjectPageProps {
 const ProjectPage = async (props: ProjectPageProps) => {
     const { workspaceId, projectId } = await props.params;
     const searchParams = await props.searchParams;
+    const { user } = await userRequired();
+    const currentUserRole = await getUserRole(user.id, workspaceId);
     const result = await getProjectDetails(workspaceId, projectId)
     return (
         <div className='flex flex-col pb-3 px-3'>
-            <ProjectHeader project={result.project as projectProps} />
+            <ProjectHeader project={result.project as projectProps} currentUserRole={currentUserRole} />
             <Tabs defaultValue={(searchParams.view as string) || 'Dashboard'}
             className='w-full'>
                 <TabsList className='mt-4'>
@@ -45,10 +49,12 @@ const ProjectPage = async (props: ProjectPageProps) => {
                 <TabsContent value='Table'>
                   <ProjectTableContainer
                   projectId={projectId}
+                  workspaceId={workspaceId}
+                  currentUserRole={currentUserRole}
                   />
                 </TabsContent>
                 <TabsContent value='Kanban'>
-                  <KanbanBoardContainer initialTasks={result.tasks?.items as unknown as ProjectTaskProps[]} />
+                  <KanbanBoardContainer initialTasks={result.tasks?.items as unknown as ProjectTaskProps[]} currentUserRole={currentUserRole} />
                 </TabsContent>
             </Tabs>
         </div>

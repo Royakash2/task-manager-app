@@ -2,8 +2,8 @@
 import { CommentProps } from '@/utils/types';
 import React, { useState } from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/card';
-import { useWorkSpaceId } from '@/hooks/UseWorkspaceId';
-import { useProjectId } from '@/hooks/UseProjectId';
+import { useWorkspaceId } from '@/hooks/use-workspace-id';
+import { useProjectId } from '@/hooks/use-project-id';
 import { Textarea } from '../ui/textarea';
 import { Button } from '../ui/button';
 import { CommentList } from '../project/comment-lists';
@@ -14,10 +14,11 @@ interface TaskCommentProps {
     taskId: string
     comments: CommentProps[]
     currentUserId: string
+    currentUserRole?: string | null
 }
 
-const TaskComments = ({ taskId, comments, currentUserId }: TaskCommentProps) => {
-    const workspaceId = useWorkSpaceId();
+const TaskComments = ({ taskId, comments, currentUserId, currentUserRole }: TaskCommentProps) => {
+    const workspaceId = useWorkspaceId();
     const projectId = useProjectId();
     const [newComment, setNewComment] = useState("")
     const [isSubmitting, setIsSubmitting] = useState(false)
@@ -35,12 +36,12 @@ const TaskComments = ({ taskId, comments, currentUserId }: TaskCommentProps) => 
                 workspaceId
             );
 
-            if (response.success) {
-                setNewComment("");
-                toast.success("Comment posted!");
-            } else {
+            if ("error" in response) {
                 toast.error(response.error || "Failed to post comment");
+                return;
             }
+            setNewComment("");
+            toast.success("Comment posted!");
         } catch (error) {
             toast.error("Something went wrong. Please try again.");
             console.error(error);
@@ -84,11 +85,12 @@ const TaskComments = ({ taskId, comments, currentUserId }: TaskCommentProps) => 
                 </div>
                 <div className="pt-2">
                     <CommentList
-                      comments={comments}
-                      currentUserId={currentUserId}
-                      workspaceId={workspaceId}
-                      projectId={projectId}
-                      taskId={taskId}
+                        comments={comments}
+                        currentUserId={currentUserId}
+                        currentUserRole={currentUserRole}
+                        workspaceId={workspaceId}
+                        projectId={projectId}
+                        taskId={taskId}
                     />
                 </div>
             </CardContent>

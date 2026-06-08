@@ -1,5 +1,5 @@
 "use client"
-import { useWorkSpaceId } from '@/hooks/UseWorkspaceId';
+import { useWorkspaceId } from '@/hooks/use-workspace-id';
 import { workspaceProps } from '@/utils/types'
 
 import React from 'react'
@@ -13,7 +13,7 @@ import { WorkspaceAvatar } from '../workspace/workspace-avatar';
 function WorkspaceSelector({ workspaces }: { workspaces: workspaceProps[] }) {
 
     const router = useRouter();
-    const workspaceId = useWorkSpaceId() as string;
+    const workspaceId = useWorkspaceId() as string;
 
     const selectedWorkspace = workspaces.find((workspace) => workspace.workspaceId === workspaceId);
 

@@ -13,7 +13,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
-export const ProjectHeader = ({ project }: { project: projectProps }) => {
+export const ProjectHeader = ({ project, currentUserRole }: { project: projectProps, currentUserRole: string | null }) => {
     return (
         <div className="flex flex-col">
             <div className="flex flex-col sm:flex-row items-start justify-between gap-3 sm:gap-6 py-4">
@@ -64,7 +64,8 @@ export const ProjectHeader = ({ project }: { project: projectProps }) => {
                     <div className="flex items-center gap-3 sm:gap-5 ml-auto">
                       <CreateTaskDialog project={project} />
 
-                      {/* Project actions menu */}
+                      {/* Project actions menu — hide for MEMBER */}
+                      {currentUserRole !== "MEMBER" && (
                       <DropdownMenu>
                         <DropdownMenuTrigger asChild>
                           <Button
@@ -84,6 +85,7 @@ export const ProjectHeader = ({ project }: { project: projectProps }) => {
                             />
                         </DropdownMenuContent>
                       </DropdownMenu>
+                      )}
                     </div>
                 </div>
             </div>

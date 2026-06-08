@@ -2,8 +2,9 @@
 
 import db from "@/lib/db";
 import { userRequired } from "../data/user/get-user";
-import { verifyAccess } from "@/lib/permissions";
+import { verifyAccess, requireTaskAccess, getUserRole } from "@/lib/permissions";
 import { revalidatePath } from "next/cache";
+import { actionError, logActivity } from "@/utils/actions";
 
 export const createComment = async (
   content: string,
@@ -15,6 +16,7 @@ export const createComment = async (
     const { user } = await userRequired();
 
     await verifyAccess(user.id, workspaceId, projectId);
+    await requireTaskAccess(user.id, taskId, workspaceId, "You can only comment on tasks you created or are assigned to.");
 
     if (!content || content.trim() === "") {
       throw new Error("Comment content cannot be empty");
@@ -35,25 +37,19 @@ export const createComment = async (
       }),
     ]);
 
-    await db.activity.create({
-      data: {
-        type: "COMMENT_CREATED",
-        description: `commented on task "${task?.title || "untitled"}"`,
-        projectId,
-        userId: user.id,
-      },
-    });
+    await logActivity(
+      "COMMENT_CREATED",
+      `commented on task "${task?.title || "untitled"}"`,
+      user.id,
+      projectId,
+    );
 
     revalidatePath(`/workspace/${workspaceId}/projects/${projectId}/${taskId}`);
 
     return { success: true, data: comment };
   } catch (error) {
     console.error("[CREATE_COMMENT_ERROR]:", error);
-    return {
-      success: false,
-      error:
-        error instanceof Error ? error.message : "An unexpected error occurred",
-    };
+    return actionError(error, "Failed to create comment");
   }
 };
 
@@ -68,6 +64,7 @@ export const updateComment = async (
     const { user } = await userRequired();
 
     await verifyAccess(user.id, workspaceId, projectId);
+    await requireTaskAccess(user.id, taskId, workspaceId, "You can only comment on tasks you created or are assigned to.");
 
     if (!content || content.trim() === "") {
       throw new Error("Comment content cannot be empty");
@@ -97,25 +94,19 @@ export const updateComment = async (
       }),
     ]);
 
-    await db.activity.create({
-      data: {
-        type: "COMMENT_EDITED",
-        description: `edited a comment on task "${task?.title || "untitled"}"`,
-        projectId,
-        userId: user.id,
-      },
-    });
+    await logActivity(
+      "COMMENT_EDITED",
+      `edited a comment on task "${task?.title || "untitled"}"`,
+      user.id,
+      projectId,
+    );
 
     revalidatePath(`/workspace/${workspaceId}/projects/${projectId}/${taskId}`);
 
     return { success: true, data: updatedComment };
   } catch (error) {
     console.error("[UPDATE_COMMENT_ERROR]:", error);
-    return {
-      success: false,
-      error:
-        error instanceof Error ? error.message : "An unexpected error occurred",
-    };
+    return actionError(error, "Failed to update comment");
   }
 };
 
@@ -129,6 +120,7 @@ export const deleteComment = async (
     const { user } = await userRequired();
 
     await verifyAccess(user.id, workspaceId, projectId);
+    await requireTaskAccess(user.id, taskId, workspaceId, "You can only delete comments on tasks you created or are assigned to.");
 
     const existingComment = await db.comment.findUnique({
       where: { id: commentId },
@@ -139,8 +131,13 @@ export const deleteComment = async (
       throw new Error("Comment not found");
     }
 
+    // OWNER and ADMIN can delete any comment; MEMBER can only delete own
+    const role = await getUserRole(user.id, workspaceId);
+
     if (existingComment.userId !== user.id) {
-      throw new Error("You can only delete your own comments");
+      if (!role || (role !== "OWNER" && role !== "ADMIN")) {
+        throw new Error("You can only delete your own comments");
+      }
     }
 
     const [task] = await Promise.all([
@@ -153,24 +150,18 @@ export const deleteComment = async (
       }),
     ]);
 
-    await db.activity.create({
-      data: {
-        type: "COMMENT_DELETED",
-        description: `deleted a comment on task "${task?.title || "untitled"}"`,
-        projectId,
-        userId: user.id,
-      },
-    });
+    await logActivity(
+      "COMMENT_DELETED",
+      `deleted a comment on task "${task?.title || "untitled"}"`,
+      user.id,
+      projectId,
+    );
 
     revalidatePath(`/workspace/${workspaceId}/projects/${projectId}/${taskId}`);
 
     return { success: true };
   } catch (error) {
     console.error("[DELETE_COMMENT_ERROR]:", error);
-    return {
-      success: false,
-      error:
-        error instanceof Error ? error.message : "An unexpected error occurred",
-    };
+    return actionError(error, "Failed to delete comment");
   }
 };

@@ -12,15 +12,16 @@ import { cn } from "@/lib/utils"
 interface KanbanCardProps {
     task: ProjectTaskProps;
     index: number;
+    isDragDisabled?: boolean;
 }
 
-export default function KanbanCard({ task, index }: KanbanCardProps) {
+export default function KanbanCard({ task, index, isDragDisabled }: KanbanCardProps) {
     const isOverdue = task.dueDate
         && task.status !== "COMPLETED"
         && new Date(task.dueDate) < new Date();
 
     return (
-        <Draggable draggableId={task.id} index={index}>
+        <Draggable draggableId={task.id} index={index} isDragDisabled={isDragDisabled}>
             {(provided, snapshot) => (
                 <Card
                     ref={provided.innerRef}

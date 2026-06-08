@@ -20,14 +20,16 @@ function AppSidebar(
     { user,
         data,
         workspaceMembers,
-        project
+        project,
+        currentUserRole
     }
         :
         {
             user: User,
             data: AppSidebarDataProps,
             workspaceMembers: workspaceMembersProps[],
-            project: projectProps[]
+            project: projectProps[],
+            currentUserRole: string | null
         }) {
     const { state } = useSidebar()
 
@@ -65,7 +67,7 @@ function AppSidebar(
                 </SidebarHeader>
                 <SidebarContent className="[&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
                     <NavMain />
-                    <NavProject projects={project} workspaceMembers={workspaceMembers} />
+                    <NavProject projects={project} workspaceMembers={workspaceMembers} currentUserRole={currentUserRole} />
                 </SidebarContent>
                 <SidebarUserProfile user={user} />
             </Sidebar>

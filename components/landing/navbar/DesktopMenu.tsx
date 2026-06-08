@@ -58,7 +58,7 @@ export const DesktopMenu = ({ isLogin, user }: DesktopMenuProps) => {
                 <div className="flex items-center justify-start gap-2 p-2">
                   <div className="flex flex-col space-y-1 leading-none">
                     {user?.given_name && <p className="font-medium">{user.given_name} {user.family_name}</p>}
-                    {user?.email && <p className="w-[200px] truncate text-sm text-muted-foreground">{user.email}</p>}
+                    {user?.email && <p className="w-50 truncate text-sm text-muted-foreground">{user.email}</p>}
                   </div>
                 </div>
                 <DropdownMenuSeparator />

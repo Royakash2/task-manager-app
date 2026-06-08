@@ -1,11 +1,10 @@
 "use client";
 
-import { userSchema } from '@/lib/schema';
+import { userSchema, type UserData } from '@/lib/schema';
 import React, { useState } from 'react'
 import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import z from 'zod';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from './ui/form';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from './ui/card';
 import { Input } from './ui/input';
@@ -24,13 +23,11 @@ interface Props {
 
 }
 
-export type userDatatype = z.infer<typeof userSchema>
-
 export const OnboardingForm = ({ name, email, image }: Props) => {
     const [pending, setPending] = useState(false);
     const router = useRouter();
 
-    const form = useForm<userDatatype>({
+    const form = useForm<UserData>({
         resolver: zodResolver(userSchema), defaultValues: {
             about: '',
             name: name || '',
@@ -41,7 +38,7 @@ export const OnboardingForm = ({ name, email, image }: Props) => {
         }
     })
 
-    const onSubmit = async (data: userDatatype) => {
+    const onSubmit = async (data: UserData) => {
         try {
             setPending(true);
             const response = await createUser(data);

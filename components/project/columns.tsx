@@ -29,7 +29,7 @@ export type TaskTableItem = Task & {
   attachments: File[];
 };
 
-export const columns: ColumnDef<TaskTableItem>[] = [
+export const createColumns = (userRole: string | null): ColumnDef<TaskTableItem>[] => [
   {
     id: "select",
     header: ({ table }) => (
@@ -168,11 +168,11 @@ export const columns: ColumnDef<TaskTableItem>[] = [
   {
     accessorKey: "actions",
     header: "Actions",
-    cell: ({ row }) => <ActionsCell row={row} />,
+    cell: ({ row }) => <ActionsCell row={row} userRole={userRole} />,
   },
 ];
 
-const ActionsCell = ({ row }: { row: { original: TaskTableItem } }) => {
+const ActionsCell = ({ row, userRole }: { row: { original: TaskTableItem }, userRole: string | null }) => {
   const [open, setOpen] = useState(false);
 
   return (
@@ -191,6 +191,7 @@ const ActionsCell = ({ row }: { row: { original: TaskTableItem } }) => {
              <span className="flex items-center gap-2"><Eye className="w-4 h-4" /> View</span>
             </Link>
           </DropdownMenuItem>
+          {userRole !== "MEMBER" && (
           <DropdownMenuItem asChild onSelect={(e) => e.preventDefault()}>
             <DeleteTaskDialog
               taskId={row.original.id}
@@ -200,6 +201,7 @@ const ActionsCell = ({ row }: { row: { original: TaskTableItem } }) => {
               onSuccess={() => setOpen(false)}
             />
           </DropdownMenuItem>
+          )}
         </DropdownMenuContent>
       </DropdownMenu>
     </div>
