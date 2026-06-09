@@ -2,7 +2,7 @@ import { getTaskById } from '@/app/data/task/get-task-by-id';
 import { getUserRole } from '@/lib/permissions';
 import TaskComments from '@/components/task/task-comments';
 import TaskDetails from '@/components/task/task-details';
-import { redirect } from 'next/navigation';
+import { NotFoundState } from '@/components/not-found-state';
 import React from 'react'
 
 interface TaskDetailPageProps {
@@ -15,9 +15,27 @@ interface TaskDetailPageProps {
 
 const TaskDetailPage = async (props: TaskDetailPageProps) => {
   const { taskId, workspaceId, projectId } = await props.params;
-  const { task, comments, documentation, currentUserId } = await getTaskById(taskId, workspaceId, projectId);
+  const result = await getTaskById(taskId, workspaceId, projectId);
 
-  if (!task) redirect("not-found");
+  if ("error" in result) {
+    return (
+      <NotFoundState
+        title="Task not found"
+        description="This task may have been deleted or you may not have access to it."
+      />
+    );
+  }
+
+  const { task, comments, documentation, currentUserId } = result;
+
+  if (!task) {
+    return (
+      <NotFoundState
+        title="Task not found"
+        description="This task may have been deleted or you may not have access to it."
+      />
+    );
+  }
 
   const currentUserRole = await getUserRole(currentUserId, workspaceId);
 

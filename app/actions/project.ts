@@ -19,12 +19,17 @@ export const createProject = async (data: ProjectData) => {
       },
     });
 
-    const membersAccess =
-      validatedData.membersAccess?.length === 0
-        ? [user.id]
-        : validatedData.membersAccess?.includes(user.id)
-          ? validatedData.membersAccess
-          : [...(validatedData.membersAccess || []), user.id];
+    // Always include all OWNERs and ADMINs — they always have access
+    const ownerAndAdminIds = workspaceMembers
+      .filter((m) => m.accessLevel === "OWNER" || m.accessLevel === "ADMIN")
+      .map((m) => m.userId);
+
+    const selectedIds = validatedData.membersAccess || [];
+
+    // Combine: OWNERs/ADMINs + selected members + ensure creator is included
+    const membersAccess = [
+      ...new Set([...ownerAndAdminIds, ...selectedIds, user.id]),
+    ];
 
     await db.project.create({
       data: {
@@ -55,6 +60,106 @@ export const createProject = async (data: ProjectData) => {
   } catch (error) {
     console.error("[CREATE_PROJECT_ERROR]:", error);
     return actionError(error, "Failed to create project");
+  }
+};
+
+export const updateProject = async (
+  workspaceId: string,
+  projectId: string,
+  data: Partial<Pick<ProjectData, "name" | "description">>,
+) => {
+  try {
+    const { user } = await userRequired();
+    await requireRole(user.id, workspaceId, "OWNER", "ADMIN");
+
+    const validated = projectSchema.pick({ name: true, description: true }).partial().parse(data);
+
+    const project = await db.project.update({
+      where: { id: projectId },
+      data: {
+        ...(validated.name !== undefined && { name: validated.name }),
+        ...(validated.description !== undefined && {
+          description: validated.description,
+        }),
+      },
+    });
+
+    await logActivity(
+      "PROJECT_UPDATED",
+      `updated project settings`,
+      user.id,
+      projectId,
+      workspaceId,
+    );
+
+    revalidatePath(`/workspace/${workspaceId}/projects/${projectId}`);
+
+    return { success: true, data: project };
+  } catch (error) {
+    console.error("[UPDATE_PROJECT_ERROR]:", error);
+    return actionError(error, "Failed to update project");
+  }
+};
+
+export const toggleProjectAccess = async (
+  workspaceId: string,
+  projectId: string,
+  memberWorkspaceMemberId: string,
+  hasAccess: boolean,
+) => {
+  try {
+    const { user } = await userRequired();
+    await requireRole(user.id, workspaceId, "OWNER", "ADMIN");
+
+    // Upsert: create a ProjectAccess record if it doesn't exist, or update it
+    const member = await db.workspaceMembers.findUnique({
+      where: { id: memberWorkspaceMemberId },
+      select: { accessLevel: true, userId: true, user: { select: { name: true } } },
+    });
+
+    if (!member) {
+      return { success: false, error: "Member not found" };
+    }
+
+    // OWNER and ADMIN always have access — can't toggle
+    if (member.accessLevel === "OWNER" || member.accessLevel === "ADMIN") {
+      return {
+        success: false,
+        error: "Workspace owners and admins always have access to all projects.",
+      };
+    }
+
+    await db.projectAccess.upsert({
+      where: {
+        workspaceMemberId_projectId: {
+          workspaceMemberId: memberWorkspaceMemberId,
+          projectId,
+        },
+      },
+      create: {
+        workspaceMemberId: memberWorkspaceMemberId,
+        projectId,
+        hasAccess,
+      },
+      update: {
+        hasAccess,
+      },
+    });
+
+    await logActivity(
+      hasAccess ? "PROJECT_ACCESS_GRANTED" : "PROJECT_ACCESS_REVOKED",
+      `${hasAccess ? "granted" : "revoked"} project access for ${member.user.name}`,
+      user.id,
+      projectId,
+      workspaceId,
+    );
+
+    revalidatePath(`/workspace/${workspaceId}/projects/${projectId}`);
+
+    return { success: true };
+  } catch (error) {
+    console.error("[TOGGLE_PROJECT_ACCESS_ERROR]:", error);
+    return actionError(error, "Failed to update project access");
   }
 };
 
