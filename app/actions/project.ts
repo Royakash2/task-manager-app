@@ -2,7 +2,7 @@
 import { userRequired } from "../data/user/get-user";
 import { requireRole } from "@/lib/permissions";
 import db from "@/lib/db";
-import { projectSchema, type ProjectData } from "@/lib/schema";
+import { projectSchema, ProjectData } from "@/lib/schema";
 import { revalidatePath } from "next/cache";
 import { deleteAttachments } from "@/utils/file-attachments";
 import { actionError, logActivity } from "@/utils/actions";

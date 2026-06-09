@@ -41,7 +41,7 @@ model Workspace {
   members     WorkspaceMembers[]
   projects    Project[]
   activities  Activity[]
-  inviteCode  String             @unique
+  inviteCode  String             @unique //remove it later
   createdAt   DateTime           @default(now())
   updatedAt   DateTime           @updatedAt
 }

@@ -16,7 +16,7 @@ import { Search, Users, Check } from "lucide-react";
 import { ProfileAvatar } from "../profile-avatar";
 import { Badge } from "../ui/badge";
 import { cn } from "@/lib/utils";
-import type { ProjectData } from "@/lib/schema";
+import { ProjectData } from "@/lib/schema";
 import type { workspaceMembersProps } from "@/utils/types";
 
 interface CreateProjectDialogBodyProps {

@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { projectSchema, type ProjectData } from "@/lib/schema";
+import { projectSchema, ProjectData } from "@/lib/schema";
 import { useWorkspaceId } from "@/hooks/use-workspace-id";
 import { Button } from "../ui/button";
 import {

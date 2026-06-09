@@ -1,7 +1,7 @@
 "use server";
 
 import { userRequired } from "../data/user/get-user";
-import { userSchema, type UserData } from "@/lib/schema";
+import { userSchema, UserData } from "@/lib/schema";
 import db from "@/lib/db";
 import { actionError } from "@/utils/actions";
 

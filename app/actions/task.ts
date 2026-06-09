@@ -1,7 +1,7 @@
 "use server";
 
 import { userRequired } from "../data/user/get-user";
-import { taskFormSchema, type TaskFormValues } from "@/lib/schema";
+import { taskFormSchema, TaskFormValues } from "@/lib/schema";
 import db from "@/lib/db";
 import { TaskStatus } from "@prisma/client";
 import { revalidatePath } from "next/cache";
