@@ -2,7 +2,7 @@
 
 import db from "@/lib/db";
 import { userRequired } from "../data/user/get-user";
-import { inviteMemberSchema, updateMemberRoleSchema } from "@/lib/schema";
+import { inviteMemberSchema, InviteMemberData, updateMemberRoleSchema } from "@/lib/schema";
 import { getUserRole, requireOwner, requireRole } from "@/lib/permissions";
 import { getMemberWithUser } from "../data/members/get-member-with-user";
 import { revalidatePath } from "next/cache";
@@ -10,7 +10,7 @@ import { actionError, logActivity } from "@/utils/actions";
 
 export const inviteMember = async (
   workspaceId: string,
-  data: { email: string; role: "ADMIN" | "MEMBER" },
+  data: InviteMemberData,
 ) => {
   try {
     const { user } = await userRequired();

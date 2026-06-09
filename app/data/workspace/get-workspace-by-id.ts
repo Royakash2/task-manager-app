@@ -23,7 +23,7 @@ export const getWorkspaceById = async (workspaceId: string) => {
     });
 
     if (!workspace) {
-      return { error: "Workspace not found", members: [], currentUserRole: null };
+      return { error: "Workspace not found", currentUserRole: null };
     }
 
     return { workspace, currentUserRole };

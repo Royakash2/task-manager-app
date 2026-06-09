@@ -72,3 +72,4 @@ export type ProjectData = z.infer<typeof projectSchema>;
 export type TaskFormValues = z.infer<typeof taskFormSchema>;
 export type SettingsFormValues = z.infer<typeof workspaceSchema>;
 export type WorkspaceData = z.infer<typeof workspaceSchema>;
+export type InviteMemberData = z.infer<typeof inviteMemberSchema>;

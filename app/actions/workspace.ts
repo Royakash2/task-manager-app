@@ -7,9 +7,7 @@ import db from "@/lib/db";
 
 import { generateInviteCode } from "@/utils/get-invite-code";
 import { deleteAttachments } from "@/utils/file-attachments";
-import { revalidatePath } from "next/cache";
-import { actionError, logActivity } from "@/utils/actions";
-
+import { revalidatePath } from "next/cache";import { actionError, logActivity } from "@/utils/actions";
 
 export const createWorkspace = async (data: WorkspaceData) => {
   try {
@@ -55,7 +53,7 @@ export const createWorkspace = async (data: WorkspaceData) => {
 
 export const updateWorkspace = async (
   workspaceId: string,
-  data: { name: string; description?: string },
+  data: Partial<WorkspaceData>,
 ) => {
   try {
     const { user } = await userRequired();
