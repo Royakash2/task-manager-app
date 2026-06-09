@@ -7,24 +7,25 @@ export const getTaskById = async (
   workspaceId: string,
   projectId: string,
 ) => {
-  const { user } = await userRequired();
+  try {
+    const { user } = await userRequired();
+    await verifyAccess(user.id, workspaceId, projectId);
 
-  await verifyAccess(user.id, workspaceId, projectId);
-
-  const [task, comments, documentation] = await Promise.all([
-    db.task.findFirst({
-      where: { id: taskId, deletedAt: null },
-      include: {
-        assigneeTo: { select: { id: true, name: true, image: true } },
-        attachments: { select: { id: true, name: true, url: true, type: true } },
-        project: {
-          include: {
-            projectAccess: {
-              include: {
-                workspaceMember: {
-                  include: {
-                    user: {
-                      select: { id: true, name: true, image: true },
+    const [task, comments, documentation] = await Promise.all([
+      db.task.findFirst({
+        where: { id: taskId, deletedAt: null },
+        include: {
+          assigneeTo: { select: { id: true, name: true, image: true } },
+          attachments: { select: { id: true, name: true, url: true, type: true } },
+          project: {
+            include: {
+              projectAccess: {
+                include: {
+                  workspaceMember: {
+                    include: {
+                      user: {
+                        select: { id: true, name: true, image: true },
+                      },
                     },
                   },
                 },
@@ -32,38 +33,43 @@ export const getTaskById = async (
             },
           },
         },
-      },
-    }),
+      }),
 
-    db.comment.findMany({
-      where: { taskId: taskId },
-      include: { user: { select: { id: true, name: true, image: true } } },
-      orderBy: { createdAt: "desc" },
-    }),
+      db.comment.findMany({
+        where: { taskId: taskId },
+        include: { user: { select: { id: true, name: true, image: true } } },
+        orderBy: { createdAt: "desc" },
+      }),
 
-    db.documentation.findUnique({
-      where: { taskId },
-    }),
-  ]);
+      db.documentation.findUnique({
+        where: { taskId },
+      }),
+    ]);
 
-  if (!task) {
+    if (!task) {
+      return {
+        task: null,
+        comments: [],
+        documentation: null,
+        currentUserId: user.id,
+      };
+    }
+
+    const project = {
+      ...task.project,
+      members: task.project.projectAccess.map((access) => access.workspaceMember),
+    };
+
     return {
-      task: null,
-      comments: [],
-      documentation: null,
+      task: { ...task, project },
+      comments,
+      documentation,
       currentUserId: user.id,
     };
+  } catch (error) {
+    console.error("[GET_TASK_BY_ID_ERROR]:", error);
+    return {
+      error: error instanceof Error ? error.message : "Failed to fetch task",
+    };
   }
-
-  const project = {
-    ...task.project,
-    members: task.project.projectAccess.map((access) => access.workspaceMember),
-  };
-
-  return {
-    task: { ...task, project },
-    comments,
-    documentation,
-    currentUserId: user.id,
-  };
 };

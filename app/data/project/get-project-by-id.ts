@@ -3,6 +3,7 @@ import { userRequired } from "../user/get-user";
 import { verifyAccess } from "@/lib/permissions";
 
 export const getProjectById = async (workspaceId: string, projectId: string) => {
+  try {
     const { user } = await userRequired();
     await verifyAccess(user.id, workspaceId, projectId);
 
@@ -21,4 +22,8 @@ export const getProjectById = async (workspaceId: string, projectId: string) => 
     });
 
     return { tasks };
+  } catch (error) {
+    console.error("[GET_PROJECT_BY_ID_ERROR]:", error);
+    return { error: error instanceof Error ? error.message : "Failed to fetch project tasks" };
+  }
 };
