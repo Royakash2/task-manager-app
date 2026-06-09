@@ -46,7 +46,7 @@ function AppSidebar(
                         </Link>
                     </div>
                     <div className='flex items-center justify-between gap-2 group-data-[collapsible=icon]:block'>
-                        <div className='flex-1'>
+                        <div className='flex-1 min-w-0'>
                             <WorkspaceSelector workspaces={data.workspaces} />
                         </div>
                         {state === 'expanded' && (

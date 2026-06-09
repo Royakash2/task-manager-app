@@ -20,6 +20,10 @@ const workspaceLayout = async ({ children, params }: Props) => {
   } else if (!data?.onboardingCompleted) {
     redirect("/onboarding");
   }
+  
+  if (data?.workspaces && !data.workspaces.some((w) => w.workspaceId === workspaceId)) {
+    redirect("/workspace");
+  }
   return (
     <SidebarProvider>
      <div className='flex w-full bg-sidebar h-screen'>
