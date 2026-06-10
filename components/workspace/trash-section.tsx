@@ -68,14 +68,20 @@ export const TrashSection = ({ tasks, onPermanentDelete, onRecover }: TrashSecti
   const handleBulkRecover = async () => {
     setPendingAction("recover");
     const ids = [...selectedIds];
+    const results = await Promise.allSettled(
+      ids.map((id) => onRecover(id)),
+    );
     let successCount = 0;
     const errors: string[] = [];
-    for (const id of ids) {
-      const result = await onRecover(id);
-      if (result.success) {
+    for (const result of results) {
+      if (result.status === "fulfilled" && result.value.success) {
         successCount++;
       } else {
-        errors.push(result.error || "Unknown error");
+        const errorMsg =
+          result.status === "fulfilled"
+            ? result.value.error || "Unknown error"
+            : result.reason?.message || "Unknown error";
+        errors.push(errorMsg);
       }
     }
     if (errors.length > 0) {
@@ -91,17 +97,23 @@ export const TrashSection = ({ tasks, onPermanentDelete, onRecover }: TrashSecti
   const handleBulkDelete = async () => {
     setPendingAction("delete");
     const ids = [...selectedIds];
+    const results = await Promise.allSettled(
+      ids.map((id) => onPermanentDelete(id)),
+    );
+    setConfirmOpen(false);
     let successCount = 0;
     const errors: string[] = [];
-    for (const id of ids) {
-      const result = await onPermanentDelete(id);
-      if (result.success) {
+    for (const result of results) {
+      if (result.status === "fulfilled" && result.value.success) {
         successCount++;
       } else {
-        errors.push(result.error || "Unknown error");
+        const errorMsg =
+          result.status === "fulfilled"
+            ? result.value.error || "Unknown error"
+            : result.reason?.message || "Unknown error";
+        errors.push(errorMsg);
       }
     }
-    setConfirmOpen(false);
     if (errors.length > 0) {
       toast.error(`${errors.length} task${errors.length === 1 ? "" : "s"} failed: ${errors.join(", ")}`);
     }

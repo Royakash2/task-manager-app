@@ -37,12 +37,18 @@ export const createProject = async (data: ProjectData) => {
         description: validatedData.description,
         workspaceId: validatedData.workspaceId,
         projectAccess: {
-          create: membersAccess?.map((memberId) => ({
-            workspaceMemberId: workspaceMembers.find(
-              (member) => member.userId === memberId,
-            )!.id,
-            hasAccess: true,
-          })),
+          create: membersAccess
+            ?.map((memberId) => {
+              const workspaceMember = workspaceMembers.find(
+                (member) => member.userId === memberId,
+              );
+              if (!workspaceMember) return null;
+              return {
+                workspaceMemberId: workspaceMember.id,
+                hasAccess: true,
+              };
+            })
+            .filter((item): item is NonNullable<typeof item> => item !== null),
         },
       },
     });
