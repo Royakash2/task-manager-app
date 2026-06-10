@@ -1,4 +1,5 @@
 import { getWorkspaceById } from "@/app/data/workspace/get-workspace-by-id";
+import { getTrashedTasks } from "@/app/data/task/get-trashed-tasks";
 import { SettingsPageClient } from "@/components/workspace/workspace-settings";
 
 interface SettingsPageProps {
@@ -27,11 +28,15 @@ const SettingsPage = async (props: SettingsPageProps) => {
     );
   }
 
+  const trashedResult = await getTrashedTasks(workspaceId);
+  const trashedTasks = "error" in trashedResult ? [] : trashedResult.tasks;
+
   return (
     <SettingsPageClient
       workspace={result.workspace}
       workspaceId={workspaceId}
       currentUserRole={result.currentUserRole}
+      trashedTasks={trashedTasks}
     />
   );
 };
