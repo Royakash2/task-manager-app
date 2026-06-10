@@ -74,6 +74,14 @@ export interface ProjectTaskProps extends Task {
   project: { id: string; name: string };
 }
 
+export interface TaskStats {
+  completed: number;
+  inProgress: number;
+  overdue: number;
+  total: number;
+  items: ProjectTaskProps[];
+}
+
 export interface Column {
   id: TaskStatus;
   title: string;
