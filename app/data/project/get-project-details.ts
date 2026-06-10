@@ -4,6 +4,7 @@ import { verifyAccess } from "@/lib/permissions";
 import { TaskStatus } from "@prisma/client";
 
 export const getProjectDetails = async (workspaceId: string, projectId: string) => {
+  try {
     const { user } = await userRequired();
 
     await verifyAccess(user.id, workspaceId, projectId);
@@ -111,4 +112,7 @@ export const getProjectDetails = async (workspaceId: string, projectId: string) 
        totalWorkspaceMembers,
        comments
     }
+  } catch (error) {
+    return { error: error instanceof Error ? error.message : "Failed to fetch project details" };
+  }
 }

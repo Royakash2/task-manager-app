@@ -42,7 +42,7 @@ export const verifyAccess = async (
 
     if (!projectAccess?.hasAccess) {
       throw new Error(
-        "You do not have permission to modify data in this project",
+        "You do not have access to this project",
       );
     }
   }
