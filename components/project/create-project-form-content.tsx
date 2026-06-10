@@ -1,6 +1,6 @@
 "use client";
 
-import { useForm } from "react-hook-form";
+import { type UseFormReturn } from "react-hook-form";
 import {
   FormControl,
   FormField,
@@ -16,7 +16,7 @@ import type { workspaceMembersProps } from "@/utils/types";
 import { MemberAccessPicker } from "./member-access-picker";
 
 interface CreateProjectDialogBodyProps {
-  form: ReturnType<typeof useForm<ProjectData>>;
+  form: UseFormReturn<ProjectData>;
   workspaceMembers: workspaceMembersProps[];
   pending: boolean;
   onCancel: () => void;
