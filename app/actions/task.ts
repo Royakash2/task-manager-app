@@ -95,21 +95,13 @@ export const softDeleteTask = async (
 
     const existingTask = await db.task.findUnique({
       where: { id: taskId },
-      include: {
-        attachments: true,
-      },
+      select: { id: true, title: true },
     });
 
     if (!existingTask) {
       return { success: false, error: "Task not found" };
     }
 
-    // Clean up UploadThing files
-    if (existingTask.attachments.length > 0) {
-      await deleteAttachments(existingTask.attachments.map((f) => f.url));
-    }
-
-    // Soft delete — set deletedAt
     await db.task.update({
       where: { id: taskId },
       data: { deletedAt: new Date() },
@@ -306,5 +298,72 @@ export const updateTaskDetails = async (
   } catch (error) {
     console.error("Failed to update task:", error);
     return actionError(error, "Failed to update task");
+  }
+};
+
+export const permanentlyDeleteTask = async (taskId: string) => {
+  try {
+    const { user } = await userRequired();
+
+    const task = await db.task.findUnique({
+      where: { id: taskId },
+      include: {
+        attachments: true,
+        project: { select: { workspaceId: true } },
+      },
+    });
+
+    if (!task) {
+      return { success: false, error: "Task not found" };
+    }
+
+    await requireRole(user.id, task.project.workspaceId, "OWNER");
+
+    if (task.attachments.length > 0) {
+      await deleteAttachments(task.attachments.map((f) => f.url));
+    }
+
+    await db.task.delete({ where: { id: taskId } });
+
+    revalidatePath(`/workspace/${task.project.workspaceId}/settings`);
+
+    return { success: true };
+  } catch (error) {
+    console.error("Failed to permanently delete task:", error);
+    return actionError(error, "Failed to permanently delete task");
+  }
+};
+
+export const recoverTask = async (taskId: string) => {
+  try {
+    const { user } = await userRequired();
+
+    const task = await db.task.findUnique({
+      where: { id: taskId },
+      select: {
+        id: true,
+        title: true,
+        projectId: true,
+        project: { select: { workspaceId: true } },
+      },
+    });
+
+    if (!task) {
+      return { success: false, error: "Task not found" };
+    }
+
+    await requireRole(user.id, task.project.workspaceId, "OWNER");
+
+    await db.task.update({
+      where: { id: taskId },
+      data: { deletedAt: null },
+    });
+
+    revalidatePath(`/workspace/${task.project.workspaceId}/settings`);
+
+    return { success: true };
+  } catch (error) {
+    console.error("Failed to recover task:", error);
+    return actionError(error, "Failed to recover task");
   }
 };
