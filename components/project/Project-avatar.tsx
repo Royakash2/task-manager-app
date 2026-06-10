@@ -15,7 +15,7 @@ export const ProjectAvatar = ({
             className={cn("size-6 rounded-md", className)}
         >
             <AvatarFallback className={cn("bg-blue-600 text-white rounded-sm font-medium", fallbackClassName)}>
-                {name.charAt(0).toUpperCase()}
+                {name?.charAt(0)?.toUpperCase() || "?"}
             </AvatarFallback>
         </Avatar>
     );

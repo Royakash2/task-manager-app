@@ -6,6 +6,7 @@ import { verifyAccess, getUserRole } from "@/lib/permissions";
 export const getUserWorkspaceProjects = async (workspaceId: string) => {
   try {
     const { user: kindeUser } = await userRequired();
+
     await verifyAccess(kindeUser.id, workspaceId);
     const role = await getUserRole(kindeUser.id, workspaceId);
     const query =

@@ -3,17 +3,10 @@
 import { projectProps } from "@/utils/types";
 import { ProjectAvatar } from "./Project-avatar";
 import { CreateTaskDialog } from "../task/create-task-dialog";
-import { DeleteProjectDialog } from "./delete-project-dialog";
-import { Button } from "../ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
-import { Users, Ellipsis } from "lucide-react";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+import { Users } from "lucide-react";
 
-export const ProjectHeader = ({ project, currentUserRole }: { project: projectProps, currentUserRole: string | null }) => {
+export const ProjectHeader = ({ project }: { project: projectProps }) => {
     return (
         <div className="flex flex-col">
             <div className="flex flex-col sm:flex-row items-start justify-between gap-3 sm:gap-6 py-4">
@@ -63,29 +56,6 @@ export const ProjectHeader = ({ project, currentUserRole }: { project: projectPr
 
                     <div className="flex items-center gap-3 sm:gap-5 ml-auto">
                       <CreateTaskDialog project={project} />
-
-                      {/* Project actions menu — hide for MEMBER */}
-                      {currentUserRole !== "MEMBER" && (
-                      <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
-                          <Button
-                            variant="ghost"
-                            size="icon"
-                            className="h-8 w-8 rounded-md cursor-pointer text-muted-foreground hover:bg-muted"
-                          >
-                            <Ellipsis className="h-4 w-4" />
-                          </Button>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end" sideOffset={10} className="w-44 p-1">
-                            <DeleteProjectDialog
-                              projectId={project.id}
-                              projectName={project.name}
-                              workspaceId={project.workspaceId}
-                              redirectOnDelete
-                            />
-                        </DropdownMenuContent>
-                      </DropdownMenu>
-                      )}
                     </div>
                 </div>
             </div>

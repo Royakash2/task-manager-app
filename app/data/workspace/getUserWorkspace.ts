@@ -22,9 +22,9 @@ export const getUserWorkspaces = async () => {
         },
       },
     });
-    return { data: workspace };
+    return { data: workspace, error: null };
   } catch (error) {
-    console.error(error);
-    return { data: null };
+    console.error("[GET_USER_WORKSPACES_ERROR]:", error);
+    return { data: null, error: error instanceof Error ? error.message : "Failed to fetch workspaces" };
   }
 };

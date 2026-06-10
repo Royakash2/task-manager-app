@@ -1,6 +1,6 @@
 "use client";
 
-import { userSchema, type UserData } from '@/lib/schema';
+import { userSchema, UserData } from '@/lib/schema';
 import React, { useState } from 'react'
 import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';

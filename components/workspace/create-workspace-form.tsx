@@ -1,10 +1,9 @@
 "use client";
 
-import { workspaceSchema } from '@/lib/schema';
+import { workspaceSchema, WorkspaceData } from '@/lib/schema';
 import React, { useState } from 'react'
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import z from 'zod';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '../ui/form';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../ui/card';
 import { Input } from '../ui/input';
@@ -14,7 +13,7 @@ import { toast } from 'sonner';
 import { createWorkspace } from '@/app/actions/workspace';
 import { useRouter } from 'next/navigation';
 
-export type createWorkspaceDatatype = z.infer<typeof workspaceSchema>
+export type createWorkspaceDatatype = WorkspaceData
 
 export const CreateWorkspaceForm = () => {
     const [pending, setPending] = useState(false);

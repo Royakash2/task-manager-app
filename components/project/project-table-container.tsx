@@ -10,7 +10,8 @@ export const ProjectTableContainer = async ({
     workspaceId: string;
     currentUserRole: string | null;
 }) => {
-    const { tasks } = await getProjectById(workspaceId, projectId);
+    const result = await getProjectById(workspaceId, projectId);
+    const tasks = "error" in result ? [] : result.tasks;
     return (
         <>
             <ProjectTable tasks={tasks} userRole={currentUserRole} />

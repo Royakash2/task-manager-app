@@ -46,7 +46,7 @@ function AppSidebar(
                         </Link>
                     </div>
                     <div className='flex items-center justify-between gap-2 group-data-[collapsible=icon]:block'>
-                        <div className='flex-1'>
+                        <div className='flex-1 min-w-0'>
                             <WorkspaceSelector workspaces={data.workspaces} />
                         </div>
                         {state === 'expanded' && (
@@ -66,7 +66,7 @@ function AppSidebar(
                     </div>
                 </SidebarHeader>
                 <SidebarContent className="[&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
-                    <NavMain />
+                    <NavMain currentUserRole={currentUserRole} />
                     <NavProject projects={project} workspaceMembers={workspaceMembers} currentUserRole={currentUserRole} />
                 </SidebarContent>
                 <SidebarUserProfile user={user} />

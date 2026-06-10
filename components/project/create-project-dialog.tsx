@@ -1,9 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { projectSchema, type ProjectData } from "@/lib/schema";
+import { projectSchema, ProjectData } from "@/lib/schema";
 import { useWorkspaceId } from "@/hooks/use-workspace-id";
 import { Button } from "../ui/button";
 import {
@@ -32,13 +32,23 @@ export const CreateProjectForm = ({ workspaceMembers }: Props) => {
   const [pending, setPending] = useState(false);
   const [dialogOpen, setDialogOpen] = useState(false);
 
+  const lockedMemberIds = useMemo(
+    () =>
+      workspaceMembers
+        .filter(
+          (m) => m.accessLevel === "OWNER" || m.accessLevel === "ADMIN",
+        )
+        .map((m) => m.userId),
+    [workspaceMembers],
+  );
+
   const form = useForm<ProjectData>({
     resolver: zodResolver(projectSchema),
     defaultValues: {
       name: "",
       description: "",
       workspaceId: workspaceId as string,
-      membersAccess: [],
+      membersAccess: lockedMemberIds,
     },
   });
 
@@ -77,7 +87,7 @@ export const CreateProjectForm = ({ workspaceMembers }: Props) => {
         </TooltipTrigger>
         <TooltipContent side="right">Create Project</TooltipContent>
       </Tooltip>
-      <DialogContent>
+      <DialogContent className="max-h-[95vh] overflow-y-auto no-scrollbar">
         <DialogHeader>
           <DialogTitle className="text-2xl font-bold">
             Create new Project

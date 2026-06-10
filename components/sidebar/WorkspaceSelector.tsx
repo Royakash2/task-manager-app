@@ -28,24 +28,24 @@ function WorkspaceSelector({ workspaces }: { workspaces: workspaceProps[] }) {
                 <SidebarMenuItem>
                     <DropdownMenu>
                         <DropdownMenuTrigger asChild>
-                            <SidebarMenuButton size={'lg'} className='data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground group-data-[collapsible=icon]:justify-center'>
+                            <SidebarMenuButton size={'lg'} className='w-full min-w-0 data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground group-data-[collapsible=icon]:justify-center'>
                                 <WorkspaceAvatar name={selectedWorkspace?.workspace.name as string || 'W'} />
-                                <div className='font-semibold group-data-[collapsible=icon]:hidden truncate'>
+                                <div className='font-semibold group-data-[collapsible=icon]:hidden truncate min-w-0'>
                                     {selectedWorkspace?.workspace.name}
                                 </div>
-                                <ChevronsUpDown className='size-4 ml-auto group-data-[collapsible=icon]:hidden' />
+                                <ChevronsUpDown className='size-4 shrink-0 ml-auto group-data-[collapsible=icon]:hidden' />
                             </SidebarMenuButton>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align='start' className='w-(--radix-dropdown-menu-trigger-width)'>
                             {
                                 workspaces.map(workspace => (
                                     <DropdownMenuItem key={workspace.id} onClick={() => onWorkspaceSelect(workspace?.workspaceId)}>
-                                        <div className='flex flex-row items-center gap-2'>
+                                        <div className='flex flex-row items-center gap-2 min-w-0 w-full'>
                                             <WorkspaceAvatar name={workspace.workspace.name as string || 'W'} />
-                                            <p>{workspace.workspace.name}</p>
+                                            <p className='truncate'>{workspace.workspace.name}</p>
                                             {
                                                 workspace.workspaceId === workspaceId && (
-                                                    <Check className='ml-auto' />
+                                                    <Check className='ml-auto shrink-0' />
                                                 )
                                             }
 

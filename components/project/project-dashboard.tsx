@@ -1,5 +1,4 @@
-import { projectProps, Activity, CommentProps } from '@/utils/types';
-import { Task } from '@prisma/client';
+import { projectProps, Activity, CommentProps, TaskStats } from '@/utils/types';
 import React from 'react'
 import { Card } from '../ui/card';
 import TaskDistributionChart from './task-distribution-chart';
@@ -11,13 +10,7 @@ import { History, MessageSquare } from "lucide-react";
 
 interface ProjectDashboardProps {
     project: projectProps;
-    tasks: {
-        completed: number;
-        inProgress: number;
-        overdue: number;
-        total: number;
-        items: Task[]
-    };
+    tasks: TaskStats;
     activities: Activity[];
     totalWorkspaceMembers: number;
     comments: CommentProps[];
