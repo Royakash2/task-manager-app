@@ -251,6 +251,7 @@ export const ProjectSettings = ({
           onDelete={() => deleteProject(project.workspaceId, project.id)}
           deleteDescription="Permanently remove this project and all its tasks, comments, and files."
           warning="All tasks, comments, and files within this project will be permanently removed."
+          redirectUrl={`/workspace/${project.workspaceId}`}
         />
       )}
     </div>
