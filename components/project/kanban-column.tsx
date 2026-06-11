@@ -13,7 +13,7 @@ interface KanbanColumnProps {
 export default function KanbanColumn({ column, isViewer }: KanbanColumnProps) {
     return (
         <div className={cn(
-            "flex-1 min-w-[200px]",
+            "flex-1 min-w-[170px] max-w-[240px]",
             "bg-transparent",
             "flex flex-col border-r border-border last:border-r-0"
         )}>
