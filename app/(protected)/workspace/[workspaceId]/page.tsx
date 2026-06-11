@@ -24,7 +24,7 @@ const WorkspaceHomePage = async (props: WorkspaceHomeProps) => {
     <div className="flex flex-col gap-6 p-4 md:p-6">
       {/* Header */}
       <div>
-        <h1 className="text-2xl font-bold tracking-tight text-foreground">
+        <h1 className="text-2xl font-bold tracking-tight text-foreground capitalize">
           {currentWorkspace?.workspace?.name || 'Workspace'}
         </h1>
         <p className="text-sm text-muted-foreground mt-1">
@@ -81,7 +81,7 @@ const WorkspaceHomePage = async (props: WorkspaceHomeProps) => {
                         fallbackClassName="text-sm font-bold"
                       />
                       <div className="min-w-0 flex-1">
-                        <p className="font-semibold text-sm text-foreground truncate">
+                        <p className="font-semibold text-sm text-foreground truncate capitalize">
                           {project.name}
                         </p>
                         {project.description && (

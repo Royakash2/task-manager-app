@@ -30,7 +30,7 @@ function WorkspaceSelector({ workspaces }: { workspaces: workspaceProps[] }) {
                         <DropdownMenuTrigger asChild>
                             <SidebarMenuButton size={'lg'} className='w-full min-w-0 data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground group-data-[collapsible=icon]:justify-center'>
                                 <WorkspaceAvatar name={selectedWorkspace?.workspace.name as string || 'W'} />
-                                <div className='font-semibold group-data-[collapsible=icon]:hidden truncate min-w-0'>
+                                <div className='font-semibold group-data-[collapsible=icon]:hidden truncate min-w-0 capitalize'>
                                     {selectedWorkspace?.workspace.name}
                                 </div>
                                 <ChevronsUpDown className='size-4 shrink-0 ml-auto group-data-[collapsible=icon]:hidden' />
@@ -42,7 +42,7 @@ function WorkspaceSelector({ workspaces }: { workspaces: workspaceProps[] }) {
                                     <DropdownMenuItem key={workspace.id} onClick={() => onWorkspaceSelect(workspace?.workspaceId)}>
                                         <div className='flex flex-row items-center gap-2 min-w-0 w-full'>
                                             <WorkspaceAvatar name={workspace.workspace.name as string || 'W'} />
-                                            <p className='truncate'>{workspace.workspace.name}</p>
+                                            <p className='truncate capitalize'>{workspace.workspace.name}</p>
                                             {
                                                 workspace.workspaceId === workspaceId && (
                                                     <Check className='ml-auto shrink-0' />
