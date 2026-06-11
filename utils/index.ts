@@ -45,9 +45,9 @@ export const taskStats = [
     color: "bg-green-500",
   },
   {
-    status: TaskStatus.BLOCKED,
-    label: "BLOCKED",
-    color: "bg-red-500",
+    status: TaskStatus.CANCELLED,
+    label: "CANCELLED",
+    color: "bg-gray-500",
   },
   {
     status: TaskStatus.BACKLOG,

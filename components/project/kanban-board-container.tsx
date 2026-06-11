@@ -6,13 +6,12 @@ import { DragDropContext, DropResult } from "@hello-pangea/dnd"
 import KanbanColumn from "./kanban-column"
 import { updateTaskPosition } from "@/app/actions/task"
 
-const columnsTitle: Record<$Enums.TaskStatus, string> = {
+const columnsTitle: Partial<Record<$Enums.TaskStatus, string>> = {
+    BACKLOG: "Backlog",
     TODO: "Todo",
     IN_PROGRESS: "In Progress",
     IN_REVIEW: "In Review",
-    BACKLOG: "Backlog",
     COMPLETED: "Completed",
-    BLOCKED: "Blocked",
 }
 
 export default function KanbanBoardContainer({ initialTasks, currentUserRole }: { initialTasks: ProjectTaskProps[], currentUserRole: string | null }) {

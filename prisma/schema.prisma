@@ -102,7 +102,7 @@ enum TaskStatus {
   COMPLETED
   IN_REVIEW
   BACKLOG
-  BLOCKED
+  CANCELLED
 }
 
 enum TaskPriority {

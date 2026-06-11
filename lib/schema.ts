@@ -38,7 +38,7 @@ export const taskFormSchema = z.object({
     "TODO",
     "IN_PROGRESS",
     "COMPLETED",
-    "BLOCKED",
+    "CANCELLED",
     "BACKLOG",
     "IN_REVIEW",
   ]),
