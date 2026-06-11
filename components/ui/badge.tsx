@@ -25,7 +25,7 @@ const badgeVariants = cva(
         BACKLOG: "border-transparent bg-pink-600 text-white hover:bg-pink-600/80",
         IN_REVIEW: "border-transparent bg-purple-600 text-white hover:bg-purple-600/80",
         COMPLETED: "border-transparent bg-green-600 text-white hover:bg-green-600/80",
-        BLOCKED: "border-transparent bg-red-600 text-white hover:bg-red-600/80",
+        CANCELLED: "border-transparent bg-gray-600 text-white hover:bg-gray-600/80",
         CRITICAL: "border-transparent bg-red-600 text-white hover:bg-red-600/80",
         HIGH: "border-transparent bg-orange-600 text-white hover:bg-orange-600/80",
         MEDIUM: "border-transparent bg-yellow-600 text-white hover:bg-yellow-600/80",
