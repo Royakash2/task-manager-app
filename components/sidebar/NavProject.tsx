@@ -53,7 +53,7 @@ export const NavProject = ({
                                             >
                                                 <Link href={href} onClick={() => setOpenMobile(false)}>
                                                     <FolderKanban className="size-4" />
-                                                    <span>{project.name}</span>
+                                                    <span className="capitalize">{project.name}</span>
                                                 </Link>
                                             </SidebarMenuButton>
                                         </SidebarMenuItem>

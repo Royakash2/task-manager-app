@@ -176,7 +176,7 @@ export const TrashSection = ({ tasks, onPermanentDelete, onRecover }: TrashSecti
                     <p className="text-sm font-medium truncate">{task.title}</p>
                     <div className="flex items-center gap-1.5 mt-0.5">
                       <FolderKanban className="size-3 text-muted-foreground shrink-0" />
-                      <span className="text-xs text-muted-foreground truncate">
+                      <span className="text-xs text-muted-foreground truncate capitalize">
                         {task.project.name}
                       </span>
                     </div>

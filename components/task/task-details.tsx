@@ -29,7 +29,7 @@ const TaskDetails = ({ task, documentation, currentUserRole }: TaskProps) => {
            <div className='flex flex-wrap justify-between w-full items-center gap-4'>
             <div className='flex items-center gap-2'>
                 <ProjectAvatar name={task.project.name} />
-                <p className='text-xs font-semibold text-muted-foreground'>
+                <p className='text-xs font-semibold text-muted-foreground capitalize'>
                     {task.project.name}
                 </p>
             </div>

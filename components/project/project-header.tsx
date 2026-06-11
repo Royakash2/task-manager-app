@@ -20,7 +20,7 @@ export const ProjectHeader = ({ project }: { project: projectProps }) => {
                     
                     {/* Info */}
                     <div className="min-w-0 flex-1">
-                        <h1 className="text-xl sm:text-2xl 2xl:text-3xl font-bold tracking-tight text-foreground leading-tight">
+                        <h1 className="text-xl sm:text-2xl 2xl:text-3xl font-bold tracking-tight text-foreground leading-tight capitalize">
                             {project?.name}
                         </h1>
                         {project?.description && (
