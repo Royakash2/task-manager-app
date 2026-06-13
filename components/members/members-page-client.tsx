@@ -9,11 +9,12 @@ import { RemoveMemberDialog } from "./remove-member-dialog";
 import { Search, Users, AlertCircle } from "lucide-react";
 import type { WorkspaceMemberProps } from "@/utils/types";
 import { useWorkspaceId } from "@/hooks/use-workspace-id";
+import { AccessLevel } from "@prisma/client";
 
 interface MembersPageClientProps {
   members: WorkspaceMemberProps[];
   currentUserId: string;
-  currentUserRole: string | null;
+  currentUserRole: AccessLevel | null;
   error?: string | null;
 }
 
@@ -27,7 +28,7 @@ export const MembersPageClient = ({
   const [removeTarget, setRemoveTarget] = useState<WorkspaceMemberProps | null>(null);
   const workspaceId = useWorkspaceId();
 
-  const isOwner = currentUserRole === "OWNER";
+  const isOwner = currentUserRole === AccessLevel.OWNER;
   // const canManage = currentUserRole === "OWNER" || currentUserRole === "ADMIN";
 
   const filtered = members.filter((m) => {

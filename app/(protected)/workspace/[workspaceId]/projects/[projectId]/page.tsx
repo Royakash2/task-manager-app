@@ -13,6 +13,7 @@ import type {
   TaskStats,
 } from "@/utils/types";
 import { userRequired } from "@/app/data/user/get-user";
+import { AccessLevel } from "@prisma/client";
 import { getUserRole } from "@/lib/permissions";
 import { NotFoundState } from "@/components/not-found-state";
 import Link from "next/link";
@@ -39,7 +40,7 @@ const ProjectPage = async (props: ProjectPageProps) => {
     );
   }
 
-  const isMember = currentUserRole === "MEMBER";
+  const isMember = currentUserRole === AccessLevel.MEMBER;
 
   // Fetch settings data only if user can see settings
   const settingsResult = !isMember

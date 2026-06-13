@@ -3,7 +3,7 @@
 
 import React from 'react'
 import { AppSidebarDataProps } from './AppSidebarContainer'
-import { User } from '@prisma/client'
+import { AccessLevel, User } from '@prisma/client'
 import { projectProps, workspaceMembersProps } from '@/utils/types'
 import { Sidebar, SidebarContent, SidebarHeader, useSidebar } from '../ui/sidebar'
 import { Button } from '../ui/button'
@@ -29,7 +29,7 @@ function AppSidebar(
             data: AppSidebarDataProps,
             workspaceMembers: workspaceMembersProps[],
             project: projectProps[],
-            currentUserRole: string | null
+            currentUserRole: AccessLevel | null
         }) {
     const { state } = useSidebar()
 

@@ -1,5 +1,6 @@
 "use client";
 
+import { FileTypes } from "@prisma/client";
 import { Upload } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useFileUpload, type FileUploadProps } from "@/hooks/use-file-upload";
@@ -59,7 +60,7 @@ export const FileUpload = ({
               key={file.id}
               name={file.file.name}
               url={file.preview}
-              type={file.file.type.startsWith("image/") ? "IMAGE" : "PDF"}
+              type={file.file.type.startsWith("image/") ? FileTypes.IMAGE : FileTypes.PDF}
               onRemove={() => removePending(file.id)}
               isPending
             />

@@ -16,16 +16,17 @@ import { UserPlus } from "lucide-react";
 import { toast } from "sonner";
 import { inviteMember } from "@/app/actions/members";
 import { useWorkspaceId } from "@/hooks/use-workspace-id";
+import { AccessLevel } from "@prisma/client";
 
 interface InviteMemberDialogProps {
-  currentUserRole: string | null;
+  currentUserRole: AccessLevel | null;
 }
 
 export const InviteMemberDialog = ({ currentUserRole }: InviteMemberDialogProps) => {
   const workspaceId = useWorkspaceId();
   const [open, setOpen] = useState(false);
   const [email, setEmail] = useState("");
-  const [role, setRole] = useState<"ADMIN" | "MEMBER">("MEMBER");
+  const [role, setRole] = useState<typeof AccessLevel.ADMIN | typeof AccessLevel.MEMBER>(AccessLevel.MEMBER);
   const [pending, setPending] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -42,7 +43,7 @@ export const InviteMemberDialog = ({ currentUserRole }: InviteMemberDialogProps)
       if (result.success) {
         toast.success(`${result.data?.name} has been invited as ${role.toLowerCase()}`);
         setEmail("");
-        setRole("MEMBER");
+        setRole(AccessLevel.MEMBER);
         setOpen(false);
       } else {
         toast.error(result.error || "Failed to invite member");
@@ -55,8 +56,8 @@ export const InviteMemberDialog = ({ currentUserRole }: InviteMemberDialogProps)
     }
   };
 
-  const canManage = currentUserRole === "OWNER" || currentUserRole === "ADMIN";
-  const isOwner = currentUserRole === "OWNER";
+  const canManage = currentUserRole === AccessLevel.OWNER || currentUserRole === AccessLevel.ADMIN;
+  const isOwner = currentUserRole === AccessLevel.OWNER;
 
   if (!canManage) return null;
 
@@ -97,8 +98,8 @@ export const InviteMemberDialog = ({ currentUserRole }: InviteMemberDialogProps)
                   type="radio"
                   name="role"
                   value="MEMBER"
-                  checked={role === "MEMBER"}
-                  onChange={() => setRole("MEMBER")}
+                  checked={role === AccessLevel.MEMBER}
+                  onChange={() => setRole(AccessLevel.MEMBER)}
                   className="size-4 accent-primary"
                 />
                 <div className="flex flex-col">
@@ -114,8 +115,8 @@ export const InviteMemberDialog = ({ currentUserRole }: InviteMemberDialogProps)
                   type="radio"
                   name="role"
                   value="ADMIN"
-                  checked={role === "ADMIN"}
-                  onChange={() => setRole("ADMIN")}
+                  checked={role === AccessLevel.ADMIN}
+                  onChange={() => setRole(AccessLevel.ADMIN)}
                   className="size-4 accent-primary"
                 />
                 <div className="flex flex-col">

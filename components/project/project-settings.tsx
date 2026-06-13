@@ -22,6 +22,7 @@ import {
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { EntitySettingsForm } from "@/components/ui/entity-settings-form";
+import { AccessLevel } from "@prisma/client";
 import { DangerZoneCard } from "@/components/ui/danger-zone-card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
@@ -29,7 +30,7 @@ import { Badge } from "@/components/ui/badge";
 interface ProjectSettingsMember {
   id: string;
   userId: string;
-  accessLevel: string;
+  accessLevel: AccessLevel;
   hasAccess: boolean;
   user: {
     id: string;
@@ -42,7 +43,7 @@ interface ProjectSettingsMember {
 interface ProjectSettingsAdmin {
   id: string;
   userId: string;
-  accessLevel: string;
+  accessLevel: AccessLevel;
   user: {
     id: string;
     name: string;
@@ -60,7 +61,7 @@ interface ProjectSettingsProps {
   };
   admins: ProjectSettingsAdmin[];
   members: ProjectSettingsMember[];
-  currentUserRole: string | null;
+  currentUserRole: AccessLevel | null;
 }
 
 export const ProjectSettings = ({
@@ -69,7 +70,7 @@ export const ProjectSettings = ({
   members,
   currentUserRole,
 }: ProjectSettingsProps) => {
-  const canManage = currentUserRole === "OWNER" || currentUserRole === "ADMIN";
+  const canManage = currentUserRole === AccessLevel.OWNER || currentUserRole === AccessLevel.ADMIN;
   const [togglingMember, setTogglingMember] = useState<string | null>(null);
 
   const handleToggleAccess = async (memberId: string, currentAccess: boolean) => {
@@ -164,7 +165,7 @@ export const ProjectSettings = ({
                       className="shrink-0 gap-1 text-xs"
                     >
                       <Shield className="size-3" />
-                      {member.accessLevel === "OWNER" ? "Owner" : "Admin"}
+                      {member.accessLevel === AccessLevel.OWNER ? "Owner" : "Admin"}
                     </Badge>
                   </div>
                 ))}
