@@ -5,6 +5,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { taskFormSchema, TaskFormValues } from "@/lib/schema";
 import { projectProps } from "@/utils/types";
+import { TaskStatus, TaskPriority } from "@prisma/client";
 import {
   Dialog,
   DialogContent,
@@ -40,10 +41,10 @@ export const CreateTaskDialog = ({ project }: Props) => {
     defaultValues: {
       title: "",
       description: "",
-      status: "TODO",
+      status: TaskStatus.TODO,
       dueDate: undefined,
       startDate: undefined,
-      priority: "MEDIUM",
+      priority: TaskPriority.MEDIUM,
       attachments: [],
       assigneeId: "",
     },

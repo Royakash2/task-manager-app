@@ -1,4 +1,5 @@
 import type { Attachment } from "@/hooks/use-file-upload";
+import { FileTypes } from "@prisma/client";
 
 type UploadResult = { name: string; url: string };
 
@@ -18,7 +19,7 @@ export async function uploadPendingAttachments(
   const newAttachments: Attachment[] = uploadResult.map((f) => ({
     name: f.name,
     url: f.url,
-    type: f.name.toLowerCase().endsWith(".pdf") ? ("PDF" as const) : ("IMAGE" as const),
+    type: f.name.toLowerCase().endsWith(".pdf") ? FileTypes.PDF : FileTypes.IMAGE,
   }));
 
   return [...existingAttachments, ...newAttachments];

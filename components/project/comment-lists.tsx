@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { toast } from "sonner";
 
+import { AccessLevel } from "@prisma/client";
 import { CommentProps } from "@/utils/types";
 import { updateComment, deleteComment } from "@/app/actions/comment";
 import { CommentItem } from "./comment-item";
@@ -11,7 +12,7 @@ import { CommentEditForm } from "./comment-edit-form";
 interface CommentListProps {
   comments: CommentProps[];
   currentUserId?: string;
-  currentUserRole?: string | null;
+  currentUserRole?: AccessLevel | null;
   workspaceId?: string;
   projectId?: string;
   taskId?: string;

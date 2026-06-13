@@ -1,3 +1,4 @@
+import { AccessLevel } from "@prisma/client";
 import { getProjectById } from "@/app/data/project/get-project-by-id";
 import { ProjectTable } from "./project-table";
 
@@ -8,7 +9,7 @@ export const ProjectTableContainer = async ({
 }: {
     projectId: string;
     workspaceId: string;
-    currentUserRole: string | null;
+    currentUserRole: AccessLevel | null;
 }) => {
     const result = await getProjectById(workspaceId, projectId);
     const tasks = "error" in result ? [] : result.tasks;

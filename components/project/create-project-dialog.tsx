@@ -18,6 +18,7 @@ import { Form } from "../ui/form";
 import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
 import { Plus } from "lucide-react";
 import { toast } from "sonner";
+import { AccessLevel } from "@prisma/client";
 import { createProject } from "@/app/actions/project";
 
 import type { workspaceMembersProps } from "@/utils/types";
@@ -36,7 +37,7 @@ export const CreateProjectForm = ({ workspaceMembers }: Props) => {
     () =>
       workspaceMembers
         .filter(
-          (m) => m.accessLevel === "OWNER" || m.accessLevel === "ADMIN",
+          (m) => m.accessLevel === AccessLevel.OWNER || m.accessLevel === AccessLevel.ADMIN,
         )
         .map((m) => m.userId),
     [workspaceMembers],

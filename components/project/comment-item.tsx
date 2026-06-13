@@ -2,6 +2,7 @@ import { formatDistanceToNow } from "date-fns";
 import { Pencil } from "lucide-react";
 
 import { ProfileAvatar } from "../profile-avatar";
+import { AccessLevel } from "@prisma/client";
 import { CommentProps } from "@/utils/types";
 import { Button } from "../ui/button";
 import { ConfirmDeleteDialog } from "../ui/confirm-delete-dialog";
@@ -12,7 +13,7 @@ interface CommentItemProps {
   isEditing?: boolean;
   onStartEdit?: () => void;
   onDelete?: () => Promise<{ success: boolean; error?: string }>;
-  currentUserRole?: string | null;
+  currentUserRole?: AccessLevel | null;
   children?: React.ReactNode;
 }
 
@@ -55,7 +56,7 @@ export const CommentItem = ({
             </span>
           )}
 
-          {((isAuthor || currentUserRole === "OWNER" || currentUserRole === "ADMIN") && !isEditing && onDelete) && (
+          {((isAuthor || currentUserRole === AccessLevel.OWNER || currentUserRole === AccessLevel.ADMIN) && !isEditing && onDelete) && (
             <>
               {isAuthor && onStartEdit && (
               <Button
