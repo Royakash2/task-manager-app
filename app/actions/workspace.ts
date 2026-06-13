@@ -4,7 +4,7 @@ import { workspaceSchema, WorkspaceData } from "@/lib/schema";
 import { userRequired } from "../data/user/get-user";
 import { requireOwner } from "@/lib/permissions";
 import db from "@/lib/db";
-
+import { AccessLevel } from "@prisma/client";
 import { generateInviteCode } from "@/utils/get-invite-code";
 import { deleteAttachments } from "@/utils/file-attachments";
 import { revalidatePath } from "next/cache";
@@ -30,7 +30,7 @@ export const createWorkspace = async (data: WorkspaceData) => {
         members: {
           create: {
             userId: user.id,
-            accessLevel: "OWNER",
+            accessLevel: AccessLevel.OWNER,
           },
         },
       },

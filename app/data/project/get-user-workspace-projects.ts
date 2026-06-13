@@ -1,7 +1,7 @@
 import db from "@/lib/db";
-// refresh
 import { userRequired } from "../user/get-user";
 import { verifyAccess, getUserRole } from "@/lib/permissions";
+import { AccessLevel } from "@prisma/client";
 
 export const getUserWorkspaceProjects = async (workspaceId: string) => {
   try {
@@ -10,7 +10,7 @@ export const getUserWorkspaceProjects = async (workspaceId: string) => {
     await verifyAccess(kindeUser.id, workspaceId);
     const role = await getUserRole(kindeUser.id, workspaceId);
     const query =
-      role === "OWNER" || role === "ADMIN"
+      role === AccessLevel.OWNER || role === AccessLevel.ADMIN
         ? { workspaceId }
         : {
             projectAccess: {
