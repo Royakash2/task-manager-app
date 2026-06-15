@@ -24,6 +24,8 @@ model User {
   workspaces          WorkspaceMembers[]
   image               String?
   tasks               Task[]             @relation("TaskAssignee")
+  notifications       Notification[]
+  actedNotifications  Notification[] @relation("NotificationActor")
   createdTasks        Task[]             @relation("TaskCreator")
   activities          Activity[]
   comments            Comment[]
@@ -197,6 +199,35 @@ model File {
   task      Task?     @relation(fields: [taskId], references: [id], onDelete: Cascade)
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
+}
+
+enum NotificationType {
+  TASK_ASSIGNED
+  TASK_UPDATED
+  COMMENT_ADDED
+  COMMENT_EDITED
+  MEMBER_JOINED
+  PROJECT_CREATED
+}
+
+model Notification {
+  id          String           @id @default(uuid())
+  type        NotificationType
+  title       String
+  message     String
+  link        String?
+  isRead      Boolean          @default(false)
+  userId      String
+  user        User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  actorId     String?
+  actor       User?            @relation("NotificationActor", fields: [actorId], references: [id], onDelete: SetNull)
+  workspaceId String?
+  projectId   String?
+  taskId      String?
+  createdAt   DateTime         @default(now())
+
+  @@index([userId, isRead])
+  @@index([userId, createdAt])
 }
 
 enum SubscriptionPlan {

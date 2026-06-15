@@ -1,4 +1,4 @@
-import { $Enums, AccessLevel, Comment, WorkspaceMembers, Task, TaskStatus } from "@prisma/client";
+import { $Enums, AccessLevel, Comment, WorkspaceMembers, Task, TaskStatus, NotificationType, FileTypes } from "@prisma/client";
 
 export interface Activity {
   id: string;
@@ -88,10 +88,30 @@ export interface Column {
   tasks: ProjectTaskProps[];
 }
 
+export interface NotificationProps {
+  id: string;
+  type: NotificationType;
+  title: string;
+  message: string;
+  link: string | null;
+  isRead: boolean;
+  userId: string;
+  actorId: string | null;
+  actor: {
+    id: string;
+    name: string;
+    image: string | null;
+  } | null;
+  workspaceId: string | null;
+  projectId: string | null;
+  taskId: string | null;
+  createdAt: Date;
+}
+
 export interface WorkspaceMemberProps {
   id: string;
   userId: string;
-  accessLevel: string;
+  accessLevel: AccessLevel;
   createdAt: Date;
   user: {
     id: string;
