@@ -193,28 +193,22 @@ export function NotificationsProvider({ children }: { children: ReactNode }) {
     });
     setTotal((prev) => Math.max(0, prev - 1));
 
+    // Rollback helper — restores the notification if the server operation fails
+    const revert = () => {
+      if (!removedNotification) return;
+      setNotifications((prev) => [...prev, removedNotification!]);
+      if (!removedNotification.isRead) setUnreadCount((u) => u + 1);
+      setTotal((prev) => prev + 1);
+    };
+
     try {
       const result = await deleteNotificationAction(notificationId);
       if (!result.success) {
-        // Revert on failure
-        if (removedNotification) {
-          setNotifications((prev) => [...prev, removedNotification!]);
-          if (!removedNotification.isRead) {
-            setUnreadCount((u) => u + 1);
-          }
-          setTotal((prev) => prev + 1);
-        }
+        revert();
         if ('error' in result) toast.error(result.error);
       }
     } catch {
-      // Revert on failure
-      if (removedNotification) {
-        setNotifications((prev) => [...prev, removedNotification!]);
-        if (!removedNotification.isRead) {
-          setUnreadCount((u) => u + 1);
-        }
-        setTotal((prev) => prev + 1);
-      }
+      revert();
       toast.error("Failed to delete notification");
     }
   }, []);
