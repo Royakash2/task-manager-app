@@ -69,13 +69,12 @@ export async function createNotification(params: CreateNotificationParams) {
     return { success: true, data: notification };
   } catch (error) {
     console.error("Failed to create notification:", error);
-    return { success: false, error: "Failed to create notification" };
+    return actionError(error, "Failed to create notification");
   }
 }
 
 /**
  * Convenience helper: creates a TASK_ASSIGNED notification.
- * Reuses the same message format and link pattern in one place.
  */
 export async function notifyTaskAssigned(
   userId: string,
@@ -110,7 +109,7 @@ export async function markNotificationAsRead(notificationId: string) {
     return { success: true };
   } catch (error) {
     console.error("Failed to mark notification as read:", error);
-    return { success: false, error: "Failed to mark notification as read" };
+    return actionError(error, "Failed to mark notification as read");
   }
 }
 
@@ -128,10 +127,7 @@ export async function markAllNotificationsAsRead() {
     return { success: true };
   } catch (error) {
     console.error("Failed to mark all notifications as read:", error);
-    return {
-      success: false,
-      error: "Failed to mark all notifications as read",
-    };
+    return actionError(error, "Failed to mark all notifications as read");
   }
 }
 
@@ -167,6 +163,6 @@ export async function deleteNotification(notificationId: string) {
     return { success: true };
   } catch (error) {
     console.error("Failed to delete notification:", error);
-    return { success: false, error: "Failed to delete notification" };
+    return actionError(error, "Failed to delete notification");
   }
 }

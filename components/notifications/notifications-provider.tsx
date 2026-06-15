@@ -204,7 +204,7 @@ export function NotificationsProvider({ children }: { children: ReactNode }) {
           }
           setTotal((prev) => prev + 1);
         }
-        toast.error(result.error);
+        if ('error' in result) toast.error(result.error);
       }
     } catch {
       // Revert on failure
