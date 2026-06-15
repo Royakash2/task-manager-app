@@ -2,16 +2,18 @@
 import { userRequired } from "../data/user/get-user";
 import { requireRole } from "@/lib/permissions";
 import db from "@/lib/db";
+import { AccessLevel } from "@prisma/client";
 import { projectSchema, ProjectData } from "@/lib/schema";
 import { revalidatePath } from "next/cache";
 import { deleteAttachments } from "@/utils/file-attachments";
 import { actionError, logActivity } from "@/utils/actions";
+import { createNotification } from "./notification";
 
 export const createProject = async (data: ProjectData) => {
   try {
     const { user } = await userRequired();
     const validatedData = projectSchema.parse(data);
-    await requireRole(user.id, data.workspaceId, "OWNER", "ADMIN");
+    await requireRole(user.id, data.workspaceId, AccessLevel.OWNER, AccessLevel.ADMIN);
 
     const workspaceMembers = await db.workspaceMembers.findMany({
       where: {
@@ -21,7 +23,7 @@ export const createProject = async (data: ProjectData) => {
 
     // Always include all OWNERs and ADMINs — they always have access
     const ownerAndAdminIds = workspaceMembers
-      .filter((m) => m.accessLevel === "OWNER" || m.accessLevel === "ADMIN")
+      .filter((m) => m.accessLevel === AccessLevel.OWNER || m.accessLevel === AccessLevel.ADMIN)
       .map((m) => m.userId);
 
     const selectedIds = validatedData.membersAccess || [];
@@ -31,7 +33,7 @@ export const createProject = async (data: ProjectData) => {
       ...new Set([...ownerAndAdminIds, ...selectedIds, user.id]),
     ];
 
-    await db.project.create({
+    const project = await db.project.create({
       data: {
         name: validatedData.name,
         description: validatedData.description,
@@ -61,6 +63,25 @@ export const createProject = async (data: ProjectData) => {
       validatedData.workspaceId,
     );
 
+    // Notify all workspace members about the new project (except the creator)
+    const membersToNotify = workspaceMembers.filter(
+      (m) => m.userId !== user.id
+    );
+    await Promise.allSettled(
+      membersToNotify.map((member) =>
+        createNotification({
+          type: "PROJECT_CREATED",
+          title: "New Project Created",
+          message: `New project "${validatedData.name}" was created in the workspace`,
+          userId: member.userId,
+          actorId: user.id,
+          link: `/workspace/${validatedData.workspaceId}/projects/${project.id}`,
+          workspaceId: validatedData.workspaceId,
+          projectId: project.id,
+        })
+      )
+    );
+
     revalidatePath(`/workspace/${data.workspaceId}`);
     return { success: true };
   } catch (error) {
@@ -76,7 +97,7 @@ export const updateProject = async (
 ) => {
   try {
     const { user } = await userRequired();
-    await requireRole(user.id, workspaceId, "OWNER", "ADMIN");
+    await requireRole(user.id, workspaceId, AccessLevel.OWNER, AccessLevel.ADMIN);
 
     const validated = projectSchema.pick({ name: true, description: true }).partial().parse(data);
 
@@ -115,7 +136,7 @@ export const toggleProjectAccess = async (
 ) => {
   try {
     const { user } = await userRequired();
-    await requireRole(user.id, workspaceId, "OWNER", "ADMIN");
+    await requireRole(user.id, workspaceId, AccessLevel.OWNER, AccessLevel.ADMIN);
 
     // Upsert: create a ProjectAccess record if it doesn't exist, or update it
     const member = await db.workspaceMembers.findUnique({
@@ -128,7 +149,7 @@ export const toggleProjectAccess = async (
     }
 
     // OWNER and ADMIN always have access — can't toggle
-    if (member.accessLevel === "OWNER" || member.accessLevel === "ADMIN") {
+    if (member.accessLevel === AccessLevel.OWNER || member.accessLevel === AccessLevel.ADMIN) {
       return {
         success: false,
         error: "Workspace owners and admins always have access to all projects.",
@@ -172,7 +193,7 @@ export const toggleProjectAccess = async (
 export const deleteProject = async (workspaceId: string, projectId: string) => {
   try {
     const { user } = await userRequired();
-    await requireRole(user.id, workspaceId, "OWNER", "ADMIN");
+    await requireRole(user.id, workspaceId, AccessLevel.OWNER, AccessLevel.ADMIN);
 
     const project = await db.project.findUnique({
       where: { id: projectId },

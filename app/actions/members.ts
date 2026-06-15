@@ -7,6 +7,8 @@ import { getUserRole, requireOwner, requireRole } from "@/lib/permissions";
 import { getMemberWithUser } from "../data/members/get-member-with-user";
 import { revalidatePath } from "next/cache";
 import { actionError, logActivity } from "@/utils/actions";
+import { createNotification } from "./notification";
+import { AccessLevel } from "@prisma/client";
 
 export const inviteMember = async (
   workspaceId: string,
@@ -14,12 +16,12 @@ export const inviteMember = async (
 ) => {
   try {
     const { user } = await userRequired();
-    await requireRole(user.id, workspaceId, "OWNER", "ADMIN");
+    await requireRole(user.id, workspaceId, AccessLevel.OWNER, AccessLevel.ADMIN);
 
     const validated = inviteMemberSchema.parse(data);
 
     // ADMIN can only invite as MEMBER, not ADMIN
-    if (validated.role === "ADMIN") {
+    if (validated.role === AccessLevel.ADMIN) {
       await requireOwner(user.id, workspaceId);
     }
 
@@ -73,6 +75,17 @@ export const inviteMember = async (
       )
     ]);
 
+    // Notify the invited user
+    await createNotification({
+      type: "MEMBER_JOINED",
+      title: "Added to Workspace",
+      message: `You were added to "${workspace?.name ?? "the workspace"}" workspace`,
+      userId: invitedUser.id,
+      actorId: user.id,
+      link: `/workspace/${workspaceId}`,
+      workspaceId,
+    });
+
     revalidatePath(`/workspace/${workspaceId}`, "layout");
 
     return {
@@ -88,7 +101,7 @@ export const inviteMember = async (
 export const updateMemberRole = async (
   workspaceId: string,
   memberId: string,
-  newRole: "ADMIN" | "MEMBER",
+  newRole: AccessLevel,
 ) => {
   try {
     const { user } = await userRequired();
@@ -103,7 +116,7 @@ export const updateMemberRole = async (
     }
 
     // Prevent self-demotion
-    if (member.userId === user.id && member.accessLevel === "OWNER") {
+    if (member.userId === user.id && member.accessLevel === AccessLevel.OWNER) {
       return {
         success: false,
         error: "You cannot change your own role as the workspace owner.",
@@ -111,7 +124,7 @@ export const updateMemberRole = async (
     }
 
     // Prevent changing an OWNER's role
-    if (member.accessLevel === "OWNER") {
+    if (member.accessLevel === AccessLevel.OWNER) {
       return {
         success: false,
         error: "Cannot change the role of a workspace owner.",
@@ -144,7 +157,7 @@ export const updateMemberRole = async (
 export const removeMember = async (workspaceId: string, memberId: string) => {
   try {
     const { user } = await userRequired();
-    await requireRole(user.id, workspaceId, "OWNER", "ADMIN");
+    await requireRole(user.id, workspaceId, AccessLevel.OWNER, AccessLevel.ADMIN);
 
     const member = await getMemberWithUser(memberId);
 
@@ -161,7 +174,7 @@ export const removeMember = async (workspaceId: string, memberId: string) => {
     }
 
     // Prevent removing owners
-    if (member.accessLevel === "OWNER") {
+    if (member.accessLevel === AccessLevel.OWNER) {
       return {
         success: false,
         error: "Cannot remove a workspace owner.",
@@ -169,9 +182,9 @@ export const removeMember = async (workspaceId: string, memberId: string) => {
     }
 
     // ADMIN can only remove MEMBERs, not other ADMINs
-    if (member.accessLevel === "ADMIN") {
+    if (member.accessLevel === AccessLevel.ADMIN) {
       const actorRole = await getUserRole(user.id, workspaceId);
-      if (actorRole !== "OWNER") {
+      if (actorRole !== AccessLevel.OWNER) {
         return {
           success: false,
           error: "Only workspace owners can remove admins.",
