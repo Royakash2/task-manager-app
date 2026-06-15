@@ -60,23 +60,23 @@ const ProjectPage = async (props: ProjectPageProps) => {
       >
         <TabsList className="mt-4">
           <Link href={`?view=Dashboard`}>
-            <TabsTrigger className="px-1.5 md:px-3" value="Dashboard">
+            <TabsTrigger className="px-1.5 md:px-3 cursor-pointer" value="Dashboard">
               Dashboard
             </TabsTrigger>
           </Link>
           <Link href={`?view=Table`}>
-            <TabsTrigger className="px-1.5 md:px-3" value="Table">
+            <TabsTrigger className="px-1.5 md:px-3 cursor-pointer" value="Table">
               Table
             </TabsTrigger>
           </Link>
           <Link href={`?view=Kanban`}>
-            <TabsTrigger className="px-1.5 md:px-3" value="Kanban">
+            <TabsTrigger className="px-1.5 md:px-3 cursor-pointer" value="Kanban">
               Kanban
             </TabsTrigger>
           </Link>
           {!isMember && (
             <Link href={`?view=Settings`}>
-              <TabsTrigger className="px-1.5 md:px-3" value="Settings">
+              <TabsTrigger className="px-1.5 md:px-3 cursor-pointer" value="Settings">
                 Settings
               </TabsTrigger>
             </Link>

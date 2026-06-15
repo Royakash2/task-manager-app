@@ -123,7 +123,7 @@ export async function enforceAssigneeRestriction(
   workspaceId: string,
   submittedAssigneeId: string | null | undefined,
 ): Promise<string | null | undefined> {
-  if (!submittedAssigneeId || submittedAssigneeId === userId) return submittedAssigneeId;
+  if (!submittedAssigneeId || submittedAssigneeId === userId) return submittedAssigneeId || undefined;
 
   const role = await getUserRole(userId, workspaceId);
 

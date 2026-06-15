@@ -40,6 +40,7 @@ export const createColumns = (userRole: AccessLevel | null): ColumnDef<TaskTable
         }
         onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
         aria-label="select all"
+        className="cursor-pointer"
       />
     ),
     cell: ({ row }) => (
@@ -47,6 +48,7 @@ export const createColumns = (userRole: AccessLevel | null): ColumnDef<TaskTable
         checked={row.getIsSelected()}
         onCheckedChange={(value) => row.toggleSelected(!!value)}
         aria-label="select row"
+        className="cursor-pointer"
       />
     ),
     enableSorting: false,

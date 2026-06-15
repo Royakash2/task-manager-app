@@ -31,17 +31,23 @@ interface DataTableProps<TData, TValue> {
     columns: ColumnDef<TData, TValue>[]
     data: TData[]
     meta?: Record<string, unknown>
+    rowSelection?: Record<string, boolean>
+    onRowSelectionChange?: React.Dispatch<React.SetStateAction<Record<string, boolean>>>
 }
 
 export function DataTable<TData, TValue>({
     columns,
     data,
     meta,
+    rowSelection: externalRowSelection,
+    onRowSelectionChange: externalOnRowSelectionChange,
 }: DataTableProps<TData, TValue>) {
     const [sorting, setSorting] = useState<SortingState>([]);
     const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
     const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
-    const [rowSelection, setRowSelection] = useState({});
+    const [internalRowSelection, setInternalRowSelection] = useState<Record<string, boolean>>({});
+    const rowSelection = externalRowSelection ?? internalRowSelection;
+    const setRowSelection = externalOnRowSelectionChange ?? setInternalRowSelection;
     const table = useReactTable({
         data,
         columns,
