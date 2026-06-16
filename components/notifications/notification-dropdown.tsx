@@ -3,8 +3,7 @@
 import { useNotifications } from "@/hooks/use-notifications";
 import { NotificationItem } from "./notification-item";
 import { Button } from "@/components/ui/button";
-import { Bell, CheckCheck, Loader2, ExternalLink } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { Bell, CheckCheck, Loader2 } from "lucide-react";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef } from "react";
 
@@ -51,16 +50,17 @@ export function NotificationDropdown() {
       <Button
         variant="ghost"
         size="icon"
-        className="relative"
         onClick={isDropdownOpen ? closeDropdown : openDropdown}
         aria-label="Notifications"
       >
-        <Bell className="h-5 w-5" />
-        {unreadCount > 0 && (
-          <span className="absolute -top-0.5 -right-0.5 flex h-4 w-4 items-center justify-center rounded-full bg-primary text-[10px] font-bold text-primary-foreground ring-2 ring-background">
-            {unreadCount > 9 ? "9+" : unreadCount}
-          </span>
-        )}
+        <span className="relative inline-flex">
+          <Bell className="size-4" />
+          {unreadCount > 0 && (
+            <span className="absolute -top-1 -right-1 flex h-3 min-w-3 items-center justify-center rounded-full bg-primary px-0.5 text-[8px] font-bold text-primary-foreground leading-none">
+              {unreadCount > 9 ? "9+" : unreadCount}
+            </span>
+          )}
+        </span>
       </Button>
 
       {/* Dropdown */}

@@ -82,18 +82,20 @@ export const NavMain = ({ currentUserRole }: NavMainProps) => {
                   tooltip={item.label}
                 >
                   <Link href={item.href} onClick={() => setOpenMobile(false)}>
-                    <Icon className="size-4" />
+                    <span className="relative">
+                      <Icon className="size-4" />
+                      {(item.badge ?? 0) > 0 && (
+                        <span
+                          className={cn(
+                            "absolute -top-1 -right-1 flex h-3 min-w-3 items-center justify-center rounded-full px-0.5 text-[8px] font-bold leading-none",
+                            "bg-primary text-primary-foreground"
+                          )}
+                        >
+                          {(item.badge ?? 0) > 9 ? "9+" : item.badge ?? 0}
+                        </span>
+                      )}
+                    </span>
                     <span>{item.label}</span>
-                    {(item.badge ?? 0) > 0 && (
-                      <span
-                        className={cn(
-                          "ml-auto flex h-5 min-w-5 items-center justify-center rounded-full px-1 text-[10px] font-bold",
-                          "bg-primary text-primary-foreground"
-                        )}
-                      >
-                        {(item.badge ?? 0) > 9 ? "9+" : item.badge ?? 0}
-                      </span>
-                    )}
                   </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>
