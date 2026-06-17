@@ -9,7 +9,13 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "../ui/sidebar";
-import { Bell, CheckSquare, LayoutDashboard, Settings, Users } from "lucide-react";
+import {
+  Bell,
+  CheckSquare,
+  LayoutDashboard,
+  Settings,
+  Users,
+} from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
@@ -88,10 +94,10 @@ export const NavMain = ({ currentUserRole }: NavMainProps) => {
                         <span
                           className={cn(
                             "absolute -top-1 -right-1 flex h-3 min-w-3 items-center justify-center rounded-full px-0.5 text-[8px] font-bold leading-none",
-                            "bg-primary text-primary-foreground"
+                            "bg-primary text-primary-foreground",
                           )}
                         >
-                          {(item.badge ?? 0) > 9 ? "9+" : item.badge ?? 0}
+                          {(item.badge ?? 0) > 9 ? "9+" : (item.badge ?? 0)}
                         </span>
                       )}
                     </span>
