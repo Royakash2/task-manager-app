@@ -26,8 +26,6 @@ export const industryTypesList = [
   "Others",
 ];
 
-
-
 export const taskStats = [
   {
     status: TaskStatus.TODO,
