@@ -58,5 +58,3 @@ export const taskStats = [
     color: "bg-blue-500",
   },
 ];
-
-
