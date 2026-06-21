@@ -1,5 +1,5 @@
 import { userRequired } from '@/app/data/user/get-user';
-import { getUserWorkspaces } from '@/app/data/workspace/getUserWorkspace'
+import { getUserWorkspaces } from '@/app/data/workspace/get-user-workspace'
 import { OnboardingForm } from '@/components/OnboardingForm';
 import { redirect } from 'next/navigation';
 import React from 'react'
