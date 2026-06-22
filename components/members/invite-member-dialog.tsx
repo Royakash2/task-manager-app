@@ -20,9 +20,10 @@ import { AccessLevel } from "@prisma/client";
 
 interface InviteMemberDialogProps {
   currentUserRole: AccessLevel | null;
+  children?: React.ReactNode;
 }
 
-export const InviteMemberDialog = ({ currentUserRole }: InviteMemberDialogProps) => {
+export const InviteMemberDialog = ({ currentUserRole, children }: InviteMemberDialogProps) => {
   const workspaceId = useWorkspaceId();
   const [open, setOpen] = useState(false);
   const [email, setEmail] = useState("");
@@ -64,10 +65,12 @@ export const InviteMemberDialog = ({ currentUserRole }: InviteMemberDialogProps)
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button size="sm" className="cursor-pointer">
-          <UserPlus className="size-4 mr-1.5" />
-          Invite
-        </Button>
+        {children ?? (
+          <Button size="sm" className="cursor-pointer">
+            <UserPlus className="size-4 mr-1.5" />
+            Invite
+          </Button>
+        )}
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
