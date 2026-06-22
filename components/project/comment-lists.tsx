@@ -87,9 +87,17 @@ export const CommentList = ({
     }
   };
 
+  if (!comments || comments.length === 0) {
+    return (
+      <p className="text-sm text-muted-foreground/60 text-center py-8">
+        No comments yet.
+      </p>
+    );
+  }
+
   return (
     <div className="space-y-5">
-      {comments?.map((comment) => {
+      {comments.map((comment) => {
         const isEditing = editingCommentId === comment.id;
         const isAuthor =
           !!currentUserId && comment.user.id === currentUserId;
