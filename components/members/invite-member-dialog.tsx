@@ -66,10 +66,14 @@ export const InviteMemberDialog = ({ currentUserRole, children }: InviteMemberDi
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         {children ?? (
-          <Button size="sm" className="cursor-pointer">
-            <UserPlus className="size-4 mr-1.5" />
-            Invite
-          </Button>
+           <Button
+              variant="outline"
+              size="default"
+              className="w-full sm:w-auto"
+            >
+              <UserPlus className="size-4 mr-2" />
+              Invite
+            </Button>
         )}
       </DialogTrigger>
       <DialogContent>
