@@ -1,4 +1,4 @@
-import { $Enums, AccessLevel, Comment, WorkspaceMembers, Task, TaskStatus, NotificationType, FileTypes } from "@prisma/client";
+import { $Enums, AccessLevel, Comment, WorkspaceMembers, Task, TaskStatus, NotificationType } from "@prisma/client";
 
 export interface Activity {
   id: string;
@@ -30,7 +30,7 @@ export interface workspaceMembersProps extends WorkspaceMembers {
     id: string;
     hasAccess: boolean;
     projectId: string;
-  };
+  }[];
 }
 
 export interface projectProps {
@@ -119,4 +119,42 @@ export interface WorkspaceMemberProps {
     email: string;
     image: string | null;
   };
+}
+
+// ── Dashboard types ─────────────────────────────────────────────────────────
+
+export interface ProjectDashboardStat {
+  id: string;
+  name: string;
+  description: string | null;
+  workspaceId: string;
+  totalTasks: number;
+  completedTasks: number;
+  completionPercentage: number;
+  memberCount: number;
+  members: { id: string; name: string; image: string | null }[];
+  lastActivityAt: Date | null;
+}
+
+export interface DashboardActivityItem {
+  id: string;
+  type: string;
+  description: string;
+  createdAt: Date;
+  user: { name: string; image: string | null };
+}
+
+export interface WorkspaceDashboardData {
+  workspace: {
+    name: string;
+    description: string | null;
+  };
+  currentUserRole: AccessLevel | null;
+  taskStats: {
+    total: number;
+  };
+  projectsStats: ProjectDashboardStat[];
+  memberCount: number;
+  workspaceMembers: workspaceMembersProps[];
+  recentActivities: DashboardActivityItem[];
 }
