@@ -2,15 +2,16 @@
 
 import { useCallback, useEffect, useState } from "react";
 import Image from "next/image";
+import { FileTypes } from "@prisma/client";
 import { X, ChevronLeft, ChevronRight } from "lucide-react";
 type ImageLightboxPreviewProps = {
-  images: { id: string; name: string; url: string; type: string }[];
+  images: { id: string; name: string; url: string; type: FileTypes }[];
 };
 
 export const ImageLightboxPreview = ({ images }: ImageLightboxPreviewProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(0);
-  const imageFiles = images.filter((img) => img.type === "IMAGE");
+  const imageFiles = images.filter((img) => img.type === FileTypes.IMAGE);
 
   const open = useCallback((fileId: string) => {
     const idx = imageFiles.findIndex((f) => f.id === fileId);
@@ -62,7 +63,7 @@ export const ImageLightboxPreview = ({ images }: ImageLightboxPreviewProps) => {
       <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
         {images.map((file) => (
           <div key={file.id} className="relative group cursor-pointer">
-            {file.type === "IMAGE" ? (
+            {file.type === FileTypes.IMAGE ? (
               <div
                 onClick={() => open(file.id)}
                 className="relative w-full h-32 rounded-lg overflow-hidden border border-slate-200 dark:border-slate-800"

@@ -13,6 +13,7 @@ import type {
   TaskStats,
 } from "@/utils/types";
 import { userRequired } from "@/app/data/user/get-user";
+import { AccessLevel } from "@prisma/client";
 import { getUserRole } from "@/lib/permissions";
 import { NotFoundState } from "@/components/not-found-state";
 import Link from "next/link";
@@ -39,7 +40,7 @@ const ProjectPage = async (props: ProjectPageProps) => {
     );
   }
 
-  const isMember = currentUserRole === "MEMBER";
+  const isMember = currentUserRole === AccessLevel.MEMBER;
 
   // Fetch settings data only if user can see settings
   const settingsResult = !isMember
@@ -59,23 +60,23 @@ const ProjectPage = async (props: ProjectPageProps) => {
       >
         <TabsList className="mt-4">
           <Link href={`?view=Dashboard`}>
-            <TabsTrigger className="px-1.5 md:px-3" value="Dashboard">
+            <TabsTrigger className="px-1.5 md:px-3 cursor-pointer" value="Dashboard">
               Dashboard
             </TabsTrigger>
           </Link>
           <Link href={`?view=Table`}>
-            <TabsTrigger className="px-1.5 md:px-3" value="Table">
+            <TabsTrigger className="px-1.5 md:px-3 cursor-pointer" value="Table">
               Table
             </TabsTrigger>
           </Link>
           <Link href={`?view=Kanban`}>
-            <TabsTrigger className="px-1.5 md:px-3" value="Kanban">
+            <TabsTrigger className="px-1.5 md:px-3 cursor-pointer" value="Kanban">
               Kanban
             </TabsTrigger>
           </Link>
           {!isMember && (
             <Link href={`?view=Settings`}>
-              <TabsTrigger className="px-1.5 md:px-3" value="Settings">
+              <TabsTrigger className="px-1.5 md:px-3 cursor-pointer" value="Settings">
                 Settings
               </TabsTrigger>
             </Link>

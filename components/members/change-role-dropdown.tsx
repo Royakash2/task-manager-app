@@ -15,10 +15,11 @@ import { ChevronDown } from "lucide-react";
 import { toast } from "sonner";
 import { updateMemberRole } from "@/app/actions/members";
 import { useWorkspaceId } from "@/hooks/use-workspace-id";
+import { AccessLevel } from "@prisma/client";
 
 interface ChangeRoleDropdownProps {
   memberId: string;
-  currentRole: string;
+  currentRole: AccessLevel;
   isOwner: boolean;
 }
 
@@ -31,9 +32,9 @@ export const ChangeRoleDropdown = ({
   const [role, setRole] = useState(currentRole);
   const [pending, setPending] = useState(false);
 
-  if (!isOwner || currentRole === "OWNER") return null;
+  if (!isOwner || currentRole === AccessLevel.OWNER) return null;
 
-  const handleRoleChange = async (newRole: string) => {
+  const handleRoleChange = async (newRole: AccessLevel) => {
     if (newRole === role) return;
 
     setPending(true);
@@ -42,7 +43,7 @@ export const ChangeRoleDropdown = ({
       const result = await updateMemberRole(
         workspaceId,
         memberId,
-        newRole as "ADMIN" | "MEMBER",
+        newRole,
       );
       if (!result.success) {
         setRole(role); // revert
@@ -74,7 +75,7 @@ export const ChangeRoleDropdown = ({
           Change role
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
-        <DropdownMenuRadioGroup value={role} onValueChange={handleRoleChange}>
+        <DropdownMenuRadioGroup value={role} onValueChange={(v) => handleRoleChange(v as AccessLevel)}>
           <DropdownMenuRadioItem value="MEMBER" className="cursor-pointer">
             <div className="flex flex-col">
               <span className="text-sm">Member</span>

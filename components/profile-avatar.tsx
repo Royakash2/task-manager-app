@@ -8,12 +8,14 @@ export const ProfileAvatar = ({
   className,
   numOfChars = 1,
 }: {
-  name: string;
+  name?: string | null;
   url?: string;
   size?: "xs" | "sm" | "md" | "lg";
   className?: string;
   numOfChars?: number;
 }) => {
+  const displayName = name || "?";
+
   return (
     <Avatar
       className={cn(
@@ -25,9 +27,9 @@ export const ProfileAvatar = ({
         className
       )}
     >
-      <AvatarImage src={url || undefined} alt={name} />
+      <AvatarImage src={url || undefined} alt={displayName} />
       <AvatarFallback className="rounded-full bg-blue-600/10 text-blue-600 font-medium">
-        {name.substring(0, numOfChars).toUpperCase()}
+        {displayName.substring(0, numOfChars).toUpperCase()}
       </AvatarFallback>
     </Avatar>
   );

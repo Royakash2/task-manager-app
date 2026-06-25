@@ -1,5 +1,5 @@
 "use client"
-import { $Enums } from "@prisma/client"
+import { $Enums, AccessLevel } from "@prisma/client"
 import { Column, ProjectTaskProps } from "@/utils/types"
 import { startTransition, useEffect, useState } from "react"
 import { DragDropContext, DropResult } from "@hello-pangea/dnd"
@@ -14,7 +14,7 @@ const columnsTitle: Partial<Record<$Enums.TaskStatus, string>> = {
     COMPLETED: "Completed",
 }
 
-export default function KanbanBoardContainer({ initialTasks, currentUserRole }: { initialTasks: ProjectTaskProps[], currentUserRole: string | null }) {
+export default function KanbanBoardContainer({ initialTasks, currentUserRole }: { initialTasks: ProjectTaskProps[], currentUserRole: AccessLevel | null }) {
     const [columns, setColumns] = useState<Column[]>([]);
 
     useEffect(() => {
@@ -71,7 +71,7 @@ export default function KanbanBoardContainer({ initialTasks, currentUserRole }: 
         <DragDropContext onDragEnd={onDragEnd}>
             <div className="flex overflow-x-auto w-full min-h-[calc(100vh-220px)] dark:bg-muted/15 border border-border/40 rounded-lg [&::-webkit-scrollbar]:h-2 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:bg-border hover:[&::-webkit-scrollbar-thumb]:bg-muted-foreground/30">
                 {columns.map((column) => (
-                    <KanbanColumn key={column.id} column={column} isViewer={currentUserRole === "MEMBER"} />
+                    <KanbanColumn key={column.id} column={column} isViewer={currentUserRole === AccessLevel.MEMBER} />
                 ))}
             </div>
         </DragDropContext>

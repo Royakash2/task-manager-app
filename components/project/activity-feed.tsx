@@ -7,9 +7,17 @@ interface ActivityFeedProps {
 }
 
 export const ActivityFeed = ({ activities }: ActivityFeedProps) => {
+    if (!activities || activities.length === 0) {
+        return (
+            <p className="text-sm text-muted-foreground/60 text-center py-8">
+                No recent activity yet.
+            </p>
+        );
+    }
+
     return (
         <div className="space-y-5">
-            {activities?.map((activity) => (
+            {activities.map((activity) => (
                 <div key={activity.id} className="flex items-start gap-4">
                     <ProfileAvatar 
                         url={activity.user.image || undefined}

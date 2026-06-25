@@ -1,5 +1,5 @@
 import { projectProps } from '@/utils/types'
-import { File, Task, User } from '@prisma/client'
+import { AccessLevel, File, Task, User } from '@prisma/client'
 import React from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/card'
 import { ProjectAvatar } from '../project/Project-avatar'
@@ -19,7 +19,7 @@ export interface TaskProps {
   attachments: File[]
   },
   documentation?: { content: string | null } | null,
-  currentUserRole?: string | null,
+  currentUserRole?: AccessLevel | null | undefined,
 }
 
 const TaskDetails = ({ task, documentation, currentUserRole }: TaskProps) => {
@@ -59,7 +59,7 @@ const TaskDetails = ({ task, documentation, currentUserRole }: TaskProps) => {
                   task={task}
                   project={task.project}
                 />
-                {currentUserRole !== "MEMBER" && (
+                {currentUserRole !== AccessLevel.MEMBER && (
                 <DeleteTaskDialog
                   taskId={task.id}
                   projectId={task.project.id}

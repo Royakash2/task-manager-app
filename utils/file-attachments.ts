@@ -1,9 +1,10 @@
 import { UTApi } from "uploadthing/server";
 import db from "@/lib/db";
+import { FileTypes } from "@prisma/client";
 
 const utapi = new UTApi();
 
-type AttachmentInput = { name: string; url: string; type: "IMAGE" | "PDF" };
+type AttachmentInput = { name: string; url: string; type: FileTypes };
 
 export async function syncTaskAttachments(
   taskId: string,

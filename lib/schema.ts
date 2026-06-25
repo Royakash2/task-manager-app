@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { TaskStatus, TaskPriority, AccessLevel, FileTypes } from "@prisma/client";
 
 export const userSchema = z.object({
   name: z
@@ -30,27 +31,22 @@ export const projectSchema = z.object({
   membersAccess: z.array(z.string()).optional(),
 });
 
+const memberRoles = [AccessLevel.ADMIN, AccessLevel.MEMBER] as const;
+
 export const taskFormSchema = z.object({
   title: z.string().min(1, "Title is required"),
   description: z.string().optional(),
   assigneeId: z.string().optional(),
-  status: z.enum([
-    "TODO",
-    "IN_PROGRESS",
-    "COMPLETED",
-    "CANCELLED",
-    "BACKLOG",
-    "IN_REVIEW",
-  ]),
+  status: z.nativeEnum(TaskStatus),
   dueDate: z.date().optional(),
   startDate: z.date().optional(),
-  priority: z.enum(["LOW", "MEDIUM", "HIGH", "CRITICAL"]),
+  priority: z.nativeEnum(TaskPriority),
   attachments: z
     .array(
       z.object({
         name: z.string(),
         url: z.string(),
-        type: z.enum(["IMAGE", "PDF"]),
+        type: z.nativeEnum(FileTypes),
       }),
     )
     .optional(),
@@ -58,12 +54,12 @@ export const taskFormSchema = z.object({
 
 export const inviteMemberSchema = z.object({
   email: z.string().email("Invalid email address"),
-  role: z.enum(["ADMIN", "MEMBER"]),
+  role: z.enum(memberRoles),
 });
 
 export const updateMemberRoleSchema = z.object({
   memberId: z.string().min(1),
-  newRole: z.enum(["ADMIN", "MEMBER"]),
+  newRole: z.enum(memberRoles),
 });
 
 // Inferred types for use across both server actions and UI components

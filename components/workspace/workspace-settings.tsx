@@ -1,5 +1,6 @@
 "use client";
 
+import { AccessLevel } from "@prisma/client";
 import { workspaceSchema } from "@/lib/schema";
 
 import { EntitySettingsForm } from "@/components/ui/entity-settings-form";
@@ -29,7 +30,7 @@ interface SettingsPageClientProps {
     updatedAt: Date;
   };
   workspaceId: string;
-  currentUserRole: string | null;
+  currentUserRole: AccessLevel | null;
   trashedTasks: TrashedTask[];
 }
 
@@ -39,7 +40,7 @@ export const SettingsPageClient = ({
   currentUserRole,
   trashedTasks,
 }: SettingsPageClientProps) => {
-  const isOwner = currentUserRole === "OWNER";
+  const isOwner = currentUserRole === AccessLevel.OWNER;
 
   return (
     <div className="flex flex-col gap-8 p-4 md:p-6">

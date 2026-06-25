@@ -1,6 +1,7 @@
 import { userRequired } from "@/app/data/user/get-user";
 import { createUploadthing, type FileRouter } from "uploadthing/next";
 import { UploadThingError } from "uploadthing/server";
+import { FileTypes } from "@prisma/client";
 
 import db from "@/lib/db";
 
@@ -31,7 +32,7 @@ const handleUploadComplete = async ({
       data: {
         name: file.name,
         url,
-        type: file.name.toLowerCase().endsWith(".pdf") ? "PDF" : "IMAGE",
+        type: file.name.toLowerCase().endsWith(".pdf") ? FileTypes.PDF : FileTypes.IMAGE,
       },
     });
   } catch (error) {

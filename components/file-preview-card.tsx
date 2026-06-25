@@ -1,12 +1,13 @@
 "use client";
 
+import { FileTypes } from "@prisma/client";
 import Image from "next/image";
 import { X } from "lucide-react";
 
 type FilePreviewCardProps = {
   name: string;
   url: string;
-  type: string;
+  type: FileTypes;
   onRemove: () => void;
   isPending?: boolean;
 };
@@ -21,7 +22,7 @@ export function FilePreviewCard({
   return (
     <div className="group relative flex items-center justify-between w-50 border border-slate-200 dark:border-slate-800 rounded-lg p-3 bg-slate-50/50 dark:bg-slate-900/50 shadow-xs">
       <div className="flex items-center gap-3 min-w-0 pr-6">
-        {type === "IMAGE" ? (
+        {type === FileTypes.IMAGE ? (
           <div className="relative w-12 h-12 rounded-md overflow-hidden border border-slate-200 dark:border-slate-800 shrink-0">
             <Image src={url} alt={name} className="object-cover" fill sizes="48px" />
           </div>

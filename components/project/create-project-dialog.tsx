@@ -18,6 +18,7 @@ import { Form } from "../ui/form";
 import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
 import { Plus } from "lucide-react";
 import { toast } from "sonner";
+import { AccessLevel } from "@prisma/client";
 import { createProject } from "@/app/actions/project";
 
 import type { workspaceMembersProps } from "@/utils/types";
@@ -25,9 +26,10 @@ import CreateProjectDialogBody from "./create-project-form-content";
 
 interface Props {
   workspaceMembers: workspaceMembersProps[];
+  children?: React.ReactNode;
 }
 
-export const CreateProjectForm = ({ workspaceMembers }: Props) => {
+export const CreateProjectForm = ({ workspaceMembers, children }: Props) => {
   const workspaceId = useWorkspaceId();
   const [pending, setPending] = useState(false);
   const [dialogOpen, setDialogOpen] = useState(false);
@@ -36,7 +38,7 @@ export const CreateProjectForm = ({ workspaceMembers }: Props) => {
     () =>
       workspaceMembers
         .filter(
-          (m) => m.accessLevel === "OWNER" || m.accessLevel === "ADMIN",
+          (m) => m.accessLevel === AccessLevel.OWNER || m.accessLevel === AccessLevel.ADMIN,
         )
         .map((m) => m.userId),
     [workspaceMembers],
@@ -73,20 +75,24 @@ export const CreateProjectForm = ({ workspaceMembers }: Props) => {
 
   return (
     <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-      <Tooltip>
-        <TooltipTrigger asChild>
-          <DialogTrigger asChild>
-            <Button
-              variant="ghost"
-              className="size-7 shrink-0 hover:bg-sidebar-accent cursor-pointer"
-              size="icon"
-            >
-              <Plus />
-            </Button>
-          </DialogTrigger>
-        </TooltipTrigger>
-        <TooltipContent side="right">Create Project</TooltipContent>
-      </Tooltip>
+      {children ? (
+        <DialogTrigger asChild>{children}</DialogTrigger>
+      ) : (
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <DialogTrigger asChild>
+              <Button
+                variant="ghost"
+                className="size-7 shrink-0 hover:bg-sidebar-accent cursor-pointer"
+                size="icon"
+              >
+                <Plus />
+              </Button>
+            </DialogTrigger>
+          </TooltipTrigger>
+          <TooltipContent side="right">Create Project</TooltipContent>
+        </Tooltip>
+      )}
       <DialogContent className="max-h-[95vh] overflow-y-auto no-scrollbar">
         <DialogHeader>
           <DialogTitle className="text-2xl font-bold">

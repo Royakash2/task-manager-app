@@ -3,8 +3,10 @@
 import db from "@/lib/db";
 import { userRequired } from "../data/user/get-user";
 import { verifyAccess, requireTaskAccess, getUserRole } from "@/lib/permissions";
+import { AccessLevel } from "@prisma/client";
 import { revalidatePath } from "next/cache";
 import { actionError, logActivity } from "@/utils/actions";
+import { createNotification } from "./notification";
 
 export const createComment = async (
   content: string,
@@ -33,7 +35,7 @@ export const createComment = async (
       }),
       db.task.findUnique({
         where: { id: taskId },
-        select: { title: true },
+        select: { title: true, createdById: true, assigneeId: true },
       }),
     ]);
 
@@ -43,6 +45,29 @@ export const createComment = async (
       user.id,
       projectId,
     );
+
+    // Notify task creator and assignee (but not the commenter themselves)
+    const notifyUserIds = new Set<string>();
+    if (task?.createdById && task.createdById !== user.id) {
+      notifyUserIds.add(task.createdById);
+    }
+    if (task?.assigneeId && task.assigneeId !== user.id) {
+      notifyUserIds.add(task.assigneeId);
+    }
+
+    for (const notifyUserId of notifyUserIds) {
+      await createNotification({
+        type: "COMMENT_ADDED",
+        title: `Commented on "${task?.title || "untitled"}"`,
+        message: content.length > 120 ? content.slice(0, 120) + "..." : content,
+        userId: notifyUserId,
+        actorId: user.id,
+        link: `/workspace/${workspaceId}/projects/${projectId}/${taskId}`,
+        workspaceId,
+        projectId,
+        taskId,
+      });
+    }
 
     revalidatePath(`/workspace/${workspaceId}/projects/${projectId}/${taskId}`);
 
@@ -135,7 +160,7 @@ export const deleteComment = async (
     const role = await getUserRole(user.id, workspaceId);
 
     if (existingComment.userId !== user.id) {
-      if (!role || (role !== "OWNER" && role !== "ADMIN")) {
+      if (!role || (role !== AccessLevel.OWNER && role !== AccessLevel.ADMIN)) {
         throw new Error("You can only delete your own comments");
       }
     }

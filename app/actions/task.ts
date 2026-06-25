@@ -3,7 +3,7 @@
 import { userRequired } from "../data/user/get-user";
 import { taskFormSchema, TaskFormValues } from "@/lib/schema";
 import db from "@/lib/db";
-import { TaskStatus } from "@prisma/client";
+import { TaskStatus, AccessLevel } from "@prisma/client";
 import { revalidatePath } from "next/cache";
 import {
   requireRole,
@@ -16,6 +16,11 @@ import {
   deleteAttachments,
 } from "@/utils/file-attachments";
 import { actionError, logActivity } from "@/utils/actions";
+import { notifyTaskAssigned } from "./notification";
+
+// ============================================================================
+// CREATE
+// ============================================================================
 
 export const createTask = async (
   data: TaskFormValues,
@@ -74,6 +79,18 @@ export const createTask = async (
       projectId,
     );
 
+    // Notify assignee if someone else is assigned
+    if (assigneeId && assigneeId !== user.id) {
+      await notifyTaskAssigned(
+        assigneeId,
+        user.id,
+        newTask.id,
+        projectId,
+        workspaceId,
+        validatedData.title,
+      );
+    }
+
     revalidatePath(`/workspace/${workspaceId}/projects/${projectId}`);
 
     return { success: true };
@@ -83,6 +100,10 @@ export const createTask = async (
   }
 };
 
+// ============================================================================
+// SOFT DELETE
+// ============================================================================
+
 export const softDeleteTask = async (
   taskId: string,
   workspaceId: string,
@@ -91,7 +112,7 @@ export const softDeleteTask = async (
   try {
     const { user } = await userRequired();
 
-    await requireRole(user.id, workspaceId, "OWNER", "ADMIN");
+    await requireRole(user.id, workspaceId, AccessLevel.OWNER, AccessLevel.ADMIN);
 
     const existingTask = await db.task.findUnique({
       where: { id: taskId },
@@ -123,6 +144,10 @@ export const softDeleteTask = async (
     return actionError(error, "Failed to delete task");
   }
 };
+
+// ============================================================================
+// UPDATE
+// ============================================================================
 
 export const updateTaskPosition = async (
   taskId: string,
@@ -283,6 +308,18 @@ export const updateTaskDetails = async (
       filesToKeepOrUpdate,
     );
 
+    // Notify new assignee if changed
+    if (assigneeId && assigneeId !== existingTask.assigneeId && assigneeId !== user.id) {
+      await notifyTaskAssigned(
+        assigneeId,
+        user.id,
+        taskId,
+        existingTask.projectId,
+        existingTask.project.workspaceId,
+        validatedData.title,
+      );
+    }
+
     await logActivity(
       "TASK_UPDATED",
       `updated task "${validatedData.title}"`,
@@ -301,6 +338,71 @@ export const updateTaskDetails = async (
   }
 };
 
+// ============================================================================
+// BULK ACTIONS
+// ============================================================================
+
+export const bulkDeleteTasks = async (
+  taskIds: string[],
+  workspaceId: string,
+) => {
+  try {
+    const { user } = await userRequired();
+    await requireRole(user.id, workspaceId, AccessLevel.OWNER, AccessLevel.ADMIN);
+
+    const tasks = await db.task.findMany({
+      where: {
+        id: { in: taskIds },
+        project: { workspaceId },
+        deletedAt: null,
+      },
+      select: {
+        id: true,
+        title: true,
+        projectId: true,
+      },
+    });
+
+    if (tasks.length === 0) {
+      return { success: false, error: "No tasks found to delete" };
+    }
+
+    await db.task.updateMany({
+      where: {
+        id: { in: tasks.map((t) => t.id) },
+      },
+      data: { deletedAt: new Date() },
+    });
+
+    // Log activity for each deleted task
+    await Promise.allSettled(
+      tasks.map((task) =>
+        logActivity(
+          "TASK_DELETED",
+          `deleted task "${task.title}"`,
+          user.id,
+          task.projectId,
+        ),
+      ),
+    );
+
+    // Revalidate all affected project paths
+    const projectIds = [...new Set(tasks.map((t) => t.projectId))];
+    for (const projectId of projectIds) {
+      revalidatePath(`/workspace/${workspaceId}/projects/${projectId}`);
+    }
+
+    return { success: true, count: tasks.length };
+  } catch (error) {
+    console.error("Failed to bulk delete tasks:", error);
+    return actionError(error, "Failed to delete tasks");
+  }
+};
+
+// ============================================================================
+// PERMANENT DELETE / RECOVER (Owner only — from Trash/Settings)
+// ============================================================================
+
 export const permanentlyDeleteTask = async (taskId: string) => {
   try {
     const { user } = await userRequired();
@@ -317,7 +419,7 @@ export const permanentlyDeleteTask = async (taskId: string) => {
       return { success: false, error: "Task not found" };
     }
 
-    await requireRole(user.id, task.project.workspaceId, "OWNER");
+    await requireRole(user.id, task.project.workspaceId, AccessLevel.OWNER);
 
     if (task.attachments.length > 0) {
       await deleteAttachments(task.attachments.map((f) => f.url));
@@ -352,7 +454,7 @@ export const recoverTask = async (taskId: string) => {
       return { success: false, error: "Task not found" };
     }
 
-    await requireRole(user.id, task.project.workspaceId, "OWNER");
+    await requireRole(user.id, task.project.workspaceId, AccessLevel.OWNER);
 
     await db.task.update({
       where: { id: taskId },

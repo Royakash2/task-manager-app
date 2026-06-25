@@ -1,4 +1,4 @@
-import { $Enums, AccessLevel, Comment, WorkspaceMembers, Task, TaskStatus } from "@prisma/client";
+import { $Enums, AccessLevel, Comment, WorkspaceMembers, Task, TaskStatus, NotificationType } from "@prisma/client";
 
 export interface Activity {
   id: string;
@@ -30,7 +30,7 @@ export interface workspaceMembersProps extends WorkspaceMembers {
     id: string;
     hasAccess: boolean;
     projectId: string;
-  };
+  }[];
 }
 
 export interface projectProps {
@@ -88,10 +88,30 @@ export interface Column {
   tasks: ProjectTaskProps[];
 }
 
+export interface NotificationProps {
+  id: string;
+  type: NotificationType;
+  title: string;
+  message: string;
+  link: string | null;
+  isRead: boolean;
+  userId: string;
+  actorId: string | null;
+  actor: {
+    id: string;
+    name: string;
+    image: string | null;
+  } | null;
+  workspaceId: string | null;
+  projectId: string | null;
+  taskId: string | null;
+  createdAt: Date;
+}
+
 export interface WorkspaceMemberProps {
   id: string;
   userId: string;
-  accessLevel: string;
+  accessLevel: AccessLevel;
   createdAt: Date;
   user: {
     id: string;
@@ -99,4 +119,42 @@ export interface WorkspaceMemberProps {
     email: string;
     image: string | null;
   };
+}
+
+// ── Dashboard types ─────────────────────────────────────────────────────────
+
+export interface ProjectDashboardStat {
+  id: string;
+  name: string;
+  description: string | null;
+  workspaceId: string;
+  totalTasks: number;
+  completedTasks: number;
+  completionPercentage: number;
+  memberCount: number;
+  members: { id: string; name: string; image: string | null }[];
+  lastActivityAt: Date | null;
+}
+
+export interface DashboardActivityItem {
+  id: string;
+  type: string;
+  description: string;
+  createdAt: Date;
+  user: { name: string; image: string | null };
+}
+
+export interface WorkspaceDashboardData {
+  workspace: {
+    name: string;
+    description: string | null;
+  };
+  currentUserRole: AccessLevel | null;
+  taskStats: {
+    total: number;
+  };
+  projectsStats: ProjectDashboardStat[];
+  memberCount: number;
+  workspaceMembers: workspaceMembersProps[];
+  recentActivities: DashboardActivityItem[];
 }

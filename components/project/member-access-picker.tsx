@@ -6,6 +6,7 @@ import { Search, Users, Check, ShieldCheck } from "lucide-react";
 import { Input } from "../ui/input";
 import { ProfileAvatar } from "../profile-avatar";
 import { Badge } from "../ui/badge";
+import { AccessLevel } from "@prisma/client";
 import { cn } from "@/lib/utils";
 import type { workspaceMembersProps } from "@/utils/types";
 
@@ -23,7 +24,7 @@ export const MemberAccessPicker = ({
   const [memberSearch, setMemberSearch] = useState("");
 
   const isLocked = (member: workspaceMembersProps) =>
-    member.accessLevel === "OWNER" || member.accessLevel === "ADMIN";
+    member.accessLevel === AccessLevel.OWNER || member.accessLevel === AccessLevel.ADMIN;
 
   const toggleableMemberIds = useMemo(
     () =>
@@ -173,20 +174,15 @@ export const MemberAccessPicker = ({
                     {member.user.name}
                   </span>
                   <Badge
-                    variant={
-                      member.accessLevel as
-                        | "OWNER"
-                        | "ADMIN"
-                        | "MEMBER"
-                    }
+                    variant={member.accessLevel}
                     className="text-[10px] px-2 shrink-0"
                   >
                     {locked && (
                       <ShieldCheck className="size-3 mr-1" />
                     )}
-                    {member.accessLevel === "OWNER"
+                    {member.accessLevel === AccessLevel.OWNER
                       ? "Owner"
-                      : member.accessLevel === "ADMIN"
+                      : member.accessLevel === AccessLevel.ADMIN
                         ? "Admin"
                         : "Member"}
                   </Badge>

@@ -1,5 +1,6 @@
 "use client"
 
+import { TaskPriority } from "@prisma/client"
 import { ProjectTaskProps } from "@/utils/types"
 import { Draggable } from "@hello-pangea/dnd"
 import { ProfileAvatar } from "@/components/profile-avatar"
@@ -21,14 +22,14 @@ interface KanbanCardProps {
 
 
 
-const PRIORITY_CIRCLE: Record<string, { bg: string; border: string; text: string }> = {
+const PRIORITY_CIRCLE: Record<TaskPriority, { bg: string; border: string; text: string }> = {
     CRITICAL: { bg: "bg-rose-500/10 dark:bg-rose-500/20", border: "border-rose-500/20 dark:border-rose-500/30", text: "text-rose-500 dark:text-rose-400" },
     HIGH:     { bg: "bg-amber-500/10 dark:bg-amber-500/20", border: "border-amber-500/20 dark:border-amber-500/30", text: "text-amber-500 dark:text-amber-400" },
     MEDIUM:   { bg: "bg-blue-500/10 dark:bg-blue-500/20",   border: "border-blue-500/20 dark:border-blue-500/30",   text: "text-blue-500 dark:text-blue-400" },
     LOW:      { bg: "bg-zinc-500/10 dark:bg-zinc-500/20",  border: "border-zinc-500/20 dark:border-zinc-500/30",  text: "text-zinc-500 dark:text-zinc-400" },
 }
 
-function WaveCircle({ priority }: { priority: string }) {
+function WaveCircle({ priority }: { priority: TaskPriority }) {
     const colors = PRIORITY_CIRCLE[priority] || PRIORITY_CIRCLE.LOW;
     return (
         <div className={cn(
@@ -45,7 +46,7 @@ function WaveCircle({ priority }: { priority: string }) {
 
 
 export default function KanbanCard({ task, index, isDragDisabled }: KanbanCardProps) {
-    const priority = task.priority || "LOW";
+    const priority = task.priority || TaskPriority.LOW;
 
     return (
         <Draggable draggableId={task.id} index={index} isDragDisabled={isDragDisabled}>

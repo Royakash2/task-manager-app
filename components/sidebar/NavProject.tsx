@@ -5,6 +5,7 @@ import { SidebarGroup, SidebarGroupLabel, SidebarMenu, SidebarMenuButton, Sideba
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "../ui/collapsible"
 import { usePathname } from "next/navigation"
 import Link from "next/link"
+import { AccessLevel } from "@prisma/client"
 import { CreateProjectForm } from "../project/create-project-dialog"
 import { ChevronDown, FolderKanban } from "lucide-react"
 
@@ -17,7 +18,7 @@ export const NavProject = ({
     projects: projectProps[]
     ,
     workspaceMembers: workspaceMembersProps[],
-    currentUserRole: string | null
+    currentUserRole: AccessLevel | null
 }) => {
     const { isMobile, setOpenMobile } = useSidebar();
     const pathName = usePathname();
@@ -35,7 +36,7 @@ export const NavProject = ({
                                 </span>
                             </SidebarGroupLabel>
                         </CollapsibleTrigger>
-                        {currentUserRole !== "MEMBER" && (
+                        {currentUserRole !== AccessLevel.MEMBER && (
                             <CreateProjectForm workspaceMembers={workspaceMembers} />
                         )}
                     </div>

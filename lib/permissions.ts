@@ -26,7 +26,7 @@ export const verifyAccess = async (
   }
 
   // OWNER and ADMIN bypass the project-level access check
-  if (membership.accessLevel === "OWNER" || membership.accessLevel === "ADMIN") {
+  if (membership.accessLevel === AccessLevel.OWNER || membership.accessLevel === AccessLevel.ADMIN) {
     return;
   }
 
@@ -95,7 +95,7 @@ export const requireTaskAccess = async (
   if (!role) throw new Error("You are not a member of this workspace");
 
   // OWNER and ADMIN can access any task
-  if (role === "OWNER" || role === "ADMIN") return;
+  if (role === AccessLevel.OWNER || role === AccessLevel.ADMIN) return;
 
   // MEMBER must be the creator or assignee
   const task = await db.task.findUnique({
@@ -114,7 +114,7 @@ export const requireTaskAccess = async (
 
 /** Ensures the user is a workspace OWNER. */
 export const requireOwner = async (userId: string, workspaceId: string) => {
-  await requireRole(userId, workspaceId, "OWNER");
+  await requireRole(userId, workspaceId, AccessLevel.OWNER);
 };
 
 /** MEMBER can only assign tasks to themselves or leave unassigned. */
@@ -123,9 +123,9 @@ export async function enforceAssigneeRestriction(
   workspaceId: string,
   submittedAssigneeId: string | null | undefined,
 ): Promise<string | null | undefined> {
-  if (!submittedAssigneeId || submittedAssigneeId === userId) return submittedAssigneeId;
+  if (!submittedAssigneeId || submittedAssigneeId === userId) return submittedAssigneeId || undefined;
 
   const role = await getUserRole(userId, workspaceId);
 
-  return role === "MEMBER" ? undefined : submittedAssigneeId;
+  return role === AccessLevel.MEMBER ? undefined : submittedAssigneeId;
 }

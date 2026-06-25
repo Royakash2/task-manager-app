@@ -3,6 +3,7 @@
 import { userRequired } from "../data/user/get-user";
 import { userSchema, UserData } from "@/lib/schema";
 import db from "@/lib/db";
+import { SubscriptionPlan, SubscriptionStatus } from "@prisma/client";
 import { actionError } from "@/utils/actions";
 
 export const createUser = async (data: UserData) => {
@@ -27,8 +28,8 @@ export const createUser = async (data: UserData) => {
         image: data.image,
         subscription: {
           create: {
-            plan: "FREE",
-            status: "ACTIVE",
+            plan: SubscriptionPlan.FREE,
+            status: SubscriptionStatus.ACTIVE,
             customerPeriodEnd: new Date(),
             cancelAtPeriodEnd: false,
           },

@@ -15,7 +15,7 @@ import {
 } from "@/components/ui/dialog";
 import { Form } from "@/components/ui/form";
 import { Button } from "../ui/button";
-import { Task, User, File as PrismaFile } from "@prisma/client";
+import { Task, User, File as PrismaFile, TaskStatus, TaskPriority } from "@prisma/client";
 import { EditIcon } from "lucide-react";
 import { updateTaskDetails } from "@/app/actions/task";
 import { toast } from "sonner";
@@ -43,10 +43,10 @@ export const EditTaskDialog = ({ task, project }: Props) => {
     defaultValues: {
       title: task.title || "",
       description: task.description || "",
-      status: task.status || "TODO",
+      status: task.status || TaskStatus.TODO,
       dueDate: task.dueDate ? new Date(task.dueDate) : undefined,
       startDate: task.startDate ? new Date(task.startDate) : undefined,
-      priority: task.priority || "MEDIUM",
+      priority: task.priority || TaskPriority.MEDIUM,
       attachments:
         task.attachments?.map((file) => ({
           name: file.name,

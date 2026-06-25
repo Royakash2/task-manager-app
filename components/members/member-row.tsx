@@ -12,11 +12,12 @@ import { Ellipsis, UserMinus } from "lucide-react";
 import { ChangeRoleDropdown } from "./change-role-dropdown";
 import { ProfileAvatar } from "@/components/profile-avatar";
 import type { WorkspaceMemberProps } from "@/utils/types";
+import { AccessLevel } from "@prisma/client";
 
 interface MemberRowProps {
   member: WorkspaceMemberProps;
   currentUserId: string;
-  currentUserRole: string | null;
+  currentUserRole: AccessLevel | null;
   isOwner: boolean;
   onRemoveOpen: (member: WorkspaceMemberProps) => void;
 }
@@ -28,10 +29,10 @@ export const MemberRow = ({
   isOwner,
   onRemoveOpen,
 }: MemberRowProps) => {
-  const canManage = currentUserRole === "OWNER" || currentUserRole === "ADMIN";
+  const canManage = currentUserRole === AccessLevel.OWNER || currentUserRole === AccessLevel.ADMIN;
   const isCurrentUser = member.userId === currentUserId;
-  const isOwnerMember = member.accessLevel === "OWNER";
-  const isAdminMember = member.accessLevel === "ADMIN";
+  const isOwnerMember = member.accessLevel === AccessLevel.OWNER;
+  const isAdminMember = member.accessLevel === AccessLevel.ADMIN;
 
   // ADMIN can remove MEMBERs; OWNER can remove ADMINs and MEMBERs
   const canRemove = canManage && !isCurrentUser && !isOwnerMember && (!isAdminMember || isOwner);
@@ -64,7 +65,7 @@ export const MemberRow = ({
             )}
           </span>
           <Badge
-            variant={member.accessLevel as "OWNER" | "ADMIN" | "MEMBER"}
+            variant={member.accessLevel}
             className="text-[10px] px-1.5 py-0 h-4"
           >
             {member.accessLevel}

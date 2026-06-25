@@ -1,4 +1,4 @@
-import { getUserWorkspaces } from '@/app/data/workspace/getUserWorkspace';
+import { getUserWorkspaces } from '@/app/data/workspace/get-user-workspace';
 import AppSidebarContainer from '@/components/sidebar/AppSidebarContainer';
 import type { AppSidebarDataProps } from '@/components/sidebar/AppSidebarContainer';
 

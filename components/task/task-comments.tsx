@@ -1,5 +1,6 @@
 'use client';
 import { CommentProps } from '@/utils/types';
+import { AccessLevel } from '@prisma/client';
 import React, { useState } from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/card';
 import { useWorkspaceId } from '@/hooks/use-workspace-id';
@@ -14,7 +15,7 @@ interface TaskCommentProps {
     taskId: string
     comments: CommentProps[]
     currentUserId: string
-    currentUserRole?: string | null
+    currentUserRole?: AccessLevel | null | undefined
 }
 
 const TaskComments = ({ taskId, comments, currentUserId, currentUserRole }: TaskCommentProps) => {

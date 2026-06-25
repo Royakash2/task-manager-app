@@ -26,8 +26,6 @@ export const industryTypesList = [
   "Others",
 ];
 
-
-
 export const taskStats = [
   {
     status: TaskStatus.TODO,
@@ -60,5 +58,3 @@ export const taskStats = [
     color: "bg-blue-500",
   },
 ];
-
-

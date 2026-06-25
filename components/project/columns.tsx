@@ -1,6 +1,6 @@
 "use client";
 
-import { Task, File } from "@prisma/client";
+import { Task, File, AccessLevel, TaskStatus, TaskPriority } from "@prisma/client";
 import { ColumnDef } from "@tanstack/react-table";
 import { Checkbox } from "../ui/checkbox";
 import Link from "next/link";
@@ -29,7 +29,7 @@ export type TaskTableItem = Task & {
   attachments: File[];
 };
 
-export const createColumns = (userRole: string | null): ColumnDef<TaskTableItem>[] => [
+export const createColumns = (userRole: AccessLevel | null): ColumnDef<TaskTableItem>[] => [
   {
     id: "select",
     header: ({ table }) => (
@@ -40,6 +40,7 @@ export const createColumns = (userRole: string | null): ColumnDef<TaskTableItem>
         }
         onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
         aria-label="select all"
+        className="cursor-pointer"
       />
     ),
     cell: ({ row }) => (
@@ -47,6 +48,7 @@ export const createColumns = (userRole: string | null): ColumnDef<TaskTableItem>
         checked={row.getIsSelected()}
         onCheckedChange={(value) => row.toggleSelected(!!value)}
         aria-label="select row"
+        className="cursor-pointer"
       />
     ),
     enableSorting: false,
@@ -83,11 +85,11 @@ export const createColumns = (userRole: string | null): ColumnDef<TaskTableItem>
     accessorKey: "status",
     header: "status",
     cell: ({ row }) => {
-      const status = row.getValue("status") as string;
+      const status = row.getValue("status") as TaskStatus;
       return (
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         <Badge variant={status as any}>
-          {status === "IN_PROGRESS" ? "IN_PROGRESS" : status}
+          {status === TaskStatus.IN_PROGRESS ? "IN_PROGRESS" : status}
         </Badge>
       )
     }
@@ -96,7 +98,7 @@ export const createColumns = (userRole: string | null): ColumnDef<TaskTableItem>
     accessorKey: "priority",
     header: "priority",
     cell: ({ row }) => {
-      const priority = row.getValue("priority") as string;
+      const priority = row.getValue("priority") as TaskPriority;
       return (
         <Badge variant={"secondary"}>
           {priority}
@@ -172,7 +174,7 @@ export const createColumns = (userRole: string | null): ColumnDef<TaskTableItem>
   },
 ];
 
-const ActionsCell = ({ row, userRole }: { row: { original: TaskTableItem }, userRole: string | null }) => {
+const ActionsCell = ({ row, userRole }: { row: { original: TaskTableItem }, userRole: AccessLevel | null }) => {
   const [open, setOpen] = useState(false);
 
   return (
@@ -191,7 +193,7 @@ const ActionsCell = ({ row, userRole }: { row: { original: TaskTableItem }, user
              <span className="flex items-center gap-2"><Eye className="w-4 h-4" /> View</span>
             </Link>
           </DropdownMenuItem>
-          {userRole !== "MEMBER" && (
+          {userRole !== AccessLevel.MEMBER && (
           <DropdownMenuItem asChild onSelect={(e) => e.preventDefault()}>
             <DeleteTaskDialog
               taskId={row.original.id}

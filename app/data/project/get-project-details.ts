@@ -68,7 +68,8 @@ export const getProjectDetails = async (workspaceId: string, projectId: string) 
                     },
                     orderBy: {
                         createdAt: "desc"
-                    }
+                    },
+                    take: 50
                 }
             }
         }),
@@ -87,7 +88,8 @@ export const getProjectDetails = async (workspaceId: string, projectId: string) 
             },
             orderBy: {
                 createdAt: "desc"
-            }
+            },
+            take: 50
         })
     ]);
 
