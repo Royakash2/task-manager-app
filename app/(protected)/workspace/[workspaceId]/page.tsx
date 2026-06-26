@@ -26,7 +26,7 @@ const WorkspaceHomePage = async (props: WorkspaceHomeProps) => {
   const data = result.data!;
 
   return (
-    <div className="flex flex-col gap-6 pb-8 px-4 md:px-6">
+    <div className="flex flex-col gap-6 pb-3 px-3">
       {/* ── Section 1: Header ─────────────────────────────────────────── */}
       <WorkspaceHomeHeader
         name={data.workspace.name}

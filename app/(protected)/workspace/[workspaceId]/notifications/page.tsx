@@ -93,7 +93,7 @@ export default function NotificationsPage() {
   }, [unreadCount]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
-    <div className="flex flex-col gap-6 p-4 md:p-6">
+    <div className="flex flex-col gap-6 p-3">
       {/* Sticky header with inline actions */}
       <div className="sticky top-12 z-10 bg-background -mx-4 md:-mx-6 px-4 md:px-6 pb-4 border-b border-border flex items-start justify-between gap-4">
         <div>
