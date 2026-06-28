@@ -30,7 +30,7 @@ function WorkspaceSelector({ workspaces }: { workspaces: workspaceProps[] }) {
                         <DropdownMenuTrigger asChild>
                             <SidebarMenuButton size={'lg'} className='w-full min-w-0 data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground group-data-[collapsible=icon]:justify-center'>
                                 <WorkspaceAvatar name={selectedWorkspace?.workspace.name as string || 'W'} />
-                                <div className='font-semibold group-data-[collapsible=icon]:hidden truncate min-w-0 capitalize'>
+                                <div className='text-lg font-semibold group-data-[collapsible=icon]:hidden truncate min-w-0 capitalize'>
                                     {selectedWorkspace?.workspace.name}
                                 </div>
                                 <ChevronsUpDown className='size-4 shrink-0 ml-auto group-data-[collapsible=icon]:hidden' />
