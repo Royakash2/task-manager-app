@@ -392,6 +392,8 @@ export const bulkDeleteTasks = async (
       revalidatePath(`/workspace/${workspaceId}/projects/${projectId}`);
     }
 
+    revalidatePath(`/workspace/${workspaceId}/my-tasks`);
+
     return { success: true, count: tasks.length };
   } catch (error) {
     console.error("Failed to bulk delete tasks:", error);
