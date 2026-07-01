@@ -25,6 +25,7 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <body
         className={`${manrope.variable} ${manrope.className} antialiased`}
+        suppressHydrationWarning
       >
         <AuthProvider>
            <ThemeProvider
