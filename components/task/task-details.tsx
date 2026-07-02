@@ -71,7 +71,7 @@ const TaskDetails = ({ task, documentation, currentUserRole }: TaskProps) => {
                 )}
               </div>
             </div>
-            <p className={`text-sm text-muted-foreground/70 `}>
+            <p className="text-sm text-foreground/80 leading-relaxed">
               {task.description || "No description provided for this task."}
             </p>
           </div>
