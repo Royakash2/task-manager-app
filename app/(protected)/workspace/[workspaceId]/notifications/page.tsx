@@ -95,7 +95,7 @@ export default function NotificationsPage() {
   return (
     <div className="flex flex-col gap-6 p-3">
       {/* Sticky header with inline actions */}
-      <div className="sticky top-12 z-10 bg-background -mx-4 md:-mx-6 px-4 md:px-6 pb-4 border-b border-border flex items-start justify-between gap-4">
+      <div className="sticky top-12 z-10 bg-background -mx-4 md:-mx-6 px-4 md:px-6 pb-4 border-border flex items-start justify-between gap-4">
         <div>
           <h1 className="text-2xl font-bold tracking-tight text-foreground">
             Notifications
@@ -134,7 +134,7 @@ export default function NotificationsPage() {
 
       {/* Notifications list */}
       {isLoading ? (
-        <Card>
+        <Card className="shadow-none">
           <div className="flex items-center justify-center py-16">
             <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
           </div>
@@ -152,7 +152,7 @@ export default function NotificationsPage() {
           </div>
         </Card>
       ) : (
-        <Card>
+        <Card className="shadow-none">
           <div className="divide-y divide-border">
             {notifications.map((notification) => (
               <div
