@@ -7,7 +7,8 @@ import { usePathname } from "next/navigation"
 import Link from "next/link"
 import { AccessLevel } from "@prisma/client"
 import { CreateProjectForm } from "../project/create-project-dialog"
-import { ChevronDown, FolderKanban } from "lucide-react"
+import { ChevronDown, Folder } from "lucide-react"
+import { cn } from "@/lib/utils"
 
 
 export const NavProject = ({
@@ -27,13 +28,11 @@ export const NavProject = ({
         <>
             <SidebarGroup>
                 <Collapsible defaultOpen={true} className="group/collapsible">
-                    <div className="flex items-center justify-between pr-3">
+                    <div className="flex items-center justify-between pr-2 mb-1">
                         <CollapsibleTrigger asChild>
-                            <SidebarGroupLabel className="cursor-pointer select-none">
-                                <span className="flex items-center gap-2 text-sm font-semibold text-muted-foreground uppercase">
-                                    <ChevronDown className="size-3.5 transition-transform duration-200 group-data-[state=closed]/collapsible:-rotate-90" />
-                                    Projects
-                                </span>
+                            <SidebarGroupLabel className="cursor-pointer select-none flex items-center gap-1.5 text-sm font-semibold text-muted-foreground tracking-wider hover:text-foreground transition-colors">
+                                <ChevronDown className="size-3.5 transition-transform duration-200 group-data-[state=closed]/collapsible:-rotate-90" />
+                                Projects
                             </SidebarGroupLabel>
                         </CollapsibleTrigger>
                         {currentUserRole !== AccessLevel.MEMBER && (
@@ -45,16 +44,23 @@ export const NavProject = ({
                             {
                                 projects.map((project) => {
                                     const href = `/workspace/${project.workspaceId}/projects/${project.id}`;
+                                    const isProjectActive = pathName === href || pathName.startsWith(`${href}/`);
+                                    
                                     return (
                                         <SidebarMenuItem key={project.id}>
                                             <SidebarMenuButton
                                                 asChild
-                                                isActive={pathName === href}
+                                                isActive={isProjectActive}
                                                 tooltip={project.name}
                                             >
                                                 <Link href={href} onClick={() => setOpenMobile(false)}>
-                                                    <FolderKanban className="size-4" />
-                                                    <span className="capitalize">{project.name}</span>
+                                                    <Folder className={cn("size-3.5", isProjectActive ? "text-foreground" : "text-muted-foreground")} />
+                                                    <span className={cn(
+                                                        "capitalize font-medium text-xs transition-colors",
+                                                        isProjectActive ? "text-foreground" : "text-foreground/75"
+                                                    )}>
+                                                        {project.name}
+                                                    </span>
                                                 </Link>
                                             </SidebarMenuButton>
                                         </SidebarMenuItem>

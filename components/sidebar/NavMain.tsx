@@ -101,7 +101,9 @@ export const NavMain = ({ currentUserRole }: NavMainProps) => {
                         </span>
                       )}
                     </span>
-                    <span>{item.label}</span>
+                    <span className={cn("font-semibold text-sm", isActive ? "text-foreground" : "text-foreground/75")}>
+                      {item.label}
+                    </span>
                   </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>

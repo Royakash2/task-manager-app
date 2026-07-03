@@ -5,6 +5,7 @@ import TaskDetails from '@/components/task/task-details';
 import type { CommentProps } from '@/utils/types';
 import { NotFoundState } from '@/components/not-found-state';
 import React from 'react'
+import { BreadcrumbPageTitle } from '@/components/breadcrumb/breadcrumb-page-title';
 
 interface TaskDetailPageProps {
   params: Promise<{ 
@@ -39,16 +40,21 @@ const TaskDetailPage = async (props: TaskDetailPageProps) => {
   }
 
   const currentUserRole = await getUserRole(currentUserId, workspaceId);
+  const projectName = task?.project?.name ?? null;
+  const taskName = task?.title ?? null;
 
   return (
-    <div className='flex flex-col lg:flex-row gap-4 lg:h-screen lg:overflow-hidden bg-background'>
+    <>
+      <BreadcrumbPageTitle projectName={projectName} taskName={taskName} />
+      <div className='flex flex-col lg:flex-row gap-4 lg:h-screen lg:overflow-hidden bg-background'>
       <div className='flex-1 lg:overflow-y-auto no-scrollbar'>
        <TaskDetails task={task as unknown as Parameters<typeof TaskDetails>[0]['task']} documentation={documentation} currentUserRole={currentUserRole} />
       </div>
-     <div className='w-full lg:w-100 lg:overflow-y-auto no-scrollbar'>
+     <div className='w-full lg:w-80 lg:overflow-y-auto no-scrollbar'>
       <TaskComments taskId={taskId} comments={comments as unknown as CommentProps[]} currentUserId={currentUserId} currentUserRole={currentUserRole} />
      </div>
     </div>
+    </>
   );
 }
 
