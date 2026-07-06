@@ -7,6 +7,7 @@ import { CreateProjectForm } from "@/components/project/create-project-dialog";
 import type { workspaceMembersProps } from "@/utils/types";
 import { UserPlus, Plus, Sun, SunMedium, Moon } from "lucide-react";
 import { getGreeting } from "@/utils/greeting";
+import { WorkspaceAvatar } from "./workspace-avatar";
 
 const GREETING_ICONS = {
   Sun,
@@ -19,6 +20,7 @@ interface WorkspaceHomeHeaderProps {
   description: string | null;
   currentUserRole: AccessLevel | null;
   workspaceMembers: workspaceMembersProps[];
+  userName: string;
 }
 
 export const WorkspaceHomeHeader = ({
@@ -26,6 +28,7 @@ export const WorkspaceHomeHeader = ({
   description,
   currentUserRole,
   workspaceMembers,
+  userName,
 }: WorkspaceHomeHeaderProps) => {
   const { text: greetingText, icon: greetingIconName } = getGreeting();
   const GreetingIcon = GREETING_ICONS[greetingIconName];
@@ -35,26 +38,34 @@ export const WorkspaceHomeHeader = ({
 
   return (
     <div className="flex flex-col gap-6 pb-6 border-b border-border/60">
-      <div className="flex flex-row items-start justify-between gap-3 sm:gap-6">
-        {/* Left side: Greeting, Title, and Description */}
-        <div className="min-w-0 flex-1">
-          <div className="flex items-center gap-2 text-muted-foreground mb-1.5">
-            <GreetingIcon className="size-4 text-primary/80" />
-            <span className="text-sm font-medium tracking-wide">{greetingText}</span>
+      {/* Greeting */}
+      <div className="flex items-center gap-2 text-muted-foreground">
+        <GreetingIcon className="size-4 text-primary/80" />
+        <span className="text-sm font-medium tracking-wide">{greetingText}, {userName}</span>
+      </div>
+
+      {/* Avatar + Title + Description + Actions */}
+      <div className="flex flex-col sm:flex-row items-start justify-between gap-3 sm:gap-6">
+        <div className="flex items-center gap-4 min-w-0 w-full sm:w-auto">
+          <WorkspaceAvatar
+            name={name}
+            size="lg"
+            className="rounded-xl shadow-sm shrink-0"
+          />
+
+          <div className="min-w-0 flex-1">
+            <h1 className="text-xl sm:text-2xl 2xl:text-3xl font-bold tracking-tight text-foreground leading-tight capitalize">
+              {name}
+            </h1>
+            {description && (
+              <p className="text-xs sm:text-sm 2xl:text-base text-muted-foreground mt-1 max-w-2xl line-clamp-2">
+                {description}
+              </p>
+            )}
           </div>
-          
-          <h1 className="text-3xl font-bold tracking-tight text-foreground sm:text-4xl capitalize truncate">
-            {name}
-          </h1>
-          
-          {description && (
-            <p className="mt-2.5 text-sm sm:text-base text-muted-foreground max-w-2xl leading-relaxed">
-              {description}
-            </p>
-          )}
         </div>
 
-        {/* Right side: Quick actions */}
+        {/* Right side actions */}
         <div className="flex items-center gap-3 shrink-0">
           <InviteMemberDialog currentUserRole={currentUserRole}>
             <Button

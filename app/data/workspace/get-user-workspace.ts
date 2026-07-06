@@ -14,7 +14,7 @@ export const getUserWorkspaces = async () => {
           select: {
             id: true,
             userId: true,
-            workspace: { select: { name: true } },
+            workspace: { select: { name: true, description: true } },
             workspaceId: true,
             accessLevel: true,
             createdAt: true,
