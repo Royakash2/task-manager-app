@@ -20,7 +20,7 @@ export const MyTasksContent = ({
       <div className="flex flex-col">
         <div className="flex flex-row items-start justify-between gap-3 sm:gap-6">
           <div className="space-y-2">
-            <h1 className="text-2xl font-bold tracking-tight text-foreground sm:text-4xl">
+            <h1 className="text-2xl font-bold tracking-tight text-foreground">
               My Tasks
             </h1>
             <p className="text-sm text-muted-foreground">
