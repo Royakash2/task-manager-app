@@ -1,6 +1,6 @@
 import { Check, X } from "lucide-react";
 
-import { Button } from "../ui/button";
+import { LoadingButton } from "../ui/loading-button";
 import { Textarea } from "../ui/textarea";
 
 interface CommentEditFormProps {
@@ -31,26 +31,27 @@ export const CommentEditForm = ({
         autoFocus
       />
       <div className="flex items-center gap-2 justify-end">
-        <Button
+        <LoadingButton
           variant="ghost"
           size="sm"
           className="h-8 cursor-pointer text-muted-foreground"
           onClick={onCancel}
-          disabled={isSaving}
         >
           <X className="h-3.5 w-3.5 mr-1" />
           Cancel
-        </Button>
-        <Button
+        </LoadingButton>
+        <LoadingButton
           variant="default"
           size="sm"
           className="h-8 cursor-pointer"
           onClick={onSave}
-          disabled={isSaving || !initialContent.trim()}
+          loading={isSaving}
+          loadingText="Saving..."
+          disabled={!initialContent.trim()}
         >
           <Check className="h-3.5 w-3.5 mr-1" />
-          {isSaving ? "Saving..." : "Save"}
-        </Button>
+          Save
+        </LoadingButton>
       </div>
     </div>
   );

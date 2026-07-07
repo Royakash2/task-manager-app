@@ -15,6 +15,7 @@ import {
 } from "@/components/ui/dialog";
 import { Form } from "@/components/ui/form";
 import { Button } from "../ui/button";
+import { LoadingButton } from "../ui/loading-button";
 import { Task, User, File as PrismaFile, TaskStatus, TaskPriority } from "@prisma/client";
 import { EditIcon } from "lucide-react";
 import { updateTaskDetails } from "@/app/actions/task";
@@ -114,13 +115,13 @@ export const EditTaskDialog = ({ task, project }: Props) => {
               onPendingChange={setPendingFiles}
             />
             <div className="flex justify-end space-x-2">
-              <Button
+              <LoadingButton
                 type="submit"
-                disabled={pending}
+                loading={pending}
                 className="cursor-pointer"
               >
                 Update
-              </Button>
+              </LoadingButton>
             </div>
           </form>
         </Form>

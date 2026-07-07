@@ -2,10 +2,10 @@
 
 import { useState } from "react";
 import { CardContent, CardHeader, CardTitle, CardDescription } from "../ui/card";
-import { Button } from "../ui/button";
+import { LoadingButton } from "../ui/loading-button";
 import { saveDocumentation } from "@/app/actions/documentation";
 import { toast } from "sonner";
-import { Loader2, Save } from "lucide-react";
+import { Save } from "lucide-react";
 import Tiptap from "../ui/Tiptap";
 
 interface DocumentationEditorProps {
@@ -66,19 +66,17 @@ const DocumentationEditor = ({
               Write detailed notes and documentation for this task
             </CardDescription>
           </div>
-          <Button
-            disabled={isSaving || !hasChanges}
+          <LoadingButton
+            disabled={!hasChanges}
+            loading={isSaving}
+            loadingText="Saving..."
             onClick={handleSave}
             size="sm"
             className="cursor-pointer gap-1.5 text-xs"
           >
-            {isSaving ? (
-              <Loader2 className="size-3.5 animate-spin" />
-            ) : (
-              <Save className="size-3.5" />
-            )}
-            {isSaving ? "Saving..." : "Save Changes"}
-          </Button>
+            <Save className="size-3.5" />
+            Save Changes
+          </LoadingButton>
         </div>
       </CardHeader>
       <CardContent>

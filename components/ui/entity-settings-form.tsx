@@ -23,7 +23,7 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { Button } from "@/components/ui/button";
+import { LoadingButton } from "@/components/ui/loading-button";
 
 interface EntitySettingsFormData {
   name: string;
@@ -130,22 +130,23 @@ export const EntitySettingsForm = ({
 
             {!disabled && (
               <div className="flex items-center gap-3 pt-2">
-                <Button
+                <LoadingButton
                   type="button"
                   variant="outline"
-                  disabled={pending}
                   className="cursor-pointer"
                   onClick={() => form.reset(defaultValues)}
                 >
                   Reset
-                </Button>
-                <Button
+                </LoadingButton>
+                <LoadingButton
                   type="submit"
-                  disabled={pending || !form.formState.isDirty}
+                  loading={pending}
+                  loadingText="Saving..."
+                  disabled={!form.formState.isDirty}
                   className="cursor-pointer"
                 >
-                  {pending ? "Saving..." : "Save Changes"}
-                </Button>
+                  Save Changes
+                </LoadingButton>
               </div>
             )}
           </form>

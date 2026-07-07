@@ -21,7 +21,7 @@ export const NavProject = ({
     workspaceMembers: workspaceMembersProps[],
     currentUserRole: AccessLevel | null
 }) => {
-    const { isMobile, setOpenMobile } = useSidebar();
+    const { setOpenMobile } = useSidebar();
     const pathName = usePathname();
 
     return (

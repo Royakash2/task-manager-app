@@ -16,6 +16,7 @@ import {
 } from "@/components/ui/dialog";
 import { Form } from "@/components/ui/form";
 import { Button } from "../ui/button";
+import { LoadingButton } from "../ui/loading-button";
 import { useWorkspaceId } from "@/hooks/use-workspace-id";
 import { Plus } from "lucide-react";
 import { createTask } from "@/app/actions/task";
@@ -105,13 +106,13 @@ export const CreateTaskDialog = ({ project }: Props) => {
               onPendingChange={setPendingFiles}
             />
             <div className="flex justify-end space-x-2 ">
-              <Button
+              <LoadingButton
                 type="submit"
-                disabled={pending}
+                loading={pending}
                 className="cursor-pointer"
               >
                 Submit
-              </Button>
+              </LoadingButton>
             </div>
           </form>
         </Form>

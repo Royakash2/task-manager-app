@@ -1,6 +1,6 @@
 "use client";
 
-import { Button } from "../ui/button";
+import { LoadingButton } from "../ui/loading-button";
 import { Trash2 } from "lucide-react";
 
 interface BatchActionBarProps {
@@ -22,22 +22,23 @@ export const BatchActionBar = ({
         {selectedCount} selected
       </span>
       <div className="flex items-center gap-2 ml-auto">
-        <Button
+        <LoadingButton
           variant="destructive"
           size="sm"
           onClick={onDelete}
-          disabled={isDeleting}
+          loading={isDeleting}
+          loadingText="Deleting..."
         >
           <Trash2 className="h-4 w-4 mr-1.5" />
-          {isDeleting ? "Deleting..." : `Delete (${selectedCount})`}
-        </Button>
-        <Button
+          Delete ({selectedCount})
+        </LoadingButton>
+        <LoadingButton
           variant="ghost"
           size="sm"
           onClick={onCancel}
         >
           Cancel
-        </Button>
+        </LoadingButton>
       </div>
     </div>
   );
