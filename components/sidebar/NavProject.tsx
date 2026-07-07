@@ -56,7 +56,7 @@ export const NavProject = ({
                                                 <Link href={href} onClick={() => setOpenMobile(false)}>
                                                     <Folder className={cn("size-3.5", isProjectActive ? "text-foreground" : "text-muted-foreground")} />
                                                     <span className={cn(
-                                                        "capitalize font-semibold text-sm transition-colors",
+                                                        "font-semibold text-sm transition-colors",
                                                         isProjectActive ? "text-foreground" : "text-foreground/75"
                                                     )}>
                                                         {project.name}
