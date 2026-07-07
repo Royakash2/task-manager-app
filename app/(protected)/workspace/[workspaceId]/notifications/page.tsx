@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback, useRef } from "react";
 import { NotificationItem } from "@/components/notifications/notification-item";
-import { Bell, CheckCheck, Loader2, ChevronLeft, ChevronRight, MoreHorizontal } from "lucide-react";
+import { Bell, CheckCheck, ChevronLeft, ChevronRight, MoreHorizontal, LoaderIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import {
@@ -136,7 +136,7 @@ export default function NotificationsPage() {
       {isLoading ? (
         <Card className="shadow-none">
           <div className="flex items-center justify-center py-16">
-            <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
+            <LoaderIcon className="h-6 w-6 animate-spin text-muted-foreground" />
           </div>
         </Card>
       ) : notifications.length === 0 ? (
