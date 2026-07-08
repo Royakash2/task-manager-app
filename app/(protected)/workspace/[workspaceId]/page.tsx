@@ -7,6 +7,7 @@ import { WorkspaceHomeHeader } from "@/components/workspace/workspace-home-heade
 import { WorkspaceMembersList } from "@/components/workspace/workspace-members-list";
 import { WorkspaceStatsCards } from "@/components/workspace/workspace-stats-cards";
 import { WorkspaceProjectsGrid } from "@/components/workspace/workspace-projects-grid";
+import TaskDistributionChart from "@/components/project/task-distribution-chart";
 
 interface WorkspaceHomeProps {
   params: Promise<{ workspaceId: string }>;
@@ -26,13 +27,14 @@ const WorkspaceHomePage = async (props: WorkspaceHomeProps) => {
   const data = result.data!;
 
   return (
-    <div className="flex flex-col gap-6 pb-8 px-4 md:px-6">
+    <div className="flex flex-col gap-4 pb-3 px-3">
       {/* ── Section 1: Header ─────────────────────────────────────────── */}
       <WorkspaceHomeHeader
         name={data.workspace.name}
         description={data.workspace.description}
         currentUserRole={data.currentUserRole}
         workspaceMembers={data.workspaceMembers}
+        userName={data.userName}
       />
 
       {/* ── Section 2: Stats Cards ────────────────────────────────────── */}
@@ -40,11 +42,23 @@ const WorkspaceHomePage = async (props: WorkspaceHomeProps) => {
         projectCount={data.projectsStats.length}
         totalTasks={data.taskStats.total}
         memberCount={data.memberCount}
+        overdueTasks={data.taskStats.overdue}
       />
 
-      {/* ── Section 3: Activity + Members Grid ──────────────────────────── */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* Recent Activity */}
+      {/* ── Section 3: Activity + Members + Task Dist Grid ──────────────── */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+       
+          {/* Task Distribution Chart */}
+        <TaskDistributionChart
+          tasks={{
+            total: data.taskStats.total,
+            completed: data.taskStats.completed,
+            inProgress: data.taskStats.inProgress,
+            overdue: data.taskStats.overdue,
+          }}
+        />
+
+         {/* Recent Activity */}
         <Card className="p-5">
           <div className="flex items-center justify-between pb-4">
             <h2 className="text-sm font-medium text-muted-foreground flex items-center gap-2">
@@ -55,7 +69,6 @@ const WorkspaceHomePage = async (props: WorkspaceHomeProps) => {
 
           <ActivityFeed activities={data.recentActivities.slice(0, 5)} />
         </Card>
-
         <WorkspaceMembersList members={data.workspaceMembers} />
       </div>
 

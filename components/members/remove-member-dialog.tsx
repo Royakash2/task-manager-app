@@ -8,10 +8,9 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
+import { LoadingButton } from "@/components/ui/loading-button";
 import { toast } from "sonner";
 import { removeMember } from "@/app/actions/members";
-import { Loader2 } from "lucide-react";
 
 interface RemoveMemberDialogProps {
   open: boolean;
@@ -61,29 +60,22 @@ export const RemoveMemberDialog = ({
         </DialogHeader>
 
         <div className="flex items-center gap-3 pt-2">
-          <Button
+          <LoadingButton
             variant="outline"
             className="flex-1 cursor-pointer"
-            disabled={pending}
             onClick={() => onOpenChange(false)}
           >
             Cancel
-          </Button>
-          <Button
+          </LoadingButton>
+          <LoadingButton
             variant="destructive"
             className="flex-1 cursor-pointer"
-            disabled={pending}
+            loading={pending}
+            loadingText="Removing..."
             onClick={handleRemove}
           >
-            {pending ? (
-              <>
-                <Loader2 className="size-4 mr-1.5 animate-spin" />
-                Removing...
-              </>
-            ) : (
-              "Remove"
-            )}
-          </Button>
+            Remove
+          </LoadingButton>
         </div>
       </DialogContent>
     </Dialog>

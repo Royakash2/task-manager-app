@@ -7,7 +7,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '../ui/form';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../ui/card';
 import { Input } from '../ui/input';
-import { Button } from '../ui/button';
+import { LoadingButton } from '../ui/loading-button';
 import { Textarea } from '../ui/textarea';
 import { toast } from 'sonner';
 import { createWorkspace } from '@/app/actions/workspace';
@@ -90,12 +90,12 @@ export const CreateWorkspaceForm = () => {
                             />
 
                             <div className='flex items-center gap-3 w-full'>
-                                <Button type='button' variant="outline" className='flex-1' disabled={pending} onClick={() => router.back()}>
+                                <LoadingButton type='button' variant="outline" className='flex-1' onClick={() => router.back()}>
                                     cancel
-                                </Button>
-                                <Button type='submit' disabled={pending} className='flex-1'>
-                                    {pending ? "Creating..." : "Create Workspace"}
-                                </Button>
+                                </LoadingButton>
+                                <LoadingButton type='submit' loading={pending} loadingText="Creating..." className='flex-1'>
+                                    Create Workspace
+                                </LoadingButton>
                             </div>
                         </form>
                     </Form>

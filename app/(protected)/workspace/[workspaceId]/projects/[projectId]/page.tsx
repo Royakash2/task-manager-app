@@ -18,6 +18,7 @@ import { getUserRole } from "@/lib/permissions";
 import { NotFoundState } from "@/components/not-found-state";
 import Link from "next/link";
 import React from "react";
+import { BreadcrumbPageTitle } from "@/components/breadcrumb/breadcrumb-page-title";
 interface ProjectPageProps {
   params: Promise<{ workspaceId: string; projectId: string }>;
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
@@ -47,75 +48,80 @@ const ProjectPage = async (props: ProjectPageProps) => {
     ? await getProjectSettings(workspaceId, projectId)
     : null;
 
-  const project = result.project as unknown as projectProps;    const tasks = result.tasks as unknown as TaskStats;
+  const project = result.project as unknown as projectProps; const tasks = result.tasks as unknown as TaskStats;
   const activities = result.activities as unknown as Activity[];
   const comments = result.comments as unknown as CommentProps[];
 
+  const projectName = project?.name ?? null;
+
   return (
-    <div className="flex flex-col pb-3 px-3">
-      <ProjectHeader project={project} />
-      <Tabs
-        defaultValue={(searchParams.view as string) || "Dashboard"}
-        className="w-full"
-      >
-        <TabsList className="mt-4">
-          <Link href={`?view=Dashboard`}>
-            <TabsTrigger className="px-1.5 md:px-3 cursor-pointer" value="Dashboard">
-              Dashboard
-            </TabsTrigger>
-          </Link>
-          <Link href={`?view=Table`}>
-            <TabsTrigger className="px-1.5 md:px-3 cursor-pointer" value="Table">
-              Table
-            </TabsTrigger>
-          </Link>
-          <Link href={`?view=Kanban`}>
-            <TabsTrigger className="px-1.5 md:px-3 cursor-pointer" value="Kanban">
-              Kanban
-            </TabsTrigger>
-          </Link>
-          {!isMember && (
-            <Link href={`?view=Settings`}>
-              <TabsTrigger className="px-1.5 md:px-3 cursor-pointer" value="Settings">
-                Settings
+    <>
+      <BreadcrumbPageTitle projectName={projectName} />
+      <div className="flex flex-col pb-3 px-3">
+        <ProjectHeader project={project} />
+        <Tabs
+          defaultValue={(searchParams.view as string) || "Dashboard"}
+          className="w-full"
+        >
+          <TabsList className="mt-4">
+            <Link href={`?view=Dashboard`}>
+              <TabsTrigger className="px-1.5 md:px-3 cursor-pointer" value="Dashboard">
+                Dashboard
               </TabsTrigger>
             </Link>
-          )}
-        </TabsList>
-        <TabsContent value="Dashboard">
-          <ProjectDashboard
-            project={project}
-            tasks={tasks}
-            activities={activities}
-            totalWorkspaceMembers={result.totalWorkspaceMembers!}
-            comments={comments}
-          />
-        </TabsContent>
-        <TabsContent value="Table">
-          <ProjectTableContainer
-            projectId={projectId}
-            workspaceId={workspaceId}
-            currentUserRole={currentUserRole}
-          />
-        </TabsContent>
-        <TabsContent value="Kanban">
-          <KanbanBoardContainer
-            initialTasks={tasks.items}
-            currentUserRole={currentUserRole}
-          />
-        </TabsContent>
-        {!isMember && settingsResult && !("error" in settingsResult) && (
-          <TabsContent value="Settings">
-            <ProjectSettings
-              project={settingsResult.project}
-              admins={settingsResult.admins ?? []}
-              members={settingsResult.members}
-              currentUserRole={settingsResult.currentUserRole}
+            <Link href={`?view=Table`}>
+              <TabsTrigger className="px-1.5 md:px-3 cursor-pointer" value="Table">
+                Table
+              </TabsTrigger>
+            </Link>
+            <Link href={`?view=Kanban`}>
+              <TabsTrigger className="px-1.5 md:px-3 cursor-pointer" value="Kanban">
+                Kanban
+              </TabsTrigger>
+            </Link>
+            {!isMember && (
+              <Link href={`?view=Settings`}>
+                <TabsTrigger className="px-1.5 md:px-3 cursor-pointer" value="Settings">
+                  Settings
+                </TabsTrigger>
+              </Link>
+            )}
+          </TabsList>
+          <TabsContent value="Dashboard">
+            <ProjectDashboard
+              project={project}
+              tasks={tasks}
+              activities={activities}
+              totalWorkspaceMembers={result.totalWorkspaceMembers!}
+              comments={comments}
             />
           </TabsContent>
-        )}
-      </Tabs>
-    </div>
+          <TabsContent value="Table">
+            <ProjectTableContainer
+              projectId={projectId}
+              workspaceId={workspaceId}
+              currentUserRole={currentUserRole}
+            />
+          </TabsContent>
+          <TabsContent value="Kanban">
+            <KanbanBoardContainer
+              initialTasks={tasks.items}
+              currentUserRole={currentUserRole}
+            />
+          </TabsContent>
+          {!isMember && settingsResult && !("error" in settingsResult) && (
+            <TabsContent value="Settings">
+              <ProjectSettings
+                project={settingsResult.project}
+                admins={settingsResult.admins ?? []}
+                members={settingsResult.members}
+                currentUserRole={settingsResult.currentUserRole}
+              />
+            </TabsContent>
+          )}
+        </Tabs>
+      </div>
+    </>
   );
 };
 export default ProjectPage;

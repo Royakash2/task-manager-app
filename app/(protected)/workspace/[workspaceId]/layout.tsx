@@ -1,4 +1,5 @@
 import { getUserWorkspaces } from '@/app/data/workspace/get-user-workspace';
+import { BreadcrumbProvider } from '@/components/breadcrumb/breadcrumb-provider';
 import AppSidebarContainer from '@/components/sidebar/AppSidebarContainer';
 import type { AppSidebarDataProps } from '@/components/sidebar/AppSidebarContainer';
 
@@ -25,19 +26,21 @@ const workspaceLayout = async ({ children, params }: Props) => {
   if (data?.workspaces && !data.workspaces.some((w) => w.workspaceId === workspaceId)) {
     redirect("/workspace");
   }
+
   return (
     <SidebarProvider>
      <div className='flex w-full bg-sidebar h-screen'>
       <AppSidebarContainer data={data as unknown as AppSidebarDataProps} workspaceId={workspaceId}/>
       <main className='w-full overflow-y-auto min-h-screen bg-background'>
-      <div className='sticky top-0 z-50  border-b flex items-center bg-background'>
-        <SidebarTrigger className='px-4 cursor-pointer z-50 '/>
-        <WorkspaceNavbar />
-      </div>
-      <div className='p-0 md:p-4 pt-2 lg:p-4'>
-        {children}
-        
-      </div>
+       <BreadcrumbProvider>
+        <div className='sticky top-0 z-50  border-b flex items-center bg-background'>
+          <SidebarTrigger className='px-4 cursor-pointer z-50 '/>
+          <WorkspaceNavbar />
+        </div>
+        <div className='p-0 md:p-4 pt-2 lg:p-4'>
+          {children}
+        </div>
+       </BreadcrumbProvider>
      </main>
      </div>
      

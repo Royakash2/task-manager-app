@@ -62,6 +62,7 @@ export interface workspaceProps {
   accessLevel: $Enums.AccessLevel;
   workspace: {
     name: string;
+    description: string | null;
   };
 }
 
@@ -145,6 +146,7 @@ export interface DashboardActivityItem {
 }
 
 export interface WorkspaceDashboardData {
+  userName: string;
   workspace: {
     name: string;
     description: string | null;
@@ -152,6 +154,9 @@ export interface WorkspaceDashboardData {
   currentUserRole: AccessLevel | null;
   taskStats: {
     total: number;
+    completed: number;
+    inProgress: number;
+    overdue: number;
   };
   projectsStats: ProjectDashboardStat[];
   memberCount: number;

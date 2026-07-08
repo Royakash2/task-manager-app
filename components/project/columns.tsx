@@ -113,7 +113,7 @@ export const createColumns = (userRole: AccessLevel | null): ColumnDef<TaskTable
     cell: ({ row }) => {
       const createdAt = row.getValue("createdAt") as Date;
       return (
-        <span className="text-sm font-medium xl:text-base capitalize">
+        <span className="text-xs text-muted-foreground">
           {format(new Date(createdAt), "MMM d, yyyy")}
         </span>
       )
@@ -126,7 +126,7 @@ export const createColumns = (userRole: AccessLevel | null): ColumnDef<TaskTable
     cell: ({ row }) => {
       const dueDate = row.getValue("dueDate") as Date | null;
       return (
-        <span className="text-sm font-medium xl:text-base capitalize">
+        <span className="text-xs text-muted-foreground">
           {dueDate ? format(new Date(dueDate), "MMM d, yyyy") : "No due date"}
         </span>
       )
@@ -160,9 +160,9 @@ export const createColumns = (userRole: AccessLevel | null): ColumnDef<TaskTable
     cell: ({ row }) => {
       const attachments = row.getValue("attachments") as string[];
       return (
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 text-muted-foreground">
           <Paperclip className="w-4 h-4" />
-          {attachments?.length || 0}
+          <span className="text-sm">{attachments?.length || 0}</span>
         </div>
       );
     },

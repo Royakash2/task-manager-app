@@ -10,7 +10,7 @@ import {
 } from "../ui/form";
 import { Input } from "../ui/input";
 import { Textarea } from "../ui/textarea";
-import { Button } from "../ui/button";
+import { LoadingButton } from "../ui/loading-button";
 import { ProjectData } from "@/lib/schema";
 import type { workspaceMembersProps } from "@/utils/types";
 import { MemberAccessPicker } from "./member-access-picker";
@@ -86,22 +86,22 @@ const CreateProjectDialogBody = ({
       </div>
 
       <div className="flex items-center gap-3 w-full">
-        <Button
+        <LoadingButton
           type="button"
           variant="outline"
           className="flex-1 cursor-pointer"
-          disabled={pending}
           onClick={onCancel}
         >
           Cancel
-        </Button>
-        <Button
+        </LoadingButton>
+        <LoadingButton
           type="submit"
-          disabled={pending}
+          loading={pending}
+          loadingText="Creating..."
           className="flex-1 cursor-pointer"
         >
-          {pending ? "Creating..." : "Create Project"}
-        </Button>
+          Create Project
+        </LoadingButton>
       </div>
     </>
   );

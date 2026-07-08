@@ -43,7 +43,7 @@ export const MembersPageClient = ({
   // Error state
   if (error) {
     return (
-      <div className="flex flex-col gap-6 p-4 md:p-6">
+      <div className="flex flex-col gap-6 p-3">
         <div>
           <h1 className="text-2xl font-bold tracking-tight text-foreground">
             Members
@@ -66,7 +66,7 @@ export const MembersPageClient = ({
   }
 
   return (
-    <div className="flex flex-col gap-6 p-4 md:p-6">
+    <div className="flex flex-col gap-6 p-3">
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>

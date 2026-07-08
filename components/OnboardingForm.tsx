@@ -8,7 +8,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from './ui/form';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from './ui/card';
 import { Input } from './ui/input';
-import { Button } from './ui/button';
+import { LoadingButton } from './ui/loading-button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
 import { countryList, } from '@/utils/countryLists';
 import Image from 'next/image';
@@ -174,9 +174,9 @@ export const OnboardingForm = ({ name, email, image }: Props) => {
                                     </FormItem>
                                 )}
                             />
-                            <Button type='submit' disabled={pending} className='w-full'>
+                            <LoadingButton type='submit' loading={pending} className='w-full'>
                                 Submit
-                            </Button>
+                            </LoadingButton>
                         </form>
                     </Form>
                 </CardContent>

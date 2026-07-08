@@ -80,7 +80,7 @@ const TaskComments = ({ taskId, comments, currentUserId, currentUserRole }: Task
                             className='cursor-pointer px-6 text-sm'
                             size="sm"
                         >
-                            {isSubmitting ? "Posting..." : "Post Comment"}
+                            {isSubmitting ? "Posting..." : "Post"}
                         </Button>
                     </div>
                 </div>

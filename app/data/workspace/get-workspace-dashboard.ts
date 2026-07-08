@@ -1,5 +1,6 @@
 import db from "@/lib/db";
 import { userRequired } from "../user/get-user";
+import { getUserById } from "../user/get-user-by-id";
 import { verifyAccess } from "@/lib/permissions";
 
 import { getWorkspaceProjects } from "./get-workspace-projects";
@@ -16,6 +17,7 @@ export const getWorkspaceDashboard = async (
 ): Promise<{ data?: WorkspaceDashboardData; error?: string }> => {
   try {
     const { user } = await userRequired();
+    const dbUser = await getUserById();
     await verifyAccess(user.id, workspaceId);
 
     const [workspace, projectsResult, membersResult, recentActivities] =
@@ -73,6 +75,7 @@ export const getWorkspaceDashboard = async (
 
     return {
       data: {
+        userName: dbUser?.name ?? "User",
         workspace,
         currentUserRole,
         taskStats,

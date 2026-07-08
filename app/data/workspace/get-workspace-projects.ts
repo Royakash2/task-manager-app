@@ -10,6 +10,9 @@ export const getWorkspaceProjects = async (
   projects: ProjectDashboardStat[];
   taskStats: {
     total: number;
+    completed: number;
+    inProgress: number;
+    overdue: number;
   };
 }> => {
   const role = await getUserRole(userId, workspaceId);
@@ -58,8 +61,22 @@ export const getWorkspaceProjects = async (
     },
   });
 
+  const allTasks = projects.flatMap((p) => p.tasks);
+  const now = new Date();
+
   const taskStats = {
-    total: projects.flatMap((p) => p.tasks).length,
+    total: allTasks.length,
+    completed: allTasks.filter((t) => t.status === TaskStatus.COMPLETED).length,
+    inProgress: allTasks.filter(
+      (t) => t.status === TaskStatus.IN_PROGRESS || t.status === TaskStatus.IN_REVIEW,
+    ).length,
+    overdue: allTasks.filter(
+      (t) =>
+        t.status !== TaskStatus.COMPLETED &&
+        t.status !== TaskStatus.CANCELLED &&
+        t.dueDate &&
+        t.dueDate < now,
+    ).length,
   };
 
   const projectsStats: ProjectDashboardStat[] = projects.map((project) => {

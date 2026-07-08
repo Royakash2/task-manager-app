@@ -14,6 +14,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
+import { LoadingButton } from "@/components/ui/loading-button";
 import { cn } from "@/lib/utils";
 
 type Props = {
@@ -107,22 +108,22 @@ export const ConfirmDeleteDialog = ({
           )}
         </DialogHeader>
         <div className="flex justify-end gap-2">
-          <Button
+          <LoadingButton
             variant="outline"
             onClick={() => setOpen(false)}
-            disabled={pending}
             className="cursor-pointer"
           >
             Cancel
-          </Button>
-          <Button
+          </LoadingButton>
+          <LoadingButton
             variant="destructive"
             onClick={handleDelete}
-            disabled={pending}
+            loading={pending}
+            loadingText="Deleting..."
             className="cursor-pointer"
           >
-            {pending ? "Deleting..." : label}
-          </Button>
+            {label}
+          </LoadingButton>
         </div>
       </DialogContent>
     </Dialog>

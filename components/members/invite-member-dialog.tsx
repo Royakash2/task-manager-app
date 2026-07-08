@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
+import { LoadingButton } from "@/components/ui/loading-button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
@@ -138,18 +139,17 @@ export const InviteMemberDialog = ({ currentUserRole, children }: InviteMemberDi
           </div>
 
           <div className="flex items-center gap-3">
-            <Button
+            <LoadingButton
               type="button"
               variant="outline"
               className="flex-1 cursor-pointer"
-              disabled={pending}
               onClick={() => setOpen(false)}
             >
               Cancel
-            </Button>
-            <Button type="submit" disabled={pending} className="flex-1 cursor-pointer">
-              {pending ? "Sending..." : "Send Invite"}
-            </Button>
+            </LoadingButton>
+            <LoadingButton type="submit" loading={pending} loadingText="Sending..." className="flex-1 cursor-pointer">
+              Send Invite
+            </LoadingButton>
           </div>
         </form>
       </DialogContent>
