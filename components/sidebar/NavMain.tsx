@@ -4,6 +4,7 @@ import { useWorkspaceId } from "@/hooks/use-workspace-id";
 import { useNotifications } from "@/hooks/use-notifications";
 import {
   SidebarGroup,
+  SidebarGroupLabel,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
@@ -75,6 +76,9 @@ export const NavMain = ({ currentUserRole }: NavMainProps) => {
   return (
     <>
       <SidebarGroup>
+        <SidebarGroupLabel className="select-none text-sm font-semibold text-muted-foreground tracking-wider mb-1">
+          Menu
+        </SidebarGroupLabel>
         <SidebarMenu>
           {items.map((item) => {
             const Icon = item.icon;
