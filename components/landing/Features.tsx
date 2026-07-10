@@ -1,10 +1,10 @@
 "use client";
 
 import * as React from "react";
+import Image from "next/image";
 import { motion, Variants } from "framer-motion";
-import { LayoutDashboard, Users, BarChart3, Shield } from "lucide-react";
 import { SectionHeader } from "../ui/section-header";
-
+import { Card, CardContent } from "@/components/ui/card";
 
 // Animation variants for the container and items
 const containerVariants: Variants = {
@@ -15,7 +15,7 @@ const containerVariants: Variants = {
       staggerChildren: 0.1,
     },
   },
-}
+};
 
 const itemVariants: Variants = {
   hidden: { y: 20, opacity: 0 },
@@ -27,70 +27,75 @@ const itemVariants: Variants = {
       ease: "easeInOut",
     },
   },
-}
+};
 
 export const Features = () => {
   const featureData = {
-    title: "Features you need",
-    subtitle: "Simple, powerful tools that help your team stay organized and productive — all in one place.",
+    title: "Everything you need to hit the ground running",
     features: [
       {
-        icon: <LayoutDashboard className="h-6 w-6" />,
-        title: "Kanban Boards",
-        description: "Drag and drop tasks across customizable columns to visualize your workflow.",
+        title: "Visual Project Management",
+        description:
+          "Track tasks across Kanban boards, table views, and dashboards. Drag and drop to update status, filter by priority, and see progress at a glance.",
+        image: "/visual.png",
       },
       {
-        icon: <Users className="h-6 w-6" />,
-        title: "Team Collaboration",
-        description: "Assign tasks, leave comments, and keep your team aligned in real-time.",
+        title: "Real-Time Collaboration",
+        description:
+          "Comment on tasks, get instant notifications when things change, attach files, and document your work with a rich text editor — all in real-time.",
+        image: "/realtime.png",
       },
       {
-        icon: <BarChart3 className="h-6 w-6" />,
-        title: "Project Dashboard",
-        description: "Get instant insights with task distribution charts and activity feeds.",
-      },
-      {
-        icon: <Shield className="h-6 w-6" />,
-        title: "Role-Based Access",
-        description: "Control who sees what with workspace-level permissions and access levels.",
+        title: "Workspace & Access Control",
+        description:
+          "Invite your team, assign roles, and control who sees what — from workspace-level permissions down to individual projects.",
+        image: "/workcpace-access.png",
       },
     ],
-    
-  }
+  };
 
   return (
-    <section id="features" className="w-full py-24 md:py-32 bg-muted/30 dark:bg-muted/10 border-t border-border/40 overflow-hidden">
+    <section id="features" className="w-full py-24 md:py-32 bg-background overflow-hidden relative">
       <motion.div
-        className="container mx-auto max-w-7xl px-4 md:px-6"
+        className="mx-auto max-w-7xl px-4 md:px-6"
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true, margin: "-100px" }}
         variants={containerVariants}
       >
-        <motion.div variants={itemVariants} className="flex flex-col items-center text-center">
-          <SectionHeader
-          badge="Features"
-            title={featureData.title}
-            description={featureData.subtitle}
-
-          />
-        </motion.div>
+        <SectionHeader badge="Features" title={featureData.title} />
 
         {/* Features Grid */}
-        <div className="mx-auto  grid max-w-2xl grid-cols-1 gap-8 text-left  lg:max-w-none lg:grid-cols-2">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-0 w-full items-stretch">
           {featureData.features.map((feature, index) => (
-            <motion.div variants={itemVariants} key={index} className="flex gap-x-6">
-              <div className="flex h-10 w-10 flex-none items-center justify-center rounded-lg bg-primary/10 text-primary">
-                {feature.icon}
-              </div>
-              <div>
-                <h3 className="text-base font-semibold leading-7 text-foreground">{feature.title}</h3>
-                <p className="mt-1 text-base leading-7 text-muted-foreground">{feature.description}</p>
-              </div>
+            <motion.div variants={itemVariants} key={index} className="group h-full">
+              <Card className="h-full py-0 flex flex-col border-foreground/30 overflow-hidden bg-background hover:border-border transition-colors duration-300 rounded-none shadow-none">
+                <div className="h-64 sm:h-72 w-full bg-muted/10 relative p-4 sm:p-5 border-b border-border/50 overflow-hidden">
+                  {/* Subtle grid background */}
+                  <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-size-[24px_24px]"></div>
+                  {/* Screenshot */}
+                  <div className="relative z-10 w-full h-full rounded-lg border border-border/50 overflow-hidden shadow-sm bg-background opacity-80 group-hover:opacity-100 transition-opacity duration-300">
+                    <Image
+                      src={feature.image}
+                      alt={feature.title}
+                      fill
+                      className="object-cover object-top"
+                    />
+                  </div>
+                </div>
+                <CardContent className="p-8">
+                  <h3 className="text-2xl font-medium tracking-tight text-foreground mb-3">
+                    {feature.title}
+                  </h3>
+                  <p className="text-base text-muted-foreground leading-relaxed">
+                    {feature.description}
+                  </p>
+                </CardContent>
+              </Card>
             </motion.div>
           ))}
         </div>
       </motion.div>
     </section>
-  )
-}
+  );
+};
