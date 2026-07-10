@@ -2,78 +2,68 @@ import { Button } from "@/components/ui/button";
 import { RegisterLink, LoginLink } from "@kinde-oss/kinde-auth-nextjs/components";
 import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
 import Link from "next/link";
-import Image from "next/image";
 import { ArrowRight } from "lucide-react";
+import { TrustedByLogos } from "./TrustedByLogos";
 
 export const Hero = async () => {
   const { isAuthenticated } = getKindeServerSession();
   const isLogin = await isAuthenticated();
 
   return (
-    <section className="relative w-full pt-20 pb-16 md:pt-32 md:pb-24 flex flex-col items-center px-4 overflow-hidden">
+    <section className="relative w-full pt-24 pb-16 md:pt-40 md:pb-24 flex flex-col items-center overflow-hidden">
 
-
-      <div className="w-full max-w-7xl mx-auto relative z-10 px-4 md:px-6">
-        {/* Animated Particle Network Background */}
-        {/* <AnimatedBackground /> */}
-
-        <div className="text-center">
-
-          {/* Announcement Pill Badge */}
-          <div className="flex justify-center mb-6">
-            <div className="inline-flex items-center rounded-md border border-black/20 bg-black/5 px-3 py-1 text-sm text-black backdrop-blur-sm dark:border-white/20 dark:bg-white/10 dark:text-white">
-              <span className="flex h-2 w-2 rounded-full bg-black dark:bg-white mr-2 animate-pulse"></span>
-              Introducing VelloX for Teams
-            </div>
-          </div>
-
-          <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight text-foreground/90 mb-4">
-            Your personal workspace <br className="hidden sm:block" />
-            <span className="font-mono bg-linear-to-r from-violet-600 to-fuchsia-500 dark:from-violet-400 dark:to-fuchsia-400 bg-clip-text text-transparent">
-              VelloX
-            </span> for better productivity
+      <div className="w-full max-w-7xl mx-auto relative z-10 px-4 md:px-6 flex flex-col items-center">
+        <div className="text-center flex flex-col items-center w-full max-w-4xl">
+          
+          {/* Heading */}
+          <h1 className="text-[3.5rem] leading-[1.1] sm:text-7xl md:text-8xl font-medium tracking-tight text-foreground flex flex-wrap justify-center items-center gap-x-4 sm:gap-x-6 md:gap-x-8 w-full">
+            <span>Plan</span>
+            <span className="text-muted-foreground relative inline-block">
+              <span className="absolute top-[52%] left-0 w-full h-[0.08em] bg-muted-foreground/80 -translate-y-1/2"></span>
+              chase
+            </span>
+            <span>execute</span>
           </h1>
 
-          <p className="text-base sm:text-lg mt-4 sm:mt-6 max-w-2xl text-muted-foreground mx-auto">
-            VelloX is a premium task management platform designed to bring clarity and speed to your workflow. Stop managing tasks, start executing them.
+          {/* Subtitle */}
+          <p className="text-base sm:text-xl md:text-2xl mt-8 max-w-2xl text-muted-foreground mx-auto leading-relaxed font-light">
+            VelloX proactively organizes and clarifies your daily tasks and projects so you can focus on executing them.
           </p>
         </div>
 
-        <div className="flex flex-col sm:flex-row justify-center items-center mt-8 sm:mt-10 gap-3 sm:gap-4 w-full px-2 sm:px-0">
+        {/* CTA Buttons */}
+        <div className="flex  justify-center items-center mt-12 gap-4 sm:gap-6 w-full">
           {isLogin ? (
-            <Button asChild size="lg" className="w-full sm:w-auto">
+            <Button asChild size="lg" className="h-12 px-8 text-base">
               <Link href="/workspace">
                 Goto Workspace <ArrowRight className="ml-2 h-4 w-4" />
               </Link>
             </Button>
           ) : (
             <>
-              <Button size="lg" asChild className="w-full sm:w-auto">
+             <Button asChild variant="outline" size="lg">
+                <LoginLink>
+                  Sign In <ArrowRight className="ml-2 h-4 w-4" />
+                </LoginLink>
+              </Button>
+              <Button size="lg" asChild>
                 <RegisterLink>
                   Get Started Free <ArrowRight className="ml-2 h-4 w-4" />
                 </RegisterLink>
-              </Button>
-              <Button asChild variant="outline" size="lg" className="w-full sm:w-auto">
-                <LoginLink>
-                  See How It Works
-                </LoginLink>
               </Button>
             </>
           )}
         </div>
 
-        {/* Dashboard Showcase Image */}
-        <div className="mt-16 sm:mt-24 w-full max-w-7xl mx-auto relative rounded-xl sm:rounded-2xl border border-border/50 shadow-2xl shadow-blue-900/5 overflow-hidden">
-
-          <Image
-            src="/dashboard-hero.png"
-            alt="VelloX Dashboard Preview"
-            width={1200}
-            height={400}
-            className="w-full h-auto max-h-150 object-cover object-top rounded-xl sm:rounded-2xl transform hover:scale-[1.01] transition-transform duration-700 ease-out"
-            priority
-          />
+        {/* Small text below buttons */}
+        <div className="mt-8 text-sm font-mono text-muted-foreground flex flex-col sm:flex-row items-center justify-center gap-1 sm:gap-2 text-center">
+          <span>trusted by fast-growing teams</span>
+          <span className="hidden sm:inline">·</span>
+          <span>Plan · Track · Ship</span>
         </div>
+
+        <TrustedByLogos />
+
       </div>
     </section>
   );
