@@ -25,10 +25,10 @@ export const WorkspaceAvatar = ({
   fallbackClassName?: string;
 }) => {
   return (
-    <Avatar className={cn(sizeMap[size], "rounded-md", className)}>
+    <Avatar className={cn(sizeMap[size], "rounded-sm", className)}>
       <AvatarFallback
         className={cn(
-          "bg-blue-600 text-white rounded-sm font-medium",
+          "font-semibold",
           fallbackSizeMap[size],
           fallbackClassName,
         )}
