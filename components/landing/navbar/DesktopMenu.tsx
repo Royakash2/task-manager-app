@@ -12,6 +12,7 @@ import {
   DropdownMenuSeparator,
 } from "@/components/ui/dropdown-menu";
 import { LogOut, User } from "lucide-react";
+import { NavLinks } from "./NavLinks";
 
 export type AuthUser = {
   id?: string;
@@ -31,15 +32,10 @@ export const DesktopMenu = ({ isLogin, user }: DesktopMenuProps) => {
 
   return (
     <div className="hidden md:flex items-center justify-between w-full">
-      <div className="flex items-center gap-8">
-        <Logo linkHref="/" />
-        <div className="flex items-center gap-6 font-medium text-base text-muted-foreground">
-          <Link href="#features" className="hover:text-foreground transition-colors ">Features</Link>
-          <Link href="#pricing" className="hover:text-foreground transition-colors">Pricing</Link>
-          <Link href="#about" className="hover:text-foreground transition-colors">About</Link>
-        </div>
-      </div>
-
+          <div className="flex items-center gap-12">
+            <Logo linkHref="/" />
+          </div>
+          <NavLinks variant="desktop" />
       <div className="flex items-center gap-4">
         <ThemeToggle />
         {isLogin ? (
