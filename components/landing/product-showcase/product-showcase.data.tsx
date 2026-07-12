@@ -1,7 +1,7 @@
 import { Columns3, ClipboardList, Layout } from "lucide-react";
 import React from "react";
 
-export interface TabContent {
+export interface ShowcaseContent {
   badge: string;
   title: string;
   description: string;
@@ -10,14 +10,14 @@ export interface TabContent {
   imageAlt: string;
 }
 
-export interface TabData {
+export interface ShowcaseData {
   value: string;
   icon: React.ReactNode;
   label: string;
-  content: TabContent;
+  content: ShowcaseContent;
 }
 
-export const showcaseTabs: TabData[] = [
+export const showcaseData: ShowcaseData[] = [
   {
     value: "tab-1",
     icon: <Columns3 className="h-auto w-4 shrink-0" />,

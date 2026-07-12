@@ -1,8 +1,9 @@
 "use client";
 
 import Image from "next/image";
-import { showcaseTabs } from "./product-showcase.data";
+
 import { SectionHeader } from "../../ui/section-header";
+import { showcaseData } from "./product-showcase.data";
 
 export const ProductShowcase = () => {
   return (
@@ -18,20 +19,20 @@ export const ProductShowcase = () => {
         </div>
         
         <div className="flex flex-col gap-24 md:gap-32">
-          {showcaseTabs.map((tab, index) => (
-            <div key={tab.value} className={`flex flex-col ${index % 2 === 0 ? "md:flex-row" : "md:flex-row-reverse"} gap-12 md:gap-24 items-start`}>
+          {showcaseData.map((item, index) => (
+            <div key={item.value} className={`flex flex-col ${index % 2 === 0 ? "md:flex-row" : "md:flex-row-reverse"} gap-12 md:gap-24 items-start`}>
               {/* Left Content */}
               <div className="flex-1 flex flex-col justify-center w-full">
                 <div className="flex items-center gap-2 mb-6">
                   <span className="text-muted-foreground font-mono text-sm tracking-widest font-semibold uppercase">
-                    / {tab.content.badge}
+                    / {item.content.badge}
                   </span>
                 </div>
                 <h3 className="text-2xl sm:text-3xl md:text-4xl font-medium tracking-tight text-foreground leading-[1.2] mb-4">
-                  {tab.content.title}
+                  {item.content.title}
                 </h3>
                 <p className="text-muted-foreground text-lg sm:text-xl leading-relaxed font-light">
-                  {tab.content.description}
+                  {item.content.description}
                 </p>
               </div>
               
@@ -42,10 +43,10 @@ export const ProductShowcase = () => {
                   <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-[0.03] mix-blend-overlay pointer-events-none rounded-xl"></div>
                   
                   {/* Inner Image Container */}
-                  <div className="relative w-full h-full rounded-lg overflow-hidden border border-border/40 bg-background shadow-2xl">
+                  <div className="relative w-full h-full rounded-lg overflow-hidden border border-border/40 bg-background">
                      <Image 
-                       src={tab.content.imageSrc} 
-                       alt={tab.content.imageAlt} 
+                       src={item.content.imageSrc} 
+                       alt={item.content.imageAlt} 
                        fill 
                        className="object-cover" 
                        sizes="(max-width: 768px) 100vw, 50vw"
