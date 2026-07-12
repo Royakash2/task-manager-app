@@ -1,6 +1,6 @@
 export const TrustedByLogos = () => {
   return (
-    <div className="mt-24 sm:mt-32 w-full max-w-5xl mx-auto text-muted-foreground/60 font-medium">
+    <div className="mt-20 w-full max-w-5xl mx-auto text-muted-foreground/60 font-medium">
       {/* Desktop layout with brackets */}
       <div className="hidden sm:flex items-center gap-6 w-full justify-between">
         <span className="text-3xl font-light opacity-50">{"{"}</span>

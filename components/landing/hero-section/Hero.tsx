@@ -10,7 +10,7 @@ export const Hero = async () => {
   const isLogin = await isAuthenticated();
 
   return (
-    <section className="relative w-full pt-24 pb-16 md:pt-40 md:pb-24 flex flex-col items-center overflow-hidden">
+    <section className="relative w-full pt-24 pb-16  md:pb-24 flex flex-col items-center overflow-hidden">
 
       <div className="w-full max-w-7xl mx-auto relative z-10 px-4 md:px-6 flex flex-col items-center">
         <div className="text-center flex flex-col items-center w-full max-w-4xl">
