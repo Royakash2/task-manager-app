@@ -1,4 +1,4 @@
-import { Layout, Pointer, Zap } from "lucide-react";
+import { Columns3, ClipboardList, Layout } from "lucide-react";
 import React from "react";
 
 export interface TabContent {
@@ -20,47 +20,47 @@ export interface TabData {
 export const showcaseTabs: TabData[] = [
   {
     value: "tab-1",
-    icon: <Zap className="h-auto w-4 shrink-0" />,
-    label: "Fast Workflows",
+    icon: <Columns3 className="h-auto w-4 shrink-0" />,
+    label: "Kanban & Table",
     content: {
-      badge: "Automations",
-      title: "Automate your daily routines.",
+      badge: "Views",
+      title: "Track tasks your way.",
       description:
-        "Save time by setting up custom triggers and actions. VelloX automates repetitive tasks so your team can focus on what really matters.",
-      buttonText: "Explore Automations",
+        "Switch between Kanban boards, table views, and dashboards \u2014 all in one project. Drag and drop to update status, sort by any column, and see your workflow from every angle.",
+      buttonText: "Explore Views",
       imageSrc:
-        "https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=2070&auto=format&fit=crop",
-      imageAlt: "Workflow Automations",
+        "/showcase-views.png",
+      imageAlt: "Kanban boards and table view",
     },
   },
   {
     value: "tab-2",
-    icon: <Pointer className="h-auto w-4 shrink-0" />,
-    label: "Seamless Tracking",
+    icon: <ClipboardList className="h-auto w-4 shrink-0" />,
+    label: "Task Management",
     content: {
-      badge: "Kanban & Lists",
-      title: "Visualize your team's progress.",
+      badge: "Tasks",
+      title: "From inception to completion.",
       description:
-        "Use powerful Kanban boards, interactive lists, and timelines to track every task from inception to completion with perfect clarity.",
-      buttonText: "See Views",
+        "Create tasks with descriptions, due dates, priority levels, and file attachments. Assign team members, write rich documentation with the built-in editor, and track everything in one place.",
+      buttonText: "See Tasks",
       imageSrc:
-        "https://images.unsplash.com/photo-1611224923853-80b023f02d71?q=80&w=1939&auto=format&fit=crop",
-      imageAlt: "Kanban boards",
+        "/showcase-tasks.png",
+      imageAlt: "Task detail view",
     },
   },
   {
     value: "tab-3",
     icon: <Layout className="h-auto w-4 shrink-0" />,
-    label: "Advanced Analytics",
+    label: "Real-Time Sync",
     content: {
-      badge: "Dashboards",
-      title: "Make data-driven decisions.",
+      badge: "Collaboration",
+      title: "Stay in sync, instantly.",
       description:
-        "Get a bird's-eye view of your project health. Monitor team velocity, identify bottlenecks, and generate comprehensive reports instantly.",
-      buttonText: "View Analytics",
+        "Comment on tasks, get real-time notifications when things change, and track every update through the activity feed. Invite your team, assign roles, and control who has access to what.",
+      buttonText: "Learn More",
       imageSrc:
-        "https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=2015&auto=format&fit=crop",
-      imageAlt: "Analytics Dashboard",
+        "/showcase-collaboration.png",
+      imageAlt: "Team collaboration and notifications",
     },
   },
 ];
