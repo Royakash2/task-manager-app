@@ -1,4 +1,6 @@
+"use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 
@@ -9,16 +11,27 @@ interface LogoProps {
 
 export function Logo({ className = "", linkHref }: LogoProps) {
   const logoContent = (
-    <div className={`flex items-center gap-1 ${className}`}>
-      {/* <div className="relative w-10 h-10 rounded-xl overflow-hidden shrink-0">
+    <div className={`flex items-center gap-2 ${className}`}>
+      <div className="relative shrink-0 rounded-full">
         <Image
-          src="/Logo.png"
-          alt="AlignerHQ Logo"
-          fill
-          className="object-center"
+          src="/light-logo.png"
+          alt="VelloX Logo"
+          width={28}
+          height={28}
+          className="object-contain rounded-full dark:hidden"
+          priority
         />
-      </div> */}
-      <span className="text-3xl font-bold tracking-tight font-mono">VelloX</span>
+        <Image
+          src="/dark-logo.png"
+          alt="VelloX Logo"
+          width={28}
+          height={28}
+          className="object-contain rounded-full hidden dark:block"
+          priority
+        />
+      </div>
+      <span className="text-2xl font-medium font-mono ">Vellox</span>
+
     </div>
   );
 
