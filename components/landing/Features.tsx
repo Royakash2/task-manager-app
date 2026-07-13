@@ -1,10 +1,10 @@
 "use client";
 
-import * as React from "react";
 import Image from "next/image";
 import { motion, Variants } from "framer-motion";
 import { SectionHeader } from "../ui/section-header";
 import { Card, CardContent } from "@/components/ui/card";
+import { featureData } from "./features.data";
 
 // Animation variants for the container and items
 const containerVariants: Variants = {
@@ -30,29 +30,6 @@ const itemVariants: Variants = {
 };
 
 export const Features = () => {
-  const featureData = {
-    title: "Everything you need to hit the ground running",
-    features: [
-      {
-        title: "Visual Project Management",
-        description:
-          "Track tasks across Kanban boards, table views, and dashboards. Drag and drop to update status, filter by priority, and see progress at a glance.",
-        image: "/visual.png",
-      },
-      {
-        title: "Real-Time Collaboration",
-        description:
-          "Comment on tasks, get instant notifications when things change, attach files, and document your work with a rich text editor — all in real-time.",
-        image: "/realtime.png",
-      },
-      {
-        title: "Workspace & Access Control",
-        description:
-          "Invite your team, assign roles, and control who sees what — from workspace-level permissions down to individual projects.",
-        image: "/workcpace-access.png",
-      },
-    ],
-  };
 
   return (
     <section id="features" className="w-full py-24 md:py-32 bg-background overflow-hidden relative">
@@ -69,12 +46,12 @@ export const Features = () => {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-0 w-full items-stretch">
           {featureData.features.map((feature, index) => (
             <motion.div variants={itemVariants} key={index} className="group h-full">
-              <Card className="h-full py-0 flex flex-col border-foreground/30 overflow-hidden bg-background hover:border-border transition-colors duration-300 rounded-none shadow-none">
+              <Card className="h-full py-0 flex flex-col border-foreground/30 overflow-hidden bg-muted hover:border-border transition-colors duration-300 rounded-none shadow-none">
                 <div className="h-64 sm:h-72 w-full bg-muted/10 relative p-4 sm:p-5 border-b border-border/50 overflow-hidden">
                   {/* Subtle grid background */}
                   <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-size-[24px_24px]"></div>
                   {/* Screenshot */}
-                  <div className="relative z-10 w-full h-full rounded-lg border border-border/50 overflow-hidden shadow-sm bg-background opacity-80 group-hover:opacity-100 transition-opacity duration-300">
+                  <div className="relative z-10 w-full h-full rounded border border-border/50 overflow-hidden shadow-sm bg-background">
                     <Image
                       src={feature.image}
                       alt={feature.title}
