@@ -1,70 +1,78 @@
 "use client";
 
+import Link from "next/link";
 import { Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardHeader,
-  CardTitle,
-  CardContent,
-} from "@/components/ui/card";
-import { motion } from "framer-motion";
+import { useKindeBrowserClient } from "@kinde-oss/kinde-auth-nextjs";
+import { RegisterLink } from "@kinde-oss/kinde-auth-nextjs/components";
 import type { PricingTier } from "./pricing.data";
 
 export const PricingCard = ({ tier }: { tier: PricingTier }) => {
-  const inverse = tier.highlighted;
-  const popular = tier.highlighted;
+  const { isAuthenticated } = useKindeBrowserClient();
+  const popular = tier.highlighted && !tier.comingSoon;
+  const isFreeTier = !tier.comingSoon && tier.cta === "Get Started Free";
 
   return (
-    <Card
-      className={` w-full border ${inverse ? "bg-black text-white dark:bg-black" : "bg-card text-card-foreground"}`}
-    >
-      <CardHeader className="flex flex-row justify-between items-start gap-4 pb-2">
-        <CardTitle className={`text-lg font-bold ${inverse ? "text-white/70" : "text-muted-foreground"}`}>
-          {tier.name}
-        </CardTitle>
-        {popular && (
-          <motion.div
-            animate={{ backgroundPositionX: "-100%" }}
-            transition={{
-              duration: 1,
-              repeat: Infinity,
-              ease: "linear",
-              repeatType: "loop",
-            }}
-            className="text-sm px-3 py-1 rounded-xl border border-white/20 bg-[linear-gradient(to_right,#DD7DDF,#E1CD86,#BBCB92,#71C2EF,#3BFFFF)] bg-size-[200%] text-transparent bg-clip-text font-medium whitespace-nowrap"
-          >
-            Popular
-          </motion.div>
-        )}
-      </CardHeader>
-      <CardContent>
-        <div className="flex items-baseline gap-1 mt-2">
-          <span className="text-5xl font-bold tracking-tighter leading-none">{tier.price}</span>
+    <div className={`w-full flex flex-col bg-muted border ${popular ? 'border-foreground/40 ' : 'border-border '} rounded p-6 sm:p-8 relative min-h-[500px] hover:border-foreground/30 transition-colors`}>
+      {popular && (
+        <div className="absolute top-6 right-6 px-2.5 py-1 border border-foreground/30 bg-foreground/5 rounded text-[10px] tracking-widest uppercase font-semibold text-foreground">
+          Popular
+        </div>
+      )}
+
+      {tier.comingSoon && (
+        <div className="absolute top-6 right-6 px-2.5 py-1 border border-muted-foreground/30 bg-muted rounded text-[10px] tracking-widest uppercase font-semibold text-muted-foreground">
+          Coming Soon
+        </div>
+      )}
+
+      <div className="flex flex-col gap-4 mb-8 mt-2">
+        <h3 className={`text-3xl font-medium tracking-tight ${tier.comingSoon ? 'text-muted-foreground/60' : 'text-foreground'}`}>{tier.name}</h3>
+        <div className="flex items-baseline">
+          <span className={`text-4xl font-semibold tracking-tight ${tier.comingSoon ? 'text-muted-foreground/60' : 'text-foreground'}`}>{tier.price}</span>
           {tier.period && (
-            <span className={`tracking-tight font-semibold ${inverse ? "text-white/60" : "text-muted-foreground"}`}>
-              {tier.period}
-            </span>
+            <span className={`text-4xl font-semibold tracking-tight ${tier.comingSoon ? 'text-muted-foreground/60' : 'text-foreground'}`}>{tier.period}</span>
           )}
         </div>
-        <p className={`mt-4 text-sm ${inverse ? "text-white/70" : "text-muted-foreground"}`}>
-          {tier.description}
-        </p>
+      </div>
+
+      <div className={`text-sm font-medium mb-6 ${tier.comingSoon ? 'text-muted-foreground/50' : 'text-foreground'}`}>
+        Whats included :
+      </div>
+
+      <ul className="flex flex-col gap-4 mb-12">
+        {tier.features.map((feature, idx) => (
+          <li key={idx} className="flex items-start gap-3">
+            <Check className={`w-5 h-5 shrink-0 ${tier.comingSoon ? 'text-muted-foreground/40' : 'text-foreground'}`} strokeWidth={2.5} />
+            <span className={`text-[15px] leading-snug ${tier.comingSoon ? 'text-muted-foreground/40' : 'text-muted-foreground'}`}>{feature}</span>
+          </li>
+        ))}
+      </ul>
+
+      {isFreeTier ? (
+        <Button asChild className="w-full mt-auto text-sm font-semibold bg-foreground text-background hover:bg-foreground/90 shadow-sm" variant="default" size="lg">
+          {isAuthenticated ? (
+            <Link href="/workspace">{tier.cta}</Link>
+          ) : (
+            <RegisterLink>{tier.cta}</RegisterLink>
+          )}
+        </Button>
+      ) : (
         <Button
-          variant={inverse ? "secondary" : "default"}
-          className="w-full mt-6"
+          className={`w-full mt-auto text-sm font-semibold ${
+            popular
+              ? "bg-foreground text-background hover:bg-foreground/90 shadow-sm"
+              : tier.comingSoon
+                ? "bg-muted text-muted-foreground/50 cursor-not-allowed border border-border"
+                : "bg-background border border-border hover:bg-muted text-foreground"
+          }`}
+          variant={popular ? "default" : "outline"}
+          size="lg"
+          disabled={tier.comingSoon}
         >
           {tier.cta}
         </Button>
-        <ul className="flex flex-col gap-4 mt-8 text-sm">
-          {tier.features.map((feature) => (
-            <li key={feature} className="flex items-center gap-3">
-              <Check className={`h-4 w-4 shrink-0 ${inverse ? "text-white/70" : "text-primary"}`} />
-              <span className={inverse ? "text-white/80" : "text-muted-foreground"}>{feature}</span>
-            </li>
-          ))}
-        </ul>
-      </CardContent>
-    </Card>
+      )}
+    </div>
   );
 };

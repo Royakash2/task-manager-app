@@ -38,7 +38,7 @@ export const ProductShowcase = () => {
               
               {/* Right Visual */}
               <div className="flex-1 w-full">
-                <div className="w-full aspect-4/3 sm:aspect-16/11 relative rounded-xl border border-border/60 bg-muted/10 p-4 sm:p-6 lg:p-8">
+                <div className="w-full aspect-4/3 sm:aspect-16/11 relative rounded-xl border border-foreground/30 bg-muted p-4 sm:p-6 lg:p-8">
                   {/* Grainy effect overlay for dark mode texture */}
                   <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-[0.03] mix-blend-overlay pointer-events-none rounded-xl"></div>
                   
