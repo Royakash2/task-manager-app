@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { RegisterLink, LoginLink, LogoutLink } from "@kinde-oss/kinde-auth-nextjs/components";
 import { Logo } from "../../Logo";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { NavLinks } from "./NavLinks";
 
 import { AuthUser } from "./DesktopMenu";
 
@@ -32,16 +33,8 @@ export function MobileMenu({ isLogin, user }: MobileMenuProps) {
             <Logo linkHref="/" />
           </div>
 
-          <div className="flex flex-col gap-2 px-2 mt-4">
-            <Link href="#features" className="px-4 py-3 text-base font-medium rounded-lg hover:bg-accent hover:text-accent-foreground transition-all">
-              Features
-            </Link>
-            <Link href="#pricing" className="px-4 py-3 text-base font-medium rounded-lg hover:bg-accent hover:text-accent-foreground transition-all">
-              Pricing
-            </Link>
-            <Link href="#about" className="px-4 py-3 text-base font-medium rounded-lg hover:bg-accent hover:text-accent-foreground transition-all">
-              About
-            </Link>
+          <div className="mt-4">
+            <NavLinks variant="mobile" />
           </div>
           
           <div className="mt-auto px-6 pb-8 border-t border-border pt-6">

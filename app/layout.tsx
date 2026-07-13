@@ -12,8 +12,8 @@ const manrope = Manrope({
 });
 
 export const metadata: Metadata = {
-  title: "Aura",
-  description: "Experience a new atmosphere of productivity. Aura is a premium task management platform designed to bring clarity and speed to your workflow.",
+  title: "velloX - home",
+  description: "Experience a new atmosphere of productivity. VelloX is a premium task management platform designed to bring clarity and speed to your workflow.",
 };
 
 export default function RootLayout({

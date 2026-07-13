@@ -1,47 +1,60 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Navigation, Autoplay } from "swiper/modules";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 import { SectionHeader } from "@/components/ui/section-header";
-import { firstRow, secondRow } from "./testimonials.data";
+import { testimonials } from "./testimonials.data";
 import { TestimonialCard } from "./TestimonialCard";
+import { Button } from "@/components/ui/button";
+
+import "swiper/css";
+import "swiper/css/navigation";
 
 export const Testimonials = () => {
   return (
-    <section className="w-full max-w-7xl mx-auto py-24 md:py-32 dark:bg-background border-t border-border/40 overflow-hidden relative">
-      <div className="px-4 md:px-6 relative z-10 mb-16">
+    <section className="w-full max-w-7xl mx-auto py-24 md:py-32 bg-background overflow-hidden relative">
+      <div className="px-4 md:px-6 relative z-10 flex flex-col md:flex-row md:items-end justify-between gap-8 mb-8 md:-mb-12">
         <SectionHeader
           badge="Testimonials"
-          title="Loved by modern teams"
-          description="Don't just take our word for it. Here is what industry leaders have to say about their experience with VelloX."
+          title="Trusted by dev teams big & small"
+          description="See what eng leaders are saying about VelloX"
         />
+        
+        <div className="flex items-center gap-3 md:pb-32">
+          <Button variant="outline" size="icon" className="swiper-prev-btn rounded-full border-foreground/30 hover:bg-muted">
+            <ChevronLeft className="w-5 h-5" />
+          </Button>
+          <Button variant="outline" size="icon" className="swiper-next-btn rounded-full border-foreground/30 hover:bg-muted">
+            <ChevronRight className="w-5 h-5" />
+          </Button>
+        </div>
       </div>
 
-      <div className="relative flex flex-col gap-6 md:gap-8 overflow-hidden z-10 w-full py-4">
-        {/* Left and Right Fade masks for smooth edges */}
-        <div className="absolute inset-y-0 left-0 w-1/6 md:w-1/4 bg-linear-to-r from-background to-transparent z-20 pointer-events-none" />
-        <div className="absolute inset-y-0 right-0 w-1/6 md:w-1/4 bg-linear-to-l from-background to-transparent z-20 pointer-events-none" />
-
-        {/* Row 1: Scrolls Left */}
-        <motion.div 
-          className="flex gap-6 md:gap-8 w-max"
-          animate={{ x: ["0%", "-50%"] }}
-          transition={{ repeat: Infinity, ease: "linear", duration: 45 }}
+      <div className="w-full px-4 md:px-6 mt-8">
+        <Swiper
+          modules={[Navigation, Autoplay]}
+          spaceBetween={12}
+          slidesPerView={1}
+          breakpoints={{
+            640: { slidesPerView: 1.5 },
+            768: { slidesPerView: 2 },
+            1024: { slidesPerView: 3 },
+          }}
+          autoplay={{ delay: 5000, disableOnInteraction: true }}
+          loop={true}
+          navigation={{
+            prevEl: '.swiper-prev-btn',
+            nextEl: '.swiper-next-btn',
+          }}
+          className="w-full overflow-visible!"
         >
-          {firstRow.map((t, i) => (
-            <TestimonialCard key={`row1-${i}`} testimonial={t} />
+          {testimonials.map((t, i) => (
+            <SwiperSlide key={i} className="flex" style={{ height: "auto" }}>
+              <TestimonialCard testimonial={t} />
+            </SwiperSlide>
           ))}
-        </motion.div>
-
-        {/* Row 2: Scrolls Right */}
-        <motion.div 
-          className="flex gap-6 md:gap-8 w-max"
-          animate={{ x: ["-50%", "0%"] }}
-          transition={{ repeat: Infinity, ease: "linear", duration: 40 }}
-        >
-          {secondRow.map((t, i) => (
-            <TestimonialCard key={`row2-${i}`} testimonial={t} />
-          ))}
-        </motion.div>
+        </Swiper>
       </div>
     </section>
   );

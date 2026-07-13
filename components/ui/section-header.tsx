@@ -1,12 +1,12 @@
 import { ReactNode } from "react";
-import { Badge } from "@/components/ui/badge";
 
 interface SectionHeaderProps {
   title: string;
   badge?: string;
   highlight?: string;
-  description: string;
+  description?: string;
   children?: ReactNode;
+  size?: "sm" | "default" | "lg";
 }
 
 export function SectionHeader({
@@ -14,15 +14,25 @@ export function SectionHeader({
   badge,
   highlight,
   description,
+  size = "default",
 }: SectionHeaderProps) {
+  
+  const sizeClasses = {
+    sm: "text-3xl sm:text-4xl md:text-5xl",
+    default: "text-4xl sm:text-5xl md:text-6xl",
+    lg: "text-5xl sm:text-6xl md:text-7xl lg:text-8xl",
+  };
+
   return (
-    <div className="flex flex-col items-center gap-4 text-center mb-16 md:mb-20">
+    <div className="mb-16 md:mb-24 flex flex-col items-start text-left max-w-3xl">
       {badge && (
-        <Badge variant="outline" className="text-primary bg-primary/10 border-primary/20 rounded-md">
-          {badge}
-        </Badge>
+        <div className="flex items-center gap-2 mb-6">
+          <span className="text-primary font-mono text-sm tracking-widest font-semibold uppercase">
+            / {badge}
+          </span>
+        </div>
       )}
-      <h2 className="max-w-2xl text-3xl font-bold md:text-5xl tracking-tight">
+      <h2 className={`${sizeClasses[size]} font-medium tracking-tight text-foreground leading-[1.1]`}>
         {title}{" "}
         {highlight && (
           <span className="bg-linear-to-r from-blue-600 to-indigo-500 bg-clip-text text-transparent">
@@ -30,9 +40,11 @@ export function SectionHeader({
           </span>
         )}
       </h2>
-      <p className="text-muted-foreground md:text-lg max-w-2xl mt-2">
-        {description}
-      </p>
+      {description && (
+        <p className="text-base sm:text-lg text-muted-foreground mt-6 leading-relaxed font-light">
+          {description}
+        </p>
+      )}
     </div>
   );
 }

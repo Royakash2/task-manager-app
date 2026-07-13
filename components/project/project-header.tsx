@@ -14,7 +14,7 @@ export const ProjectHeader = ({ project }: { project: projectProps }) => {
                 <div className="flex items-center gap-4 min-w-0 w-full sm:w-auto">
                     <ProjectAvatar 
                         name={project.name} 
-                        className="size-10 sm:size-14 2xl:size-16 rounded-xl shadow-sm shrink-0"
+                        className="size-10 sm:size-14 2xl:size-16 rounded-sm shrink-0"
                         fallbackClassName="text-lg sm:text-2xl 2xl:text-3xl font-bold"
                     />
                     

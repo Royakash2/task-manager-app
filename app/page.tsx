@@ -4,6 +4,7 @@ import { Features } from "@/components/landing/Features";
 import { ProductShowcase } from "@/components/landing/product-showcase/Product-showcase";
 import { Testimonials } from "@/components/landing/testimonials/Testimonials";
 import { Pricing } from "@/components/landing/pricing/Pricing";
+import { Faq } from "@/components/landing/faq/Faq";
 import { Cta } from "@/components/landing/cta-section/Cta";
 import { Footer } from "@/components/landing/footer/Footer";
 import { Navbar } from "@/components/landing/navbar/Navbar";
@@ -18,6 +19,7 @@ export default function Home() {
         <ProductShowcase />
         <Testimonials />
         <Pricing />
+        <Faq />
         <Cta />
       </main>
       <Footer />

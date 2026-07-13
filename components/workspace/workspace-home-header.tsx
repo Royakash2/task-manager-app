@@ -50,7 +50,7 @@ export const WorkspaceHomeHeader = ({
           <WorkspaceAvatar
             name={name}
             size="lg"
-            className="rounded-xl shadow-sm shrink-0"
+            className=" shrink-0"
           />
 
           <div className="min-w-0 flex-1">
