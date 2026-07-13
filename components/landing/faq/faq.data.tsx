@@ -12,7 +12,7 @@ export const faqData: FaqItem[] = [
           Yes! VelloX is currently completely free to use with no limits. All features — including unlimited projects, Kanban boards, table views, dashboards, team collaboration, file attachments, and the documentation editor — are available at no cost.
         </p>
         <p>
-          We may introduce paid plans in the future, but you will always be notified in advance.
+          We may introduce paid plans in the future ,but you will always be notified in advance.
         </p>
       </div>
     ),
