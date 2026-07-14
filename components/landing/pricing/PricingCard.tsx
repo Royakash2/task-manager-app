@@ -27,24 +27,24 @@ export const PricingCard = ({ tier }: { tier: PricingTier }) => {
       )}
 
       <div className="flex flex-col gap-4 mb-8 mt-2">
-        <h3 className={`text-3xl font-medium tracking-tight ${tier.comingSoon ? 'text-muted-foreground/60' : 'text-foreground'}`}>{tier.name}</h3>
+        <h3 className={`text-3xl font-medium tracking-tight ${tier.comingSoon ? 'text-muted-foreground' : 'text-foreground'}`}>{tier.name}</h3>
         <div className="flex items-baseline">
-          <span className={`text-4xl font-semibold tracking-tight ${tier.comingSoon ? 'text-muted-foreground/60' : 'text-foreground'}`}>{tier.price}</span>
+          <span className={`text-4xl font-semibold tracking-tight ${tier.comingSoon ? 'text-muted-foreground' : 'text-foreground'}`}>{tier.price}</span>
           {tier.period && (
-            <span className={`text-4xl font-semibold tracking-tight ${tier.comingSoon ? 'text-muted-foreground/60' : 'text-foreground'}`}>{tier.period}</span>
+            <span className={`text-4xl font-semibold tracking-tight ${tier.comingSoon ? 'text-muted-foreground' : 'text-foreground'}`}>{tier.period}</span>
           )}
         </div>
       </div>
 
-      <div className={`text-sm font-medium mb-6 ${tier.comingSoon ? 'text-muted-foreground/50' : 'text-foreground'}`}>
+      <div className={`text-sm font-medium mb-6 ${tier.comingSoon ? 'text-muted-foreground' : 'text-foreground'}`}>
         Whats included :
       </div>
 
       <ul className="flex flex-col gap-4 mb-12">
         {tier.features.map((feature, idx) => (
           <li key={idx} className="flex items-start gap-3">
-            <Check className={`w-5 h-5 shrink-0 ${tier.comingSoon ? 'text-muted-foreground/40' : 'text-foreground'}`} strokeWidth={2.5} />
-            <span className={`text-[15px] leading-snug ${tier.comingSoon ? 'text-muted-foreground/40' : 'text-muted-foreground'}`}>{feature}</span>
+            <Check className={`w-5 h-5 shrink-0 ${tier.comingSoon ? 'text-muted-foreground' : 'text-foreground'}`} strokeWidth={2.5} />
+            <span className="text-[15px] leading-snug text-muted-foreground">{feature}</span>
           </li>
         ))}
       </ul>
@@ -63,7 +63,7 @@ export const PricingCard = ({ tier }: { tier: PricingTier }) => {
             popular
               ? "bg-foreground text-background hover:bg-foreground/90 shadow-sm"
               : tier.comingSoon
-                ? "bg-muted text-muted-foreground/50 cursor-not-allowed border border-border"
+                ? "bg-muted text-muted-foreground cursor-not-allowed border border-border"
                 : "bg-background border border-border hover:bg-muted text-foreground"
           }`}
           variant={popular ? "default" : "outline"}

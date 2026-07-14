@@ -13,7 +13,7 @@ export const Pricing = () => {
           description="Whether youre starting small or scaling fast, our product grows with your needs."
         />
 
-        <div className="flex flex-col w-full gap-6 items-center lg:flex-row lg:justify-center">
+        <div className="flex flex-col w-full gap-3 items-center lg:flex-row lg:justify-center">
           {tiers.map((tier, i) => (
             <PricingCard key={i} tier={tier} />
           ))}

@@ -21,7 +21,7 @@ export const TestimonialCard = ({ testimonial }: { testimonial: Testimonial }) =
         </div>
         
         {testimonial.company && (
-          <div className="hidden sm:block text-muted-foreground/60 font-sans font-semibold text-xs tracking-wider uppercase">
+          <div className="hidden sm:block text-muted-foreground font-sans font-semibold text-xs tracking-wider uppercase">
             {testimonial.company}
           </div>
         )}

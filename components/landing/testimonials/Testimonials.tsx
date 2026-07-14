@@ -22,10 +22,10 @@ export const Testimonials = () => {
         />
         
         <div className="flex items-center gap-3 md:pb-32">
-          <Button variant="outline" size="icon" className="swiper-prev-btn rounded-full border-foreground/30 hover:bg-muted">
+          <Button variant="outline" size="icon" className="swiper-prev-btn rounded-full border-foreground/30 hover:bg-muted" aria-label="Previous testimonial">
             <ChevronLeft className="w-5 h-5" />
           </Button>
-          <Button variant="outline" size="icon" className="swiper-next-btn rounded-full border-foreground/30 hover:bg-muted">
+          <Button variant="outline" size="icon" className="swiper-next-btn rounded-full border-foreground/30 hover:bg-muted" aria-label="Next testimonial">
             <ChevronRight className="w-5 h-5" />
           </Button>
         </div>
