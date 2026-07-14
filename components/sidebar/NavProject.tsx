@@ -31,8 +31,8 @@ export const NavProject = ({
                     <div className="flex items-center justify-between pr-2 mb-1">
                         <CollapsibleTrigger asChild>
                             <SidebarGroupLabel className="cursor-pointer select-none flex items-center gap-1.5 text-sm font-semibold text-muted-foreground tracking-wider hover:text-foreground transition-colors">
-                                <ChevronDown className="size-3.5 transition-transform duration-200 group-data-[state=closed]/collapsible:-rotate-90" />
                                 Projects
+                                <ChevronDown className="size-3.5 transition-transform duration-200 group-data-[state=closed]/collapsible:-rotate-90" />
                             </SidebarGroupLabel>
                         </CollapsibleTrigger>
                         {currentUserRole !== AccessLevel.MEMBER && (

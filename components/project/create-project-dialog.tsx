@@ -85,6 +85,7 @@ export const CreateProjectForm = ({ workspaceMembers, children }: Props) => {
                 variant="ghost"
                 className="size-7 shrink-0 hover:bg-sidebar-accent cursor-pointer"
                 size="icon"
+                aria-label="Create project"
               >
                 <Plus />
               </Button>
