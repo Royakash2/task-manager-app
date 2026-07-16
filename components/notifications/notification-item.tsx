@@ -2,7 +2,7 @@
 
 import { NotificationProps } from "@/utils/types";
 import { ProfileAvatar } from "@/components/profile-avatar";
-import { formatDistanceToNow } from "date-fns";
+import { formatDistanceToNowStrict } from "date-fns";
 import { NotificationType } from "@prisma/client";
 import {
   MessageSquare,
@@ -87,7 +87,7 @@ export function NotificationItem({
         )}
         <div className="flex items-center gap-2 mt-1">
           <p className="text-[11px] text-muted-foreground/50">
-            {formatDistanceToNow(new Date(notification.createdAt), {
+            {formatDistanceToNowStrict(new Date(notification.createdAt), {
               addSuffix: true,
             })}
           </p>
