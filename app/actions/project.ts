@@ -71,8 +71,8 @@ export const createProject = async (data: ProjectData) => {
       membersToNotify.map((member) =>
         createNotification({
           type: "PROJECT_CREATED",
-          title: "New Project Created",
-          message: `New project "${validatedData.name}" was created in the workspace`,
+          title: `created a new project "${validatedData.name}"`,
+          message: "",
           userId: member.userId,
           actorId: user.id,
           link: `/workspace/${validatedData.workspaceId}/projects/${project.id}`,

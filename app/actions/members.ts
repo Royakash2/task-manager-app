@@ -78,8 +78,8 @@ export const inviteMember = async (
     // Notify the invited user
     await createNotification({
       type: "MEMBER_JOINED",
-      title: "Added to Workspace",
-      message: `You were added to "${workspace?.name ?? "the workspace"}" workspace`,
+      title: `added you to the workspace "${workspace?.name ?? "untitled"}"`,
+      message: "",
       userId: invitedUser.id,
       actorId: user.id,
       link: `/workspace/${workspaceId}`,

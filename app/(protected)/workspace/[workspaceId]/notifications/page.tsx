@@ -4,7 +4,6 @@ import { useState, useEffect, useCallback, useRef } from "react";
 import { NotificationItem } from "@/components/notifications/notification-item";
 import { Bell, CheckCheck, ChevronLeft, ChevronRight, MoreHorizontal, LoaderIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
 import {
   DropdownMenu,
   DropdownMenuTrigger,
@@ -93,107 +92,107 @@ export default function NotificationsPage() {
   }, [unreadCount]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
-    <div className="flex flex-col gap-6 p-3">
-      {/* Sticky header with inline actions */}
-      <div className="sticky top-15 z-10 bg-background -mx-4 md:-mx-6 px-4 md:px-6 pb-4 border-border flex items-start justify-between gap-4">
-        <div>
-          <h1 className="text-2xl font-bold tracking-tight text-foreground">
-            Notifications
-          </h1>
-        </div>
-        <div className="flex items-center gap-3 pt-1">
-          <span className="text-sm text-muted-foreground whitespace-nowrap">
-            {unreadCount} unread
-          </span>
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="ghost" size="icon" className="h-7 w-7">
-                <MoreHorizontal className="h-4 w-4" />
-                <span className="sr-only">Actions</span>
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="w-48">
-              <DropdownMenuItem
-                onClick={handleMarkAllAsRead}
-                disabled={unreadCount === 0}
-              >
-                <CheckCheck className="h-4 w-4" />
-                Mark all read
-              </DropdownMenuItem>
-              <DropdownMenuSeparator />
-              <DropdownMenuCheckboxItem
-                checked={hideRead}
-                onCheckedChange={() => setHideRead((v) => !v)}
-              >
-                Hide read
-              </DropdownMenuCheckboxItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
-        </div>
-      </div>
-
-      {/* Notifications list */}
-      {isLoading ? (
-        <Card className="shadow-none">
-          <div className="flex items-center justify-center py-16">
-            <LoaderIcon className="h-6 w-6 animate-spin text-muted-foreground" />
+    <div className="flex flex-col min-h-screen">
+      <div className="flex-1 w-full max-w-7xl flex flex-col gap-8 pb-3 px-3">
+        {/* Header — consistent with My Tasks / Members pages */}
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div>
+            <h1 className="text-2xl font-bold tracking-tight text-foreground flex items-center gap-2">
+              Notifications
+              {unreadCount > 0 && (
+                <span className="flex items-center justify-center bg-primary text-primary-foreground text-xs font-semibold px-2 py-0.5 rounded-full">
+                  {unreadCount}
+                </span>
+              )}
+            </h1>
           </div>
-        </Card>
-      ) : notifications.length === 0 ? (
-        <Card>
-          <div className="flex flex-col items-center justify-center py-16 text-center px-6">
-            <Bell className="h-12 w-12 text-muted-foreground/30 mb-4" />
-            <h3 className="text-lg font-semibold text-foreground mb-1">
-              No notifications yet
+          <div className="flex items-center gap-1">
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost" size="icon" className="h-7 w-7">
+                  <MoreHorizontal className="h-4 w-4" />
+                  <span className="sr-only">Actions</span>
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-48">
+                <DropdownMenuItem
+                  onClick={handleMarkAllAsRead}
+                  disabled={unreadCount === 0}
+                >
+                  <CheckCheck className="h-4 w-4" />
+                  Mark all read
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuCheckboxItem
+                  checked={hideRead}
+                  onCheckedChange={() => setHideRead((v) => !v)}
+                >
+                  Hide read
+                </DropdownMenuCheckboxItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </div>
+        </div>
+
+        {/* Notifications list */}
+        {isLoading ? (
+          <div className="flex items-center justify-center py-24">
+            <LoaderIcon className="size-6 animate-spin text-muted-foreground/50" />
+          </div>
+        ) : notifications.length === 0 ? (
+          <div className="flex flex-col items-center justify-center py-24 text-center px-6">
+            <div className="flex size-12 items-center justify-center rounded-full bg-muted/50 mb-4">
+              <Bell className="size-5 text-muted-foreground/50" />
+            </div>
+            <h3 className="text-base font-semibold text-foreground mb-1.5">
+              You re all caught up
             </h3>
-            <p className="text-sm text-muted-foreground max-w-md">
+            <p className="text-sm text-muted-foreground max-w-sm">
               Notifications will appear here when someone assigns you a task, comments, or adds you to a workspace.
             </p>
           </div>
-        </Card>
-      ) : (
-        <Card className="shadow-none">
-          <div className="divide-y divide-border">
+        ) : (
+          <div className="flex flex-col -mx-3">
             {notifications.map((notification) => (
-              <div
+              <NotificationItem
                 key={notification.id}
-                className={notification.isRead ? "opacity-50" : ""}
-              >
-                <NotificationItem
-                  notification={notification}
-                  onMarkAsRead={handleMarkAsRead}
-                   onDelete={handleDelete}
-                />
-              </div>
+                notification={notification}
+                onMarkAsRead={handleMarkAsRead}
+                onDelete={handleDelete}
+              />
             ))}
           </div>
-        </Card>
-      )}
+        )}
 
-      {/* Pagination */}
-      {totalPages > 1 && !isLoading && (
-        <div className="flex items-center justify-center gap-2">
-          <Button
-            variant="outline"
-            size="sm"
-            disabled={page <= 1}
-            onClick={() => setPage(Math.max(1, page - 1))}
-          >
-            <ChevronLeft className="h-4 w-4" />
-          </Button>
-          <span className="text-sm text-muted-foreground px-3">
-            Page {page} of {totalPages}
-          </span>
-          <Button
-            variant="outline"
-            size="sm"
-            disabled={page >= totalPages}
-            onClick={() => setPage(page + 1)}
-          >
-            <ChevronRight className="h-4 w-4" />
-          </Button>
-        </div>
-      )}
+        {/* Pagination */}
+        {totalPages > 1 && !isLoading && (
+          <div className="flex items-center justify-center gap-2 mt-4 pb-12">
+            <Button
+              variant="outline"
+              size="sm"
+              disabled={page <= 1}
+              onClick={() => setPage(Math.max(1, page - 1))}
+              className="h-8 shadow-sm"
+            >
+              <ChevronLeft className="size-4 mr-1" />
+              Previous
+            </Button>
+            <span className="text-xs text-muted-foreground px-4 font-medium">
+              Page {page} of {totalPages}
+            </span>
+            <Button
+              variant="outline"
+              size="sm"
+              disabled={page >= totalPages}
+              onClick={() => setPage(page + 1)}
+              className="h-8 shadow-sm"
+            >
+              Next
+              <ChevronRight className="size-4 ml-1" />
+            </Button>
+          </div>
+        )}
+      </div>
     </div>
   );
 }

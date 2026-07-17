@@ -86,8 +86,8 @@ export async function notifyTaskAssigned(
 ) {
   return createNotification({
     type: "TASK_ASSIGNED",
-    title: "Task Assigned",
-    message: `You were assigned to task "${taskTitle}"`,
+    title: `assigned you to task "${taskTitle}"`,
+    message: "",
     userId,
     actorId,
     link: `/workspace/${workspaceId}/projects/${projectId}/${taskId}`,
