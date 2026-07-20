@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { toast } from "sonner";
 import { Trash2, FolderKanban, RotateCcw } from "lucide-react";
+import { LoadingButton } from "../ui/loading-button";
 
 import {
   Card,
@@ -192,27 +193,29 @@ export const TrashSection = ({ tasks, onPermanentDelete, onRecover }: TrashSecti
                   {selectedIds.size} selected
                 </Badge>
                 <div className="ml-auto flex items-center gap-2">
-                  <Button
+                  <LoadingButton
                     variant="outline"
                     size="sm"
                     className="h-8 text-xs cursor-pointer"
-                    disabled={pendingAction === "recover"}
+                    loading={pendingAction === "recover"}
+                    loadingText="Recovering..."
                     onClick={handleBulkRecover}
                   >
                     <RotateCcw className="size-3 mr-1" />
-                    {pendingAction === "recover" ? "..." : "Recover Selected"}
-                  </Button>
+                    Recover Selected
+                  </LoadingButton>
                   <Dialog open={confirmOpen} onOpenChange={setConfirmOpen}>
                     <DialogTrigger asChild>
-                      <Button
+                      <LoadingButton
                         variant="destructive"
                         size="sm"
                         className="h-8 text-xs cursor-pointer"
-                        disabled={pendingAction === "delete"}
+                        loading={pendingAction === "delete"}
+                        loadingText="Deleting..."
                       >
                         <Trash2 className="size-3 mr-1" />
-                        {pendingAction === "delete" ? "..." : "Delete Selected"}
-                      </Button>
+                        Delete Selected
+                      </LoadingButton>
                     </DialogTrigger>
                     <DialogContent>
                       <DialogHeader>
@@ -243,13 +246,15 @@ export const TrashSection = ({ tasks, onPermanentDelete, onRecover }: TrashSecti
                         >
                           Cancel
                         </Button>
-                        <Button
+                        <LoadingButton
                           variant="destructive"
                           onClick={handleBulkDelete}
                           className="cursor-pointer"
+                          loading={pendingAction === "delete"}
+                          loadingText="Deleting..."
                         >
-                          {pendingAction === "delete" ? "Deleting..." : "Delete"}
-                        </Button>
+                          Delete
+                        </LoadingButton>
                       </div>
                     </DialogContent>
                   </Dialog>
