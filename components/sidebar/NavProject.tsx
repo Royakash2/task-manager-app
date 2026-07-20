@@ -7,7 +7,8 @@ import { usePathname } from "next/navigation"
 import Link from "next/link"
 import { AccessLevel } from "@prisma/client"
 import { CreateProjectForm } from "../project/create-project-dialog"
-import { ChevronDown, Folder } from "lucide-react"
+import { ChevronDown } from "lucide-react"
+import { ProjectAvatar } from "../project/Project-avatar"
 import { cn } from "@/lib/utils"
 
 
@@ -31,8 +32,8 @@ export const NavProject = ({
                     <div className="flex items-center justify-between pr-2 mb-1">
                         <CollapsibleTrigger asChild>
                             <SidebarGroupLabel className="cursor-pointer select-none flex items-center gap-1.5 text-sm font-semibold text-muted-foreground tracking-wider hover:text-foreground transition-colors">
-                                <ChevronDown className="size-3.5 transition-transform duration-200 group-data-[state=closed]/collapsible:-rotate-90" />
                                 Projects
+                                <ChevronDown className="size-3.5 transition-transform duration-200 group-data-[state=closed]/collapsible:-rotate-90" />
                             </SidebarGroupLabel>
                         </CollapsibleTrigger>
                         {currentUserRole !== AccessLevel.MEMBER && (
@@ -54,7 +55,7 @@ export const NavProject = ({
                                                 tooltip={project.name}
                                             >
                                                 <Link href={href} onClick={() => setOpenMobile(false)}>
-                                                    <Folder className={cn("size-3.5", isProjectActive ? "text-foreground" : "text-muted-foreground")} />
+                                                    <ProjectAvatar name={project.name} className="size-5 shrink-0" fallbackClassName="text-[10px]" />
                                                     <span className={cn(
                                                         "font-semibold text-sm transition-colors",
                                                         isProjectActive ? "text-foreground" : "text-foreground/75"

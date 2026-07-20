@@ -22,7 +22,7 @@ export const Footer = () => {
             <p className="text-zinc-400 text-sm sm:text-base">
               The ultimate workspace. Stop managing. Start building.
             </p>
-            <p className="text-xs text-zinc-600 mt-2">
+            <p className="text-xs text-zinc-400 mt-2">
               © VelloX, Inc {new Date().getFullYear()}
             </p>
           </div>

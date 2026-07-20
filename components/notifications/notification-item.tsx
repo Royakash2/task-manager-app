@@ -2,7 +2,7 @@
 
 import { NotificationProps } from "@/utils/types";
 import { ProfileAvatar } from "@/components/profile-avatar";
-import { formatDistanceToNow } from "date-fns";
+import { formatDistanceToNowStrict } from "date-fns";
 import { NotificationType } from "@prisma/client";
 import {
   MessageSquare,
@@ -30,14 +30,20 @@ const notificationIcons: Record<NotificationType, React.ElementType> = {
   PROJECT_CREATED: FolderPlus,
 };
 
-const iconColors: Record<NotificationType, string> = {
-  TASK_ASSIGNED: "text-muted-foreground",
-  TASK_UPDATED: "text-muted-foreground",
-  COMMENT_ADDED: "text-muted-foreground",
-  COMMENT_EDITED: "text-muted-foreground",
-  MEMBER_JOINED: "text-muted-foreground",
-  PROJECT_CREATED: "text-muted-foreground",
-};
+// Makes quoted text bold and removes the quotes
+function formatTitle(title: string) {
+  const parts = title.split('"');
+  if (parts.length === 3) {
+    return (
+      <>
+        {parts[0]}
+        <span className="font-semibold text-foreground">{parts[1]}</span>
+        {parts[2]}
+      </>
+    );
+  }
+  return title;
+}
 
 export function NotificationItem({
   notification,
@@ -45,68 +51,100 @@ export function NotificationItem({
   onDelete,
 }: NotificationItemProps) {
   const Icon = notificationIcons[notification.type];
-  const iconColor = iconColors[notification.type];
 
   const content = (
     <div
+      role={notification.link ? undefined : "button"}
+      tabIndex={notification.link ? undefined : 0}
       className={cn(
-        "group flex items-start gap-3 p-3 rounded-lg transition-colors cursor-pointer",
-        "hover:bg-accent/50",
-        !notification.isRead && "bg-accent/30"
+        "group relative flex items-start gap-4 p-4 sm:px-6 transition-colors cursor-pointer border-b border-border/40 last:border-b-0",
+        notification.isRead 
+          ? "hover:bg-muted/40" 
+          : "bg-accent/30 hover:bg-accent/50",
+        !notification.link && "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
       )}
       onClick={() => !notification.isRead && onMarkAsRead(notification.id)}
+      onKeyDown={(e) => {
+        if (!notification.link && (e.key === 'Enter' || e.key === ' ')) {
+          e.preventDefault();
+          if (!notification.isRead) onMarkAsRead(notification.id);
+        }
+      }}
     >
-      {/* Icon */}
-      <div className="shrink-0 mt-0.5">
-        <Icon className={cn("h-4 w-4", iconColor)} />
-      </div>
+      {/* Unread Indicator Bar */}
+      {!notification.isRead && (
+        <div className="absolute left-0 top-0 bottom-0 w-0.5 bg-primary rounded-r-full" />
+      )}
 
-      {/* Content */}
-      <div className="flex-1 min-w-0">
-        <div className="flex items-center gap-2">
-          {notification.actor && (
+      {/* Left: Avatar & Badge */}
+      <div className="relative shrink-0 mt-0.5">
+        {notification.actor ? (
+          <div className="relative">
             <ProfileAvatar
               name={notification.actor.name}
               url={notification.actor.image || undefined}
-              size="xs"
+              size="md"
             />
-          )}
-          <div className="flex items-baseline gap-1.5 min-w-0 flex-1">
-            <span className="text-sm font-semibold text-foreground truncate max-w-[35%]">
-              {notification.actor?.name || "Unknown"}
-            </span>
-            <span className="text-xs text-muted-foreground truncate">
-              {notification.title}
-            </span>
+            {/* Icon Badge */}
+            <div className="absolute -bottom-1 -right-1 flex items-center justify-center rounded-full bg-background p-[2px]">
+              <div className="flex size-4 items-center justify-center rounded-full bg-muted shadow-sm">
+                <Icon className="size-2.5 text-muted-foreground" />
+              </div>
+            </div>
           </div>
-        </div>
-        {notification.message && (
-          <p className="text-xs text-muted-foreground/80 line-clamp-1 mt-0.5">
-            {notification.message}
-          </p>
+        ) : (
+          <div className="flex size-10 items-center justify-center rounded-full bg-muted shadow-sm">
+            <Icon className="size-5 text-muted-foreground" />
+          </div>
         )}
-        <div className="flex items-center gap-2 mt-1">
-          <p className="text-[11px] text-muted-foreground/50">
-            {formatDistanceToNow(new Date(notification.createdAt), {
-              addSuffix: true,
-            })}
-          </p>
-          {onDelete && (
-            <button
-              onClick={(e) => {
-                e.stopPropagation();
-                e.preventDefault();
-                onDelete(notification.id);
-              }}
-              className="opacity-0 group-hover:opacity-100 transition-opacity p-0.5 rounded hover:bg-destructive/10 text-muted-foreground/50 hover:text-destructive"
-              aria-label="Delete notification"
-            >
-              <Trash2 className="h-3 w-3" />
-            </button>
-          )}
-          {!notification.isRead && (
-            <div className="h-1.5 w-1.5 rounded-full bg-primary/70 ml-auto" />
-          )}
+      </div>
+
+      {/* Right: Content Flex */}
+      <div className="flex-1 min-w-0 pt-0.5">
+        <div className="flex items-start justify-between gap-4">
+          <div className="flex flex-col min-w-0 gap-1">
+            {/* Line 1: Action Context */}
+            <p className="text-[13px] leading-snug">
+              {notification.actor && (
+                <span className="font-semibold text-foreground mr-1.5">
+                  {notification.actor.name}
+                </span>
+              )}
+              <span className="text-muted-foreground">
+                {formatTitle(notification.title)}
+              </span>
+            </p>
+
+            {/* Line 2: Message Preview (if exists) */}
+            {notification.message && (
+              <p className="text-sm text-foreground/85 line-clamp-2 leading-relaxed mt-0.5">
+                &quot;{notification.message}&quot;
+              </p>
+            )}
+          </div>
+          
+          {/* Timestamp & Actions */}
+          <div className="flex flex-col items-end shrink-0 gap-2">
+            <span className="text-[11px] text-muted-foreground whitespace-nowrap font-medium">
+              {formatDistanceToNowStrict(new Date(notification.createdAt), {
+                addSuffix: true,
+              })}
+            </span>
+            
+            {onDelete && (
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  e.preventDefault();
+                  onDelete(notification.id);
+                }}
+                className="opacity-0 group-hover:opacity-100 transition-opacity p-1.5 rounded-md hover:bg-destructive/10 text-muted-foreground/50 hover:text-destructive"
+                aria-label="Delete notification"
+              >
+                <Trash2 className="size-3.5" />
+              </button>
+            )}
+          </div>
         </div>
       </div>
     </div>

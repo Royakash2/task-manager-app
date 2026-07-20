@@ -1,4 +1,4 @@
-import { formatDistanceToNow } from "date-fns";
+import { formatDistanceToNowStrict } from "date-fns";
 import { Pencil } from "lucide-react";
 
 import { ProfileAvatar } from "../profile-avatar";
@@ -40,12 +40,12 @@ export const CommentItem = ({
       />
 
       <div className="flex flex-1 flex-col gap-0.5 mt-0.5 min-w-0">
-        <div className="flex items-center gap-2">
-          <span className="font-medium text-sm text-foreground">
+        <div className="flex items-center gap-2 flex-wrap">
+          <span className="font-medium text-sm text-foreground whitespace-nowrap">
             {comment.user.name}
           </span>
-          <span className="text-xs text-muted-foreground">
-            {formatDistanceToNow(new Date(comment.createdAt), {
+          <span className="text-xs text-muted-foreground whitespace-nowrap">
+            {formatDistanceToNowStrict(new Date(comment.createdAt), {
               addSuffix: true,
             })}
           </span>
@@ -57,7 +57,7 @@ export const CommentItem = ({
           )}
 
           {((isAuthor || currentUserRole === AccessLevel.OWNER || currentUserRole === AccessLevel.ADMIN) && !isEditing && onDelete) && (
-            <>
+            <div className="flex items-center gap-1 ml-auto">
               {isAuthor && onStartEdit && (
               <Button
                 variant="ghost"
@@ -83,7 +83,7 @@ export const CommentItem = ({
                   variant="icon"
                 />
               </span>
-            </>
+            </div>
           )}
         </div>
 

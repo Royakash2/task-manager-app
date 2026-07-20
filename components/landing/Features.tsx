@@ -43,10 +43,10 @@ export const Features = () => {
         <SectionHeader badge="Features" title={featureData.title} />
 
         {/* Features Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-0 w-full items-stretch">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-3 w-full items-stretch">
           {featureData.features.map((feature, index) => (
             <motion.div variants={itemVariants} key={index} className="group h-full">
-              <Card className="h-full py-0 flex flex-col border-foreground/30 overflow-hidden bg-muted hover:border-border transition-colors duration-300 rounded-none shadow-none">
+              <Card className="h-full py-0 flex flex-col border-foreground/30 overflow-hidden bg-muted hover:border-border transition-colors duration-300 rounded-sm shadow-none">
                 <div className="h-64 sm:h-72 w-full bg-muted/10 relative p-4 sm:p-5 border-b border-border/50 overflow-hidden">
                   {/* Subtle grid background */}
                   <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-size-[24px_24px]"></div>

@@ -27,7 +27,7 @@ export const SidebarUserProfile = ({ user }: { user: User }) => {
                             {user?.email}
                         </p>
                     </div>
-                    <LogoutLink>
+                    <LogoutLink aria-label="Log out">
                         <Button
                             variant="ghost"
                             size="icon"
@@ -44,7 +44,7 @@ export const SidebarUserProfile = ({ user }: { user: User }) => {
                         name={user?.name || 'User'}
                         size="sm"
                     />
-                    <LogoutLink>
+                    <LogoutLink aria-label="Log out">
                         <Button
                             variant="ghost"
                             size="icon"

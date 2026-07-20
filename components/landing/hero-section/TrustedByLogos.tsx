@@ -1,10 +1,10 @@
 export const TrustedByLogos = () => {
   return (
-    <div className="mt-20 w-full max-w-5xl mx-auto text-muted-foreground/60 font-medium">
+    <div className="mt-20 w-full max-w-5xl mx-auto text-muted-foreground font-medium">
       {/* Desktop layout with brackets */}
       <div className="hidden sm:flex items-center gap-6 w-full justify-between">
         <span className="text-3xl font-light opacity-50">{"{"}</span>
-        <div className="text-xs tracking-widest uppercase shrink-0 text-muted-foreground/90">
+        <div className="text-xs tracking-widest uppercase shrink-0 text-muted-foreground">
           Used by fast-moving teams at
         </div>
         <div className="flex items-center gap-8 md:gap-12 lg:gap-16">
@@ -28,7 +28,7 @@ export const TrustedByLogos = () => {
 
       {/* Mobile layout — clean centered stack */}
       <div className="flex sm:hidden flex-col items-center gap-4 w-full">
-        <p className="text-[10px] tracking-widest uppercase text-muted-foreground/90">Used by fast-moving teams at</p>
+        <p className="text-[10px] tracking-widest uppercase text-muted-foreground">Used by fast-moving teams at</p>
         <div className="flex flex-wrap items-center justify-center gap-x-8 gap-y-3">
           <div className="font-serif text-lg font-bold">AXIÒM</div>
           <div className="flex items-center gap-2 text-lg font-semibold">

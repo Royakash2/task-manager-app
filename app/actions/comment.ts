@@ -58,7 +58,7 @@ export const createComment = async (
     for (const notifyUserId of notifyUserIds) {
       await createNotification({
         type: "COMMENT_ADDED",
-        title: `Commented on "${task?.title || "untitled"}"`,
+        title: `left a comment on task "${task?.title || "untitled"}"`,
         message: content.length > 120 ? content.slice(0, 120) + "..." : content,
         userId: notifyUserId,
         actorId: user.id,

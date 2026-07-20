@@ -41,9 +41,8 @@ export const DesktopMenu = ({ isLogin, user }: DesktopMenuProps) => {
         {isLogin ? (
           <div className="flex items-center gap-4">
             
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="ghost" size="icon" className="rounded-full cursor-pointer">
+            <DropdownMenu>                <DropdownMenuTrigger asChild>
+                <Button variant="ghost" size="icon" className="rounded-full cursor-pointer" aria-label="User menu">
                   <Avatar className="h-8 w-8">
                     <AvatarImage src={user?.picture || ""} alt={user?.given_name || "User avatar"} />
                     <AvatarFallback className="bg-primary/10 text-primary">{fallbackText}</AvatarFallback>

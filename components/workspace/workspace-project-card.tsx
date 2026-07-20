@@ -81,7 +81,7 @@ export const WorkspaceProjectCard = ({
               )}
             </div>
             {project.lastActivityAt && (
-              <span className="text-[11px] text-muted-foreground/60">
+              <span className="text-[11px] text-muted-foreground/80">
                 {formatDistanceToNow(new Date(project.lastActivityAt), {
                   addSuffix: true,
                 })}
