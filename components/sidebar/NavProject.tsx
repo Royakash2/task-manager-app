@@ -7,7 +7,8 @@ import { usePathname } from "next/navigation"
 import Link from "next/link"
 import { AccessLevel } from "@prisma/client"
 import { CreateProjectForm } from "../project/create-project-dialog"
-import { ChevronDown, Folder } from "lucide-react"
+import { ChevronDown } from "lucide-react"
+import { ProjectAvatar } from "../project/Project-avatar"
 import { cn } from "@/lib/utils"
 
 
@@ -54,7 +55,7 @@ export const NavProject = ({
                                                 tooltip={project.name}
                                             >
                                                 <Link href={href} onClick={() => setOpenMobile(false)}>
-                                                    <Folder className={cn("size-3.5", isProjectActive ? "text-foreground" : "text-muted-foreground")} />
+                                                    <ProjectAvatar name={project.name} className="size-5 shrink-0" fallbackClassName="text-[10px]" />
                                                     <span className={cn(
                                                         "font-semibold text-sm transition-colors",
                                                         isProjectActive ? "text-foreground" : "text-foreground/75"
