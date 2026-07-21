@@ -117,15 +117,12 @@ export const requireOwner = async (userId: string, workspaceId: string) => {
   await requireRole(userId, workspaceId, AccessLevel.OWNER);
 };
 
-/** MEMBER can only assign tasks to themselves or leave unassigned. */
+
 export async function enforceAssigneeRestriction(
   userId: string,
   workspaceId: string,
   submittedAssigneeId: string | null | undefined,
 ): Promise<string | null | undefined> {
-  if (!submittedAssigneeId || submittedAssigneeId === userId) return submittedAssigneeId || undefined;
-
-  const role = await getUserRole(userId, workspaceId);
-
-  return role === AccessLevel.MEMBER ? undefined : submittedAssigneeId;
+  
+  return submittedAssigneeId || undefined;
 }
