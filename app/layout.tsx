@@ -13,8 +13,14 @@ const manrope = Manrope({
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://getvellox.vercel.app"),
-  title: "velloX - Project Management System",
+  title: {
+    default: "velloX - Project Management System",
+    template: "%s | velloX"
+  },
   description: "Experience a new atmosphere of productivity. VelloX is a premium task management platform designed to bring clarity and speed to your workflow.",
+  keywords: ["task management", "project management", "productivity", "collaboration", "workflow"],
+  authors: [{ name: "velloX Team" }],
+  creator: "velloX",
   openGraph: {
     title: "velloX - Project Management System",
     description: "Experience a new atmosphere of productivity. VelloX is designed to bring clarity and speed to your workflow.",
@@ -22,10 +28,10 @@ export const metadata: Metadata = {
     siteName: "velloX",
     images: [
       {
-        url: "https://getvellox.vercel.app/og-image.png", 
+        url: "/og-image.png",
         width: 1200,
         height: 630,
-        alt: "velloX Task Management Preview",
+        alt: "velloX - Premium Task Management",
       },
     ],
     locale: "en_US",
@@ -35,7 +41,10 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "velloX - Premium Task Management",
     description: "Experience a new atmosphere of productivity with velloX.",
-    images: ["https://getvellox.vercel.app/og-image.png"], 
+    images: ["/og-image.png"],
+  },
+  alternates: {
+    canonical: "https://getvellox.vercel.app",
   },
 };
 
