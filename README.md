@@ -98,8 +98,7 @@
 
 ## 📸 Screenshots
 
-<!-- Replace the placeholder below with your own image URL -->
-![velloX Landing Page](./public/og-image.png)
+![velloX Landing Page](./public/landing-page.png)
 
 ---
 
