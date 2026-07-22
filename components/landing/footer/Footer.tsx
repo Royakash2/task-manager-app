@@ -70,17 +70,17 @@ export const Footer = () => {
               </h3>
               <ul className="flex flex-col gap-3">
                 <li>
-                  <Link href="https://twitter.com" target="_blank" rel="noopener noreferrer" className="text-sm text-zinc-400 hover:text-white transition-colors">
+                  <Link href="https://x.com/akash_coding" target="_blank" rel="noopener noreferrer" className="text-sm text-zinc-400 hover:text-white transition-colors">
                     Twitter
                   </Link>
                 </li>
                 <li>
-                  <Link href="https://linkedin.com" target="_blank" rel="noopener noreferrer" className="text-sm text-zinc-400 hover:text-white transition-colors">
+                  <Link href="https://www.linkedin.com/in/akash-roy-0b28442b2/" target="_blank" rel="noopener noreferrer" className="text-sm text-zinc-400 hover:text-white transition-colors">
                     LinkedIn
                   </Link>
                 </li>
                 <li>
-                  <Link href="https://github.com" target="_blank" rel="noopener noreferrer" className="text-sm text-zinc-400 hover:text-white transition-colors">
+                  <Link href="https://github.com/Royakash2/task-manager-app" target="_blank" rel="noopener noreferrer" className="text-sm text-zinc-400 hover:text-white transition-colors">
                     GitHub
                   </Link>
                 </li>
