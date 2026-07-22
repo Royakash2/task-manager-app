@@ -10,6 +10,36 @@
 
 ---
 
+## 📸 Screenshots
+
+![velloX Landing Page](./public/landing-page.png)
+
+---
+
+## 🚀 Tech Stack
+
+| Category | Technology |
+|----------|-----------|
+| **Framework** | Next.js 16 (App Router) |
+| **Language** | TypeScript |
+| **Database** | PostgreSQL (Neon) |
+| **ORM** | Prisma 7 |
+| **Auth** | Kinde Auth |
+| **Real-time** | Ably |
+| **File Uploads** | UploadThing |
+| **Rich Text** | Tiptap |
+| **Charts** | Recharts |
+| **Tables** | TanStack Table |
+| **Forms** | React Hook Form + Zod |
+| **Drag & Drop** | @hello-pangea/dnd |
+| **UI** | Tailwind CSS + shadcn/ui + Radix UI |
+| **Animations** | Framer Motion + Swiper |
+| **Theming** | next-themes |
+| **Notifications** | Sonner |
+| **Dates** | date-fns |
+
+---
+
 ## ✨ Features
 
 ### 🖥️ Landing Page
@@ -69,36 +99,6 @@
 - **Permission system** — `lib/permissions.ts` with `verifyAccess()`, `requireRole()`, `requireOwner()`, `requireTaskAccess()` guards.
 - **Consistent error handling** via `actionError()` utility.
 - **Activity logging** — centralized `logActivity()` utility used across all server actions.
-
----
-
-## 🚀 Tech Stack
-
-| Category | Technology |
-|----------|-----------|
-| **Framework** | Next.js 16 (App Router) |
-| **Language** | TypeScript |
-| **Database** | PostgreSQL (Neon) |
-| **ORM** | Prisma 7 |
-| **Auth** | Kinde Auth |
-| **Real-time** | Ably |
-| **File Uploads** | UploadThing |
-| **Rich Text** | Tiptap |
-| **Charts** | Recharts |
-| **Tables** | TanStack Table |
-| **Forms** | React Hook Form + Zod |
-| **Drag & Drop** | @hello-pangea/dnd |
-| **UI** | Tailwind CSS + shadcn/ui + Radix UI |
-| **Animations** | Framer Motion + Swiper |
-| **Theming** | next-themes |
-| **Notifications** | Sonner |
-| **Dates** | date-fns |
-
----
-
-## 📸 Screenshots
-
-![velloX Landing Page](./public/landing-page.png)
 
 ---
 
