@@ -8,7 +8,7 @@ export interface Activity {
   user: {
     name: string;
     image: string | null;
-  };
+  } | null;
 }
 
 export interface CommentProps extends Comment {
@@ -16,7 +16,7 @@ export interface CommentProps extends Comment {
     id: string;
     name: string;
     image: string | null;
-  };
+  } | null;
 }
 
 export interface workspaceMembersProps extends WorkspaceMembers {
@@ -142,7 +142,7 @@ export interface DashboardActivityItem {
   type: string;
   description: string;
   createdAt: Date;
-  user: { name: string; image: string | null };
+  user: { name: string; image: string | null } | null;
 }
 
 export interface WorkspaceDashboardData {
