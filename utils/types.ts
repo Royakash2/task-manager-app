@@ -1,4 +1,12 @@
-import { $Enums, AccessLevel, Comment, WorkspaceMembers, Task, TaskStatus, NotificationType } from "@prisma/client";
+import {
+  $Enums,
+  AccessLevel,
+  Comment,
+  WorkspaceMembers,
+  Task,
+  TaskStatus,
+  NotificationType,
+} from "@prisma/client";
 
 export interface Activity {
   id: string;
