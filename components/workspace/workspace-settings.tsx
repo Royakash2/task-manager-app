@@ -18,16 +18,7 @@ import { permanentlyDeleteTask, recoverTask } from "@/app/actions/task";
 import { deleteAccount } from "@/app/actions/user";
 import { TrashSection } from "@/components/workspace/trash-section";
 import { OnboardingForm } from "@/components/OnboardingForm";
-
-interface TrashedTask {
-  id: string;
-  title: string;
-  deletedAt: Date | null;
-  project: {
-    id: string;
-    name: string;
-  };
-}
+import { TrashedTask } from "@/utils/types";
 
 interface SettingsPageClientProps {
   workspace: {

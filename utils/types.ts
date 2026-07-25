@@ -8,6 +8,16 @@ import {
   NotificationType,
 } from "@prisma/client";
 
+export interface TrashedTask {
+  id: string;
+  title: string;
+  deletedAt: Date | null;
+  project: {
+    id: string;
+    name: string;
+  };
+}
+
 export interface Activity {
   id: string;
   type: string;
