@@ -14,8 +14,15 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { LoadingButton } from "@/components/ui/loading-button";
 import { cn } from "@/lib/utils";
+
+interface ConfirmByText {
+  label: string;
+  requiredText: string;
+  placeholder?: string;
+}
 
 type Props = {
   onDelete: () => Promise<{ success: boolean; error?: string }>;
@@ -27,6 +34,7 @@ type Props = {
   warning?: React.ReactNode;
   redirectUrl?: string;
   onSuccess?: () => void;
+  confirmByText?: ConfirmByText;
 };
 
 export const ConfirmDeleteDialog = ({
@@ -39,12 +47,16 @@ export const ConfirmDeleteDialog = ({
   redirectUrl,
   warning,
   onSuccess: onSuccessCallback,
+  confirmByText,
 }: Props) => {
   const router = useRouter();
   const [open, setOpen] = useState(false);
   const [pending, setPending] = useState(false);
+  const [confirmInput, setConfirmInput] = useState("");
 
   const label = deleteLabel ?? "Delete";
+  const isConfirmDisabled =
+    confirmByText !== undefined && confirmInput !== confirmByText.requiredText;
 
   const handleDelete = async () => {
     setPending(true);
@@ -55,10 +67,15 @@ export const ConfirmDeleteDialog = ({
         return;
       }
       setOpen(false);
+      setConfirmInput("");
       onSuccessCallback?.();
       toast.success(`${entityName.charAt(0).toUpperCase() + entityName.slice(1)} deleted successfully`);
       if (redirectUrl) {
-        router.push(redirectUrl);
+        if (redirectUrl.startsWith("/api/")) {
+          window.location.href = redirectUrl;
+        } else {
+          router.push(redirectUrl);
+        }
       }
     } catch (error) {
       console.error(error);
@@ -68,8 +85,15 @@ export const ConfirmDeleteDialog = ({
     }
   };
 
+  const handleOpenChange = (nextOpen: boolean) => {
+    setOpen(nextOpen);
+    if (!nextOpen) {
+      setConfirmInput("");
+    }
+  };
+
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
+    <Dialog open={open} onOpenChange={handleOpenChange}>
       {variant === "icon" ? (
         <DialogTrigger asChild>
           <Button
@@ -106,11 +130,29 @@ export const ConfirmDeleteDialog = ({
               <p>{warning}</p>
             </div>
           )}
+          {confirmByText && (
+            <div className="space-y-2 pt-1">
+              <p className="text-sm text-muted-foreground">
+                {confirmByText.label}{" "}
+                <strong className="text-foreground">{confirmByText.requiredText}</strong>
+              </p>
+              <Input
+                value={confirmInput}
+                onChange={(e) => setConfirmInput(e.target.value)}
+                placeholder={confirmByText.placeholder ?? "Type here"}
+                className="w-full"
+                autoFocus
+              />
+            </div>
+          )}
         </DialogHeader>
         <div className="flex justify-end gap-2">
           <LoadingButton
             variant="outline"
-            onClick={() => setOpen(false)}
+            onClick={() => {
+              setOpen(false);
+              setConfirmInput("");
+            }}
             className="cursor-pointer"
           >
             Cancel
@@ -119,6 +161,7 @@ export const ConfirmDeleteDialog = ({
             variant="destructive"
             onClick={handleDelete}
             loading={pending}
+            disabled={isConfirmDisabled}
             loadingText="Deleting..."
             className="cursor-pointer"
           >

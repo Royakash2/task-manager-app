@@ -105,11 +105,9 @@ export function NotificationItem({
           <div className="flex flex-col min-w-0 gap-1">
             {/* Line 1: Action Context */}
             <p className="text-[13px] leading-snug">
-              {notification.actor && (
-                <span className="font-semibold text-foreground mr-1.5">
-                  {notification.actor.name}
-                </span>
-              )}
+              <span className="font-semibold text-foreground mr-1.5">
+                {notification.actor?.name || "Deleted User"}
+              </span>
               <span className="text-muted-foreground">
                 {formatTitle(notification.title)}
               </span>

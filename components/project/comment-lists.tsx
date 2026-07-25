@@ -100,7 +100,7 @@ export const CommentList = ({
       {comments.map((comment) => {
         const isEditing = editingCommentId === comment.id;
         const isAuthor =
-          !!currentUserId && comment.user.id === currentUserId;
+          !!currentUserId && comment.user?.id === currentUserId;
 
         return (
           <div key={comment.id}>

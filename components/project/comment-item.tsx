@@ -33,8 +33,8 @@ export const CommentItem = ({
   return (
     <div className="flex items-start gap-3 group">
       <ProfileAvatar
-        url={comment.user.image || undefined}
-        name={comment.user.name}
+        url={comment.user?.image || undefined}
+        name={comment.user?.name || "Deleted User"}
         numOfChars={2}
         size="md"
       />
@@ -42,7 +42,7 @@ export const CommentItem = ({
       <div className="flex flex-1 flex-col gap-0.5 mt-0.5 min-w-0">
         <div className="flex items-center gap-2 flex-wrap">
           <span className="font-medium text-sm text-foreground whitespace-nowrap">
-            {comment.user.name}
+            {comment.user?.name || "Deleted User"}
           </span>
           <span className="text-xs text-muted-foreground whitespace-nowrap">
             {formatDistanceToNowStrict(new Date(comment.createdAt), {

@@ -138,17 +138,17 @@ model Task {
 }
 
 model Activity {
-  id          String   @id @default(uuid())
+  id          String    @id @default(uuid())
   type        String
   description String?
   projectId   String?
-  project     Project? @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  project     Project?  @relation(fields: [projectId], references: [id], onDelete: Cascade)
   workspaceId String?
   workspace   Workspace? @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
-  userId      String
-  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  userId      String?
+  user        User?     @relation(fields: [userId], references: [id], onDelete: SetNull)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
 
   @@index([projectId])
   @@index([workspaceId])
@@ -156,16 +156,16 @@ model Activity {
 }
 
 model Comment {
-  id        String   @id @default(uuid())
+  id        String    @id @default(uuid())
   content   String
   projectId String?
-  project   Project? @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  project   Project?  @relation(fields: [projectId], references: [id], onDelete: Cascade)
   taskId    String?
-  task      Task?    @relation(fields: [taskId], references: [id], onDelete: Cascade)
-  userId    String
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  task      Task?     @relation(fields: [taskId], references: [id], onDelete: Cascade)
+  userId    String?
+  user      User?     @relation(fields: [userId], references: [id], onDelete: SetNull)
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
 
   @@index([projectId])
   @@index([taskId])

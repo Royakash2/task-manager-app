@@ -18,6 +18,11 @@ interface DangerZoneCardProps {
   deleteDescription: string;
   warning: string;
   redirectUrl?: string;
+  confirmByText?: {
+    label: string;
+    requiredText: string;
+    placeholder?: string;
+  };
 }
 
 export const DangerZoneCard = ({
@@ -27,6 +32,7 @@ export const DangerZoneCard = ({
   deleteDescription,
   warning,
   redirectUrl,
+  confirmByText,
 }: DangerZoneCardProps) => {
   const capitalizedLabel =
     entityLabel.charAt(0).toUpperCase() + entityLabel.slice(1);
@@ -70,6 +76,7 @@ export const DangerZoneCard = ({
               variant="icon"
               redirectUrl={redirectUrl}
               warning={warning}
+              confirmByText={confirmByText}
             />
           </div>
         </div>
