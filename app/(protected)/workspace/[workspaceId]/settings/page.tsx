@@ -1,5 +1,6 @@
 import { getWorkspaceById } from "@/app/data/workspace/get-workspace-by-id";
 import { getTrashedTasks } from "@/app/data/task/get-trashed-tasks";
+import { getUserById } from "@/app/data/user/get-user-by-id";
 import { SettingsPageClient } from "@/components/workspace/workspace-settings";
 
 interface SettingsPageProps {
@@ -8,7 +9,10 @@ interface SettingsPageProps {
 
 const SettingsPage = async (props: SettingsPageProps) => {
   const { workspaceId } = await props.params;
-  const result = await getWorkspaceById(workspaceId);
+  const [result, userResult] = await Promise.all([
+    getWorkspaceById(workspaceId),
+    getUserById(),
+  ]);
 
   if ("error" in result) {
     return (
@@ -37,6 +41,7 @@ const SettingsPage = async (props: SettingsPageProps) => {
       workspaceId={workspaceId}
       currentUserRole={result.currentUserRole}
       trashedTasks={trashedTasks}
+      user={userResult}
     />
   );
 };
