@@ -7,17 +7,17 @@
 [![License](https://img.shields.io/badge/license-MIT-blue)](LICENSE)
 [![CI](https://github.com/your-username/vellox/actions/workflows/ci.yml/badge.svg)](https://github.com/your-username/vellox/actions/workflows/ci.yml)
 
-> **velloX** is a full-stack, production-grade task management platform designed for team collaboration. Built with Next.js 16 and TypeScript, it features real-time notifications, Kanban boards, role-based access control, file attachments, and a polished dark/light theme — all deployed on Vercel.
+> **velloX** is a task management app for teams. Built with Next.js 16 and TypeScript — real-time notifications, Kanban boards, role-based access, file uploads, and a dark/light theme. Deployed on Vercel.
 
 ---
 
-## 📸 Screenshots
+## Screenshots
 
 ![velloX Landing Page](./public/landing-page.png)
 
 ---
 
-## 🚀 Tech Stack
+## Tech Stack
 
 | Category | Technology |
 |----------|-----------|
@@ -41,106 +41,7 @@
 
 ---
 
-## ✨ Features
-
-### 🖥️ Landing Page
-- Hero section with a bold typography-focused headline, feature highlights, product showcase, testimonials carousel (Swiper), pricing tiers, FAQ accordion, and a CTA section — all fully responsive.
-
-### 🔐 Authentication & Onboarding
-- **Kinde Auth** integration — login, register, and session management out of the box.
-- Multi-step onboarding form capturing user profile (name, country, industry, role, bio).
-- Protected route layout with automatic redirect to onboarding or workspace creation.
-
-### 📂 Workspaces
-- Create and manage multiple workspaces.
-- **Email-based invites** — invite team members by typing their email address with role selection (**Admin** or **Member**). No invite codes needed.
-- Role-based access: **Owner**, **Admin**, and **Member**.
-- Workspace-level dashboard showing task stats, project progress, recent activities, and team members.
-- Workspace settings — rename, update description, soft-delete task recovery, permanent deletion.
-
-### 📊 Projects
-- Create projects within a workspace with optional member-level access restrictions.
-- **Kanban Board** — drag-and-drop columns (Backlog, To Do, In Progress, In Review, Completed, Cancelled) powered by `@hello-pangea/dnd`.
-- **Table View** — sortable data table powered by TanStack Table with bulk delete actions.
-- Task distribution chart (Recharts) and completion progress rings.
-- Project dashboard with activity feed and member stats.
-
-### ✅ Tasks
-- Rich task creation/editing with title, description, priority (Low/Medium/High/Critical), status, start/due dates, assignee selection, and file attachments.
-- **File attachments** — custom drag-drop zone with `useFileUpload` hook. Files stay local as previews until the form is submitted, preventing orphaned uploads.
-- UploadThing integration for server-side file management with cleanup on delete.
-- **Soft delete** — tasks are trashed instead of permanently removed, with recover/delete options in workspace settings.
-- **Rich text documentation** per task via Tiptap editor (heading, bold, italic, links, code blocks, bullet lists).
-
-### 💬 Collaboration
-- **Comments** — add, edit, and delete comments on tasks and projects.
-- **Activity feed** — chronological log of all workspace/project events.
-- **Members page** — manage team members, change roles, invite by email, remove members.
-
-### 🔔 Real-Time Notifications
-- Powered by **Ably** real-time messaging.
-- Instant push notifications for: task assigned, task updated, comment added/edited, member joined, project created.
-- Notification dropdown in the workspace navbar with unread count badge.
-- Dedicated notifications page with infinite scroll filtering (read/unread/all).
-- Sound alert on new notification (`/notification.mp3`).
-
-### 🎨 UI/UX
-- **Dark/Light theme** via `next-themes` with theme toggle.
-- **shadcn/ui** component library — dialog, sheet, drawer, dropdown, accordion, tabs, tooltip, etc.
-- **Dynamic breadcrumbs** — auto-generated from route structure.
-- **Fully responsive** layout works seamlessly across desktop, tablet, and mobile.
-- **Responsive sidebar** — collapsible navigation with workspace selector, project list, and notification badge.
-- **Toast notifications** via Sonner for action feedback.
-- **LoadingButton** — consistent loading state across all forms and dialogs.
-- **Skeleton loaders** and spinner components throughout.
-
-### 🧱 Reusable Architecture
-- **Server Actions** with RPC pattern (return `{ success, redirectTo, error }` instead of calling `redirect()` on the server).
-- **Data layer** — separated database queries in `app/data/` with dedicated getter files.
-- **Permission system** — `lib/permissions.ts` with `verifyAccess()`, `requireRole()`, `requireOwner()`, `requireTaskAccess()` guards.
-- **Consistent error handling** via `actionError()` utility.
-- **Activity logging** — centralized `logActivity()` utility used across all server actions.
-
----
-
-## 🧠 Architectural Challenges & Solutions
-
-### 1. Vercel Static Generation vs. Dynamic Auth Routes
-**Challenge:** Next.js aggressively tries to statically prerender all pages during build. Protected routes calling `userRequired()` throw `Unauthorized` on the build server, crashing the deployment.
-**Solution:** Used `export const dynamic = 'force-dynamic'` in `(protected)/layout.tsx` to opt the entire protected route branch out of static generation.
-
-### 2. The Next.js Server Action `NEXT_REDIRECT` Error
-**Challenge:** Using Next.js `redirect()` inside a Server Action throws a `NEXT_REDIRECT` exception caught by form `try...catch` blocks, causing false error toasts.
-**Solution:** Implemented the **RPC Pattern** — server actions return `{ success: true, redirectTo: "/workspace" }` instead of calling `redirect()`. The client intercepts this and manages routing via `useRouter().push()`.
-
-### 3. SVG NaN Exceptions in Progress Rings
-**Challenge:** New projects with zero tasks caused `completed / total = NaN`, crashing the SVG circle progress component.
-**Solution:** Enforced `Number.isFinite()` fallback on all mathematical inputs before rendering, gracefully degrading to `0%`.
-
-### 4. Real-Time Notifications with Ably
-**Challenge:** Building a real-time notification system that works across server actions (database writes) and client-side subscriptions without polling or excessive complexity.
-**Solution:**
-1. **Server-side publishing** — A centralized `createNotification()` server action creates the DB record and publishes to an Ably channel (`notifications:{userId}`).
-2. **Client-side subscription** — A `NotificationsProvider` wraps the protected layout, establishes an Ably real-time connection via a server-generated token request, and listens for new notifications.
-3. **Sound & count** — On receiving a notification, the provider plays an audio alert and increments the unread badge count in the sidebar.
-4. **Dedicated page** — A notifications page with infinite scroll, read/unread filters, and individual mark-as-read / delete actions.
-5. **Scope** — Notifications are triggered from 7 different action points: task assignment, task updates, comments (add/edit), member joins, and project creation.
-
-### 5. Orphaned Uploads on Dialog Cancel
-**Challenge:** Files selected in task dialogs were immediately uploaded to UploadThing. Closing the dialog without submitting left orphaned files on the server.
-**Solution:**
-1. **Custom drag-drop zone** — Replaced UploadThing's auto-upload dropzone with a native `<input type="file">` + `URL.createObjectURL()` previews.
-2. **`useFileUpload` hook** — Extracted file validation, preview management, and drag state into a reusable hook.
-3. **`uploadPendingAttachments` utility** — Centralized upload logic to remove duplication between create and edit dialogs.
-4. **Server-side cleanup** — Removed attachments are also deleted from UploadThing via `UTApi.deleteFiles()`.
-
-### 6. Prisma Build Output & Kinde Callback Routing
-**Challenge:** Vercel build instances lacked the generated Prisma Client, and initial Kinde configuration referenced localhost.
-**Solution:** Configured `postinstall: "prisma generate"` and synchronized Vercel environment variables with Kinde Auth callback definitions.
-
----
-
-## 🏗️ Project Structure
+## Project Structure
 
 ```
 app/
@@ -181,7 +82,100 @@ prisma/                   # Schema + migrations
 
 ---
 
-## 🛠️ Getting Started
+## Features
+
+### Landing Page
+- Full marketing site — hero, feature highlights, product showcase, testimonials carousel (Swiper), pricing, FAQ accordion, and CTA. Fully responsive.
+
+### Authentication & Onboarding
+- **Kinde Auth** handles login, register, and sessions.
+- Multi-step onboarding form (name, country, industry, role, bio).
+- Protected routes redirect to onboarding or workspace creation automatically.
+
+### Workspaces
+- Create and switch between multiple workspaces.
+- **Email-based invites** — type someone's email, pick a role (**Admin** or **Member**), done. No invite codes.
+- Three access levels: **Owner**, **Admin**, **Member**.
+- Dashboard shows task stats, project progress, recent activity, and team members.
+- Settings page for renaming, description, trash recovery, and permanent deletion.
+
+### Projects
+- Create projects with optional member-level access restrictions.
+- **Kanban Board** — drag-and-drop between columns (Backlog, To Do, In Progress, In Review, Completed, Cancelled).
+- **Table View** — sortable table with bulk delete.
+- Task distribution chart (Recharts) and progress rings.
+- Dashboard with activity feed and member stats.
+
+### Tasks
+- Create/edit tasks with title, description, priority (Low/Medium/High/Critical), status, dates, assignee, and file attachments.
+- **File attachments** — custom drag-drop zone that keeps files as local previews until you hit submit. No orphaned uploads.
+- UploadThing handles the server-side file storage and cleanup.
+- **Soft delete** — tasks go to trash instead of being wiped. Recover or permanently delete from settings.
+- **Rich text documentation** per task via Tiptap (headings, bold, italic, links, code blocks, lists).
+
+### Collaboration
+- **Comments** on tasks — add, edit, delete.
+- **Activity feed** — chronologically logs everything happening in the workspace.
+- **Members page** — manage roles, invite by email, remove people.
+
+### Real-Time Notifications
+- Powered by **Ably**.
+- Instant notifications when: a task is assigned or updated, a comment is added/edited, a member joins, or a project is created.
+- Dropdown in the navbar with unread count badge.
+- Full notifications page with infinite scroll and read/unread/all filters.
+- Plays a sound (`/notification.mp3`) on new notifications.
+
+### UI/UX
+- **Dark/Light theme** toggle via `next-themes`.
+- **shadcn/ui** components — dialogs, sheets, drawers, dropdowns, accordions, tabs, tooltips.
+- **Dynamic breadcrumbs** generated from the route.
+- **Responsive** — works on desktop, tablet, and mobile.
+- **Collapsible sidebar** with workspace selector, project list, and notification badge.
+- **Toast notifications** via Sonner.
+- **LoadingButton** for consistent loading states across all forms.
+- **Skeleton loaders** and spinners.
+
+### Architecture
+- **Server Actions** use an RPC pattern — return `{ success, redirectTo, error }` instead of calling `redirect()` on the server.
+- **Data layer** — database queries live in `app/data/`, separated by entity.
+- **Permission system** — `lib/permissions.ts` has guards like `verifyAccess()`, `requireRole()`, `requireOwner()`, `requireTaskAccess()`.
+- **Error handling** goes through a single `actionError()` utility.
+- **Activity logging** — centralized `logActivity()` used across all server actions.
+
+---
+
+## Architectural Challenges & Solutions
+
+### 1. Static generation breaking auth routes on build
+**Problem:** Next.js wants to statically render everything it can. But protected routes that call `userRequired()` throw `Unauthorized` on the build server, which crashes the deployment.
+**Fix:** Added `export const dynamic = 'force-dynamic'` in the protected layout to opt the whole auth-required branch out of static generation.
+
+### 2. Next.js `redirect()` clashing with server action try/catch
+**Problem:** Calling `redirect()` inside a server action throws a `NEXT_REDIRECT` error. If you have a try/catch around it (which you should), the catch thinks something went wrong and shows an error toast.
+**Fix:** Server actions now return `{ success: true, redirectTo: "/workspace" }` instead of calling `redirect()`. The client side picks this up and calls `router.push()` itself.
+
+### 3. Real-time notifications without polling
+**Problem:** I wanted push notifications when stuff happens — task assigned, comment added, etc. Polling the database every few seconds felt wrong.
+**How it works:**
+1. When a server action creates a notification in the DB, it also publishes to an Ably channel (`notifications:{userId}`).
+2. A `NotificationsProvider` wraps the protected layout, connects to Ably via a server-generated token, and listens for incoming notifications.
+3. New notifications trigger a sound and bump the unread count in the sidebar.
+4. There's a dedicated notifications page with infinite scroll and read/unread filtering.
+5. Notifications fire from 7 places: task assignment, task updates, comments (add/edit), member joins, and project creation.
+
+### 4. Files getting uploaded before the form was submitted
+**Problem:** UploadThing's default behavior uploads files the moment you select them. If you opened the create/edit task dialog, picked a file, then closed the dialog without saving — that file was now sitting on UploadThing's servers with no task attached to it.
+**How I fixed it:**
+1. Replaced UploadThing's auto-upload zone with a regular `<input type="file">` that shows local previews via `URL.createObjectURL()`.
+2. Files only get uploaded when you actually hit submit.
+3. Extracted the file handling into a reusable `useFileUpload` hook.
+4. If you remove an attachment from an existing task, it gets cleaned up from UploadThing too.
+
+
+
+---
+
+## Getting Started
 
 ### Prerequisites
 - Node.js 20+
@@ -222,6 +216,6 @@ npm run dev
 
 ---
 
-## 📄 License
+## License
 
 MIT
