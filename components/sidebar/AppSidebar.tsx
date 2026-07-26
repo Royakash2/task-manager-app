@@ -39,7 +39,7 @@ function AppSidebar(
                     </div>
                 </SidebarHeader>
                 <SidebarContent className="[&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
-                    <NavMain currentUserRole={currentUserRole} />
+                    <NavMain />
                     <NavProject projects={project} workspaceMembers={workspaceMembers} currentUserRole={currentUserRole} />
                 </SidebarContent>
                 <SidebarUserProfile user={user} />

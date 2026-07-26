@@ -65,21 +65,23 @@ export const SettingsPageClient = ({
           Manage your workspace preferences and configuration
         </p>
       </div>
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-        <EntitySettingsForm
-          schema={workspaceSchema}
-          defaultValues={{
-            name: workspace.name,
-            description: workspace.description || "",
-          }}
-          onSave={(data) => updateWorkspace(workspaceId, data)}
-          disabled={!isOwner}
-          title="Workspace Settings"
-          description="Update your workspace name and description"
-          nameLabel="Workspace Name"
-          namePlaceholder="Enter workspace name"
-          descriptionPlaceholder="What is this workspace for?"
-        />
+      <div className={isOwner ? "grid grid-cols-1 lg:grid-cols-2 gap-8" : "max-w-md"}>
+        {isOwner && (
+          <EntitySettingsForm
+            schema={workspaceSchema}
+            defaultValues={{
+              name: workspace.name,
+              description: workspace.description || "",
+            }}
+            onSave={(data) => updateWorkspace(workspaceId, data)}
+            disabled={false}
+            title="Workspace Settings"
+            description="Update your workspace name and description"
+            nameLabel="Workspace Name"
+            namePlaceholder="Enter workspace name"
+            descriptionPlaceholder="What is this workspace for?"
+          />
+        )}
 
         <OnboardingForm
           mode="settings"
