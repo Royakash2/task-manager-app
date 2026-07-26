@@ -5,6 +5,7 @@
 [![Prisma](https://img.shields.io/badge/Prisma-2D3748?logo=prisma&logoColor=white)](https://www.prisma.io/)
 [![PostgreSQL](https://img.shields.io/badge/PostgreSQL-4169E1?logo=postgresql&logoColor=white)](https://neon.tech/)
 [![License](https://img.shields.io/badge/license-MIT-blue)](LICENSE)
+[![CI](https://github.com/your-username/vellox/actions/workflows/ci.yml/badge.svg)](https://github.com/your-username/vellox/actions/workflows/ci.yml)
 
 > **velloX** is a full-stack, production-grade task management platform designed for team collaboration. Built with Next.js 16 and TypeScript, it features real-time notifications, Kanban boards, role-based access control, file attachments, and a polished dark/light theme — all deployed on Vercel.
 
@@ -52,7 +53,7 @@
 
 ### 📂 Workspaces
 - Create and manage multiple workspaces.
-- Invite team members by email with role selection (**Admin** or **Member**).
+- **Email-based invites** — invite team members by typing their email address with role selection (**Admin** or **Member**). No invite codes needed.
 - Role-based access: **Owner**, **Admin**, and **Member**.
 - Workspace-level dashboard showing task stats, project progress, recent activities, and team members.
 - Workspace settings — rename, update description, soft-delete task recovery, permanent deletion.
