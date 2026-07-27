@@ -46,6 +46,9 @@ export const metadata: Metadata = {
   alternates: {
     canonical: "https://getvellox.vercel.app",
   },
+  verification: {
+    google: "sgMBxsOX_ugHlQkR8JMtPqeBfriYRog2kwsxG41dT8Y",
+  },
 };
 
 export default function RootLayout({
