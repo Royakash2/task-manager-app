@@ -28,7 +28,7 @@ export const metadata: Metadata = {
     siteName: "velloX",
     images: [
       {
-        url: "https://getvellox.vercel.app/og-image.png",
+        url: "https://getvellox.vercel.app/og-image.png?v=2",
         width: 1200,
         height: 630,
         alt: "velloX - Premium Task Management",
@@ -41,7 +41,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "velloX - Premium Task Management",
     description: "Experience a new atmosphere of productivity with velloX.",
-    images: ["https://getvellox.vercel.app/og-image.png"],
+    images: ["https://getvellox.vercel.app/og-image.png?v=2"],
   },
   alternates: {
     canonical: "https://getvellox.vercel.app",
