@@ -38,7 +38,7 @@ interface SettingsPageClientProps {
     name: string;
     email: string;
     about: string | null;
-    indrustryType: string;
+    industryType: string;
     role: string;
     country: string;
     image: string | null;
@@ -90,7 +90,7 @@ export const SettingsPageClient = ({
           image={user?.image || ""}
           about={user?.about || ""}
           country={user?.country || ""}
-          industryType={user?.indrustryType || ""}
+          industryType={user?.industryType || ""}
           role={user?.role || ""}
         />
       </div>
