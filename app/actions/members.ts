@@ -224,3 +224,61 @@ export const removeMember = async (workspaceId: string, memberId: string) => {
     return actionError(error, "Failed to remove member");
   }
 };
+
+export const leaveWorkspace = async (workspaceId: string) => {
+  try {
+    const { user } = await userRequired();
+
+    const membership = await db.workspaceMembers.findUnique({
+      where: {
+        userId_workspaceId: {
+          userId: user.id,
+          workspaceId,
+        },
+      },
+      include: {
+        workspace: { select: { name: true } },
+      },
+    });
+
+    if (!membership) {
+      return { success: false as const, error: "You are not a member of this workspace." };
+    }
+
+    if (membership.accessLevel === AccessLevel.OWNER) {
+      return {
+        success: false as const,
+        error: "You cannot leave as the workspace owner. Transfer ownership or delete the workspace first.",
+      };
+    }
+
+    await db.$transaction([
+      db.workspaceMembers.delete({
+        where: { id: membership.id },
+      }),
+      db.task.updateMany({
+        where: {
+          assigneeId: user.id,
+          project: {
+            workspaceId,
+          },
+        },
+        data: {
+          assigneeId: null,
+        },
+      }),
+      logActivity(
+        "MEMBER_REMOVED",
+        `left the workspace "${membership.workspace.name ?? "untitled"}"`,
+        user.id,
+        undefined,
+        workspaceId,
+      ),
+    ]);
+
+    return { success: true as const, redirectTo: "/workspace" };
+  } catch (error) {
+    console.error("[LEAVE_WORKSPACE_ERROR]:", error);
+    return actionError(error, "Failed to leave workspace");
+  }
+};

@@ -9,7 +9,6 @@ import {
   requireRole,
   requireTaskAccess,
   verifyAccess,
-  enforceAssigneeRestriction,
 } from "@/lib/permissions";
 import {
   syncTaskAttachments,
@@ -40,11 +39,7 @@ export const createTask = async (
 
     const position = lastTask ? lastTask.position + 1000 : 1000;
 
-    const assigneeId = await enforceAssigneeRestriction(
-      user.id,
-      workspaceId,
-      validatedData.assigneeId,
-    );
+    const assigneeId = validatedData.assigneeId || undefined;
 
     const newTask = await db.task.create({
       data: {
@@ -277,11 +272,7 @@ export const updateTaskDetails = async (
       await deleteAttachments(filesToDelete.map((f) => f.url));
     }
 
-    const assigneeId = await enforceAssigneeRestriction(
-      user.id,
-      existingTask.project.workspaceId,
-      validatedData.assigneeId,
-    );
+    const assigneeId = validatedData.assigneeId || undefined;
 
     // 2. Update core task properties
     await db.task.update({

@@ -20,18 +20,11 @@ import {
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
-import { AccessLevel } from "@prisma/client";
 
-interface NavMainProps {
-  currentUserRole?: AccessLevel | null | undefined;
-}
-
-export const NavMain = ({ currentUserRole }: NavMainProps) => {
+export const NavMain = () => {
   const workspaceId = useWorkspaceId();
   const { setOpenMobile } = useSidebar();
   const { unreadCount } = useNotifications();
-
-  const isMember = currentUserRole === AccessLevel.MEMBER;
 
   const items = [
     {
@@ -59,16 +52,12 @@ export const NavMain = ({ currentUserRole }: NavMainProps) => {
       icon: Users,
       path: "members",
     },
-    ...(!isMember
-      ? [
-          {
-            label: "Settings",
-            href: `/workspace/${workspaceId}/settings`,
-            icon: Settings,
-            path: "settings",
-          },
-        ]
-      : []),
+    {
+      label: "Settings",
+      href: `/workspace/${workspaceId}/settings`,
+      icon: Settings,
+      path: "settings",
+    },
   ];
 
   const pathname = usePathname();

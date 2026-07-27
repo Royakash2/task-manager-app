@@ -8,8 +8,10 @@ interface MembersPageProps {
 
 const MembersPage = async (props: MembersPageProps) => {
   const { workspaceId } = await props.params;
-  const result = await getWorkspaceMembers(workspaceId);
-  const { user } = await userRequired();
+  const [result, { user }] = await Promise.all([
+    getWorkspaceMembers(workspaceId),
+    userRequired(),
+  ]);
 
   if ("error" in result && result.error) {
     return (
@@ -27,6 +29,7 @@ const MembersPage = async (props: MembersPageProps) => {
       members={result.members}
       currentUserId={user.id}
       currentUserRole={result.currentUserRole}
+      workspaceName={result.workspaceName ?? "this workspace"}
     />
   );
 };

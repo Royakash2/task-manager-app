@@ -1,49 +1,221 @@
-# Aura - Premium Task Management Platform
+# velloX — Task Management Platform
 
-Aura is a full-stack, comprehensive task management platform designed to bring clarity and speed to team workflows. Built with Next.js 15, Prisma, and Kinde Auth, it emphasizes a modern, dynamic user experience with robust authenticated routing.
+[![Next.js](https://img.shields.io/badge/Next.js_16-000?logo=next.js&logoColor=white)](https://nextjs.org/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
+[![Prisma](https://img.shields.io/badge/Prisma-2D3748?logo=prisma&logoColor=white)](https://www.prisma.io/)
+[![PostgreSQL](https://img.shields.io/badge/PostgreSQL-4169E1?logo=postgresql&logoColor=white)](https://neon.tech/)
+[![License](https://img.shields.io/badge/license-MIT-blue)](LICENSE)
+[![CI](https://github.com/your-username/vellox/actions/workflows/ci.yml/badge.svg)](https://github.com/your-username/vellox/actions/workflows/ci.yml)
 
-## 🚀 Tech Stack
-
-* **Framework:** Next.js (App Router)
-* **Language:** TypeScript
-* **Database & ORM:** PostgreSQL (Neon) & Prisma
-* **Authentication:** Kinde Auth
-* **UI & Styling:** Tailwind CSS, Radix UI, shadcn/ui, Recharts
-* **Forms & Validation:** React Hook Form & Zod
+> **velloX** is a task management app for teams. Built with Next.js 16 and TypeScript — real-time notifications, Kanban boards, role-based access, file uploads, and a dark/light theme. Deployed on Vercel.
 
 ---
 
-## 🧠 Architectural Challenges & Solutions
+## Screenshots
 
-While building this application for production deployment on Vercel, several complex edge cases were encountered and resolved. These reflect production-grade architectural and defensive programming decisions:
+![velloX Landing Page](./public/landing-page.png)
 
-### 1. Vercel Static Generation vs. Dynamic Auth Routes
-**Challenge:** Next.js aggressively attempts to statically prerender (bake into HTML) all pages during the `npm run build` process on Vercel. Because the `(protected)` routes evaluate a `userRequired()` server function to verify Kinde authentication, the build server—which has no active user session—encountered `Unauthorized` exceptions, immediately crashing the deployment.
-**Solution:** Implemented the officially recommended Next.js Route Segment configuration (`export const dynamic = 'force-dynamic';`) within the `(protected)/layout.tsx`. This successfully opted the entire protected route branch out of static generation, ensuring user authentication checks strictly occur on-demand at request time.
+---
 
-### 2. The Next.js Server Action `NEXT_REDIRECT` Error
-**Challenge:** When submitting forms managed by `react-hook-form` (with complex loading states and `toast` error handling), utilizing the Next.js `redirect()` function inside a Server Action threw hidden `NEXT_REDIRECT` exceptions. This caused the form's `try...catch` blocks to mistakenly catch the redirect as a fatal error, rendering an artificial "Something went wrong" toast just before page transition.
-**Solution:** Transitioned to the "RPC (Remote Procedure Call) Pattern". Server actions were refactored to simply return a payload (`{ success: true, redirectTo: "/workspace" }`) instead of initiating redirects themselves. The client securely intercepts this success object and manages the routing natively via `useRouter().push()`. This achieves optimal separation of concerns between server-side data mutation and client-side transition management.
+## Tech Stack
 
-### 3. Defensive Programming: SVG NaN Exceptions
-**Challenge:** In specific edge cases—such as a newly created project containing zero tasks—the task competition calculation (`completed / total`) yielded `NaN`. Passing `NaN` into the `<circle>` SVG `strokeDashoffset` property provoked a fatal, unhandled rendering error that crashed the entire dashboard component.
-**Solution:** Enforced strict Defensive Programming within the UI leaf components. A `Number.isFinite()` fallback evaluation was strapped to all mathematical inputs before rendering. This guarantees bulletproof UI component lifecycle stability, enabling the app to gracefully degrade to `0%` progress rather than crashing the React tree.
+| Category | Technology |
+|----------|-----------|
+| **Framework** | Next.js 16 (App Router) |
+| **Language** | TypeScript |
+| **Database** | PostgreSQL (Neon) |
+| **ORM** | Prisma 7 |
+| **Auth** | Kinde Auth |
+| **Real-time** | Ably |
+| **File Uploads** | UploadThing |
+| **Rich Text** | Tiptap |
+| **Charts** | Recharts |
+| **Tables** | TanStack Table |
+| **Forms** | React Hook Form + Zod |
+| **Drag & Drop** | @hello-pangea/dnd |
+| **UI** | Tailwind CSS + shadcn/ui + Radix UI |
+| **Animations** | Framer Motion + Swiper |
+| **Theming** | next-themes |
+| **Notifications** | Sonner |
+| **Dates** | date-fns |
 
-### 4. Prisma Build Output & Kinde Callback Routing
-**Challenge:** Vercel's build instances lacked the generated Prisma Client, and initial Kinde configuration referenced localhost, resulting in `404 NOT_FOUND` errors upon post-login redirects.
-**Solution:** Configured `postinstall: "prisma generate"` within the absolute build stream to dynamically generate SDK typings on Vercel's serverless edge. Synchronized Vercel environment variables securely with strict Kinde Auth callback definitions targeting the exact assigned production domain.
+---
 
-### 5. Orphaned Uploads on Dialog Cancel
-**Challenge:** When a user selected a file in the task creation/editing dialog, UploadThing automatically uploaded it to the cloud immediately. If the user closed the dialog without submitting, the file stayed on the server — orphaned and wasting storage. This also happened when removing an existing attachment in the edit dialog — the file remained on UploadThing's servers.
-**Solution:** Moved uploads from "on file select" to "on form submit":
+## Project Structure
 
-1. **Custom drag-drop zone** — Replaced `UploadDropzone` (which auto-uploads on selection) with a native `<input type="file">` + drag-drop handler. Files stay local as `URL.createObjectURL()` previews until submission.
+```
+app/
+├── (protected)/          # Authenticated routes
+│   ├── onboarding/
+│   ├── create-workspace/
+│   └── workspace/[workspaceId]/
+│       ├── page.tsx              # Dashboard
+│       ├── my-tasks/
+│       ├── members/
+│       ├── notifications/
+│       ├── settings/
+│       └── projects/[projectId]/
+│           ├── page.tsx          # Project Dashboard
+│           └── [taskId]/
+├── actions/              # Server Actions
+├── api/                  # API routes (auth, uploadthing, notifications)
+├── data/                 # Database query layer
+├── layout.tsx            # Root layout (metadata, fonts, providers)
+└── page.tsx              # Landing page
 
-2. **Custom hook (`useFileUpload`)** — Extracted all file validation, preview management, and drag state into a reusable hook, keeping the component purely focused on rendering.
+components/
+├── landing/              # Landing page sections
+├── sidebar/              # App sidebar & navigation
+├── project/              # Project dashboard, Kanban, table, charts
+├── task/                 # Task create/edit, comments, documentation
+├── workspace/            # Workspace home, settings, trash
+├── members/              # Member management
+├── notifications/        # Real-time notification UI
+├── breadcrumb/           # Dynamic breadcrumb system
+└── ui/                   # Reusable UI components (shadcn/ui)
 
-3. **Shared utility (`uploadPendingAttachments`)** — Centralized the "upload pending files and merge with existing attachments" logic, removing duplication between create and edit dialogs.
+lib/                      # Utilities (db, ably, permissions, schema)
+hooks/                    # Custom hooks (file upload, mobile, notifications)
+utils/                    # Shared utilities (types, file attachments, uploadthing)
+prisma/                   # Schema + migrations
+```
 
-4. **Server-side cleanup** — When a user removes an existing attachment during editing, the corresponding file is also deleted from UploadThing's servers via `UTApi.deleteFiles()`.
+---
 
-**Before:** Files uploaded to cloud on selection → orphaned on cancel.
-**After:** Files stay local as previews → uploaded only on submit → no orphans.
+## Features
+
+### Landing Page
+- Full marketing site — hero, feature highlights, product showcase, testimonials carousel (Swiper), pricing, FAQ accordion, and CTA. Fully responsive.
+
+### Authentication & Onboarding
+- **Kinde Auth** handles login, register, and sessions.
+- Multi-step onboarding form (name, country, industry, role, bio).
+- Protected routes redirect to onboarding or workspace creation automatically.
+
+### Workspaces
+- Create and switch between multiple workspaces.
+- **Email-based invites** — type someone's email, pick a role (**Admin** or **Member**), done. No invite codes.
+- Three access levels: **Owner**, **Admin**, **Member**.
+- Dashboard shows task stats, project progress, recent activity, and team members.
+- Settings page for renaming, description, trash recovery, and permanent deletion.
+
+### Projects
+- Create projects with optional member-level access restrictions.
+- **Kanban Board** — drag-and-drop between columns (Backlog, To Do, In Progress, In Review, Completed, Cancelled).
+- **Table View** — sortable table with bulk delete.
+- Task distribution chart (Recharts) and progress rings.
+- Dashboard with activity feed and member stats.
+
+### Tasks
+- Create/edit tasks with title, description, priority (Low/Medium/High/Critical), status, dates, assignee, and file attachments.
+- **File attachments** — custom drag-drop zone that keeps files as local previews until you hit submit. No orphaned uploads.
+- UploadThing handles the server-side file storage and cleanup.
+- **Soft delete** — tasks go to trash instead of being wiped. Recover or permanently delete from settings.
+- **Rich text documentation** per task via Tiptap (headings, bold, italic, links, code blocks, lists).
+
+### Collaboration
+- **Comments** on tasks — add, edit, delete.
+- **Activity feed** — chronologically logs everything happening in the workspace.
+- **Members page** — manage roles, invite by email, remove people.
+
+### Real-Time Notifications
+- Powered by **Ably**.
+- Instant notifications when: a task is assigned or updated, a comment is added/edited, a member joins, or a project is created.
+- Dropdown in the navbar with unread count badge.
+- Full notifications page with infinite scroll and read/unread/all filters.
+- Plays a sound (`/notification.mp3`) on new notifications.
+
+### UI/UX
+- **Dark/Light theme** toggle via `next-themes`.
+- **shadcn/ui** components — dialogs, sheets, drawers, dropdowns, accordions, tabs, tooltips.
+- **Dynamic breadcrumbs** generated from the route.
+- **Responsive** — works on desktop, tablet, and mobile.
+- **Collapsible sidebar** with workspace selector, project list, and notification badge.
+- **Toast notifications** via Sonner.
+- **LoadingButton** for consistent loading states across all forms.
+- **Skeleton loaders** and spinners.
+
+### Architecture
+- **Server Actions** use an RPC pattern — return `{ success, redirectTo, error }` instead of calling `redirect()` on the server.
+- **Data layer** — database queries live in `app/data/`, separated by entity.
+- **Permission system** — `lib/permissions.ts` has guards like `verifyAccess()`, `requireRole()`, `requireOwner()`, `requireTaskAccess()`.
+- **Error handling** goes through a single `actionError()` utility.
+- **Activity logging** — centralized `logActivity()` used across all server actions.
+
+---
+
+## Architectural Challenges & Solutions
+
+### 1. Static generation breaking auth routes on build
+**Problem:** Next.js wants to statically render everything it can. But protected routes that call `userRequired()` throw `Unauthorized` on the build server, which crashes the deployment.
+**Fix:** Added `export const dynamic = 'force-dynamic'` in the protected layout to opt the whole auth-required branch out of static generation.
+
+### 2. Next.js `redirect()` clashing with server action try/catch
+**Problem:** Calling `redirect()` inside a server action throws a `NEXT_REDIRECT` error. If you have a try/catch around it (which you should), the catch thinks something went wrong and shows an error toast.
+**Fix:** Server actions now return `{ success: true, redirectTo: "/workspace" }` instead of calling `redirect()`. The client side picks this up and calls `router.push()` itself.
+
+### 3. Real-time notifications without polling
+**Problem:** I wanted push notifications when stuff happens — task assigned, comment added, etc. Polling the database every few seconds felt wrong.
+**How it works:**
+1. When a server action creates a notification in the DB, it also publishes to an Ably channel (`notifications:{userId}`).
+2. A `NotificationsProvider` wraps the protected layout, connects to Ably via a server-generated token, and listens for incoming notifications.
+3. New notifications trigger a sound and bump the unread count in the sidebar.
+4. There's a dedicated notifications page with infinite scroll and read/unread filtering.
+5. Notifications fire from 7 places: task assignment, task updates, comments (add/edit), member joins, and project creation.
+
+### 4. Files getting uploaded before the form was submitted
+**Problem:** UploadThing's default behavior uploads files the moment you select them. If you opened the create/edit task dialog, picked a file, then closed the dialog without saving — that file was now sitting on UploadThing's servers with no task attached to it.
+**How I fixed it:**
+1. Replaced UploadThing's auto-upload zone with a regular `<input type="file">` that shows local previews via `URL.createObjectURL()`.
+2. Files only get uploaded when you actually hit submit.
+3. Extracted the file handling into a reusable `useFileUpload` hook.
+4. If you remove an attachment from an existing task, it gets cleaned up from UploadThing too.
+
+
+
+---
+
+## Getting Started
+
+### Prerequisites
+- Node.js 20+
+- PostgreSQL database (recommended: [Neon](https://neon.tech/))
+- Accounts: [Kinde](https://kinde.com/), [UploadThing](https://uploadthing.com/), [Ably](https://ably.com/)
+
+### Environment Variables
+
+```env
+# Kinde Auth
+KINDE_CLIENT_ID=your_client_id
+KINDE_CLIENT_SECRET=your_client_secret
+KINDE_ISSUER_URL=https://your-app.kinde.com
+KINDE_SITE_URL=http://localhost:3000
+KINDE_POST_LOGIN_REDIRECT_URL=http://localhost:3000/onboarding
+KINDE_POST_LOGOUT_REDIRECT_URL=http://localhost:3000
+
+# UploadThing
+UPLOADTHING_SECRET=your_secret
+UPLOADTHING_APP_ID=your_app_id
+
+# Ably
+ABLY_API_KEY=your_ably_api_key
+
+# Database
+DATABASE_URL=postgresql://...
+```
+
+### Installation
+
+```bash
+git clone https://github.com/your-username/vellox.git
+cd vellox
+npm install
+npx prisma migrate dev
+npm run dev
+```
+
+---
+
+## License
+
+MIT

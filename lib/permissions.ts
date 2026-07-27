@@ -116,13 +116,3 @@ export const requireTaskAccess = async (
 export const requireOwner = async (userId: string, workspaceId: string) => {
   await requireRole(userId, workspaceId, AccessLevel.OWNER);
 };
-
-
-export async function enforceAssigneeRestriction(
-  userId: string,
-  workspaceId: string,
-  submittedAssigneeId: string | null | undefined,
-): Promise<string | null | undefined> {
-  
-  return submittedAssigneeId || undefined;
-}

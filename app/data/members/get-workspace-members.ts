@@ -7,37 +7,44 @@ export const getWorkspaceMembers = async (workspaceId: string) => {
     const { user } = await userRequired();
     await verifyAccess(user.id, workspaceId);
 
-    const members = await db.workspaceMembers.findMany({
-      where: { workspaceId },
-      include: {
-        user: {
-          select: {
-            id: true,
-            name: true,
-            email: true,
-            image: true,
+    const [members, workspace] = await Promise.all([
+      db.workspaceMembers.findMany({
+        where: { workspaceId },
+        include: {
+          user: {
+            select: {
+              id: true,
+              name: true,
+              email: true,
+              image: true,
+            },
+          },
+          projectAccess: {
+            select: {
+              id: true,
+              hasAccess: true,
+              projectId: true,
+            },
           },
         },
-        projectAccess: {
-          select: {
-            id: true,
-            hasAccess: true,
-            projectId: true,
-          },
-        },
-      },
-      orderBy: { createdAt: "asc" },
-    });
+        orderBy: { createdAt: "asc" },
+      }),
+      db.workspace.findUnique({
+        where: { id: workspaceId },
+        select: { name: true },
+      }),
+    ]);
 
     const currentUserMember = members.find((m) => m.userId === user.id);
     const currentUserRole = currentUserMember?.accessLevel ?? null;
 
-    return { members, currentUserRole };
+    return { members, currentUserRole, workspaceName: workspace?.name ?? null };
   } catch (error) {
     console.error("[GET_WORKSPACE_MEMBERS_ERROR]:", error);
     return {
       members: [],
       currentUserRole: null,
+      workspaceName: null,
       error: error instanceof Error ? error.message : "Failed to fetch members",
     };
   }

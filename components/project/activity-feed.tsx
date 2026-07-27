@@ -20,15 +20,15 @@ export const ActivityFeed = ({ activities }: ActivityFeedProps) => {
             {activities.map((activity) => (
                 <div key={activity.id} className="flex items-start gap-4">
                     <ProfileAvatar 
-                        url={activity.user.image || undefined}
-                        name={activity.user.name}
+                        url={activity.user?.image || undefined}
+                        name={activity.user?.name || "Deleted User"}
                         numOfChars={1}
                         size="md"
                     />
 
                     <div className="flex flex-col gap-0.5">
                         <p className="text-sm text-foreground/90 leading-tight">
-                            <span className="font-semibold text-foreground">{activity.user.name}</span> {""}
+                            <span className="font-semibold text-foreground">{activity.user?.name || "Deleted User"}</span> {""}
                             {activity.description.slice(0, 35)}{activity.description.length > 35 ? ".." : ""}
                         </p>
                         <span className="text-sm text-muted-foreground font-medium">

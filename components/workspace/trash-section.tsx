@@ -4,6 +4,7 @@ import { useState } from "react";
 import { toast } from "sonner";
 import { Trash2, FolderKanban, RotateCcw } from "lucide-react";
 import { LoadingButton } from "../ui/loading-button";
+import { TrashedTask } from "@/utils/types";
 
 import {
   Card,
@@ -23,16 +24,6 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-
-interface TrashedTask {
-  id: string;
-  title: string;
-  deletedAt: Date | null;
-  project: {
-    id: string;
-    name: string;
-  };
-}
 
 interface TrashSectionProps {
   tasks: TrashedTask[];
