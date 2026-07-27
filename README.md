@@ -4,8 +4,6 @@
 [![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
 [![Prisma](https://img.shields.io/badge/Prisma-2D3748?logo=prisma&logoColor=white)](https://www.prisma.io/)
 [![PostgreSQL](https://img.shields.io/badge/PostgreSQL-4169E1?logo=postgresql&logoColor=white)](https://neon.tech/)
-[![License](https://img.shields.io/badge/license-MIT-blue)](LICENSE)
-[![CI](https://github.com/your-username/vellox/actions/workflows/ci.yml/badge.svg)](https://github.com/your-username/vellox/actions/workflows/ci.yml)
 
 > **velloX** is a task management app for teams. Built with Next.js 16 and TypeScript — real-time notifications, Kanban boards, role-based access, file uploads, and a dark/light theme. Deployed on Vercel.
 
