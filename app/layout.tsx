@@ -24,7 +24,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "velloX - Project Management System",
     description: "Experience a new atmosphere of productivity. VelloX is designed to bring clarity and speed to your workflow.",
-    url: "https://getvellox.vercel.app", 
+    url: "https://getvellox.vercel.app",
     siteName: "velloX",
     images: [
       {
@@ -63,7 +63,7 @@ export default function RootLayout({
         suppressHydrationWarning
       >
         <AuthProvider>
-           <ThemeProvider
+          <ThemeProvider
             attribute="class"
             defaultTheme="system"
             enableSystem
@@ -71,7 +71,7 @@ export default function RootLayout({
           >
             {children}
           </ThemeProvider>
-          <Toaster richColors/>
+          <Toaster richColors />
         </AuthProvider>
       </body>
     </html>
