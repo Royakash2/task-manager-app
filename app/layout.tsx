@@ -17,7 +17,7 @@ export const metadata: Metadata = {
     default: "velloX - Project Management System",
     template: "%s | velloX"
   },
-  description: "Experience a new atmosphere of productivity. VelloX is a premium task management platform designed to bring clarity and speed to your workflow.",
+  description: "Experience a new atmosphere of productivity. VelloX is a project management system designed to bring clarity and speed to your workflow.",
   keywords: ["task management", "project management", "productivity", "collaboration", "workflow"],
   authors: [{ name: "velloX Team" }],
   creator: "velloX",
@@ -31,7 +31,7 @@ export const metadata: Metadata = {
         url: "https://getvellox.vercel.app/og-image.png?v=2",
         width: 1200,
         height: 630,
-        alt: "velloX - Premium Task Management",
+        alt: "velloX - Project Management System",
       },
     ],
     locale: "en_US",
@@ -39,7 +39,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "velloX - Premium Task Management",
+    title: "velloX - Project Management System",
     description: "Experience a new atmosphere of productivity with velloX.",
     images: ["https://getvellox.vercel.app/og-image.png?v=2"],
   },
