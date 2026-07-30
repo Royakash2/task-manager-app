@@ -16,7 +16,7 @@ export default function Home() {
     "name": "velloX",
     "applicationCategory": "BusinessApplication",
     "operatingSystem": "Any",
-    "description": "Experience a new atmosphere of productivity. VelloX is a premium task management platform designed to bring clarity and speed to your workflow.",
+    "description": "Experience a new atmosphere of productivity. VelloX is a project management system designed to bring clarity and speed to your workflow.",
     "url": "https://getvellox.vercel.app",
     "offers": {
       "@type": "Offer",
