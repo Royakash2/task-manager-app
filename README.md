@@ -205,7 +205,7 @@ DATABASE_URL=postgresql://...
 ### Installation
 
 ```bash
-git clone https://github.com/your-username/vellox.git
+git clone https://github.com/Royakash2/task-manager-app.git
 cd vellox
 npm install
 npx prisma migrate dev
